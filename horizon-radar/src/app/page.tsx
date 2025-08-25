@@ -101,7 +101,7 @@ export default function Page() {
             {/* Left Arrow */}
             <button 
               className="absolute z-20 opacity-50 hover:opacity-100 transition-all duration-300 disabled:opacity-30 motion-safe:hover:scale-125 motion-reduce:hover:scale-100 disabled:hover:scale-100"
-              style={{ left: 'calc(50% - 300px - 48px)' }}
+              style={{ left: UI_CONSTANTS.CAROUSEL_LEFT_ARROW_POSITION }}
               onClick={handlePreviousCard}
               disabled={isTransitioning}
               aria-label="View previous protocol"
@@ -112,7 +112,7 @@ export default function Page() {
             {/* Right Arrow */}
             <button 
               className="absolute z-20 opacity-50 hover:opacity-100 transition-all duration-300 disabled:opacity-30 motion-safe:hover:scale-125 motion-reduce:hover:scale-100 disabled:hover:scale-100"
-              style={{ right: 'calc(50% - 300px - 48px)' }}
+              style={{ right: UI_CONSTANTS.CAROUSEL_RIGHT_ARROW_POSITION }}
               onClick={handleNextCard}
               disabled={isTransitioning}
               aria-label="View next protocol"

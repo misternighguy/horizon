@@ -239,8 +239,12 @@ export default function ArticlePage() {
             {/* Hero Image */}
             <div 
               ref={imageRef}
-              className="relative h-[250px] rounded-2xl overflow-hidden"
-              style={{ transform: `translateY(${parallaxOffset}px)` }}
+              className="relative w-full rounded-2xl overflow-hidden"
+              style={{ 
+                transform: `translateY(${parallaxOffset}px)`,
+                aspectRatio: '3/1',
+                maxHeight: '500px'
+              }}
             >
               <img
                 src={article.featuredImage || '/solar-panels.jpg'}

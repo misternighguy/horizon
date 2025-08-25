@@ -9,6 +9,8 @@
 
 **Mode**: Started in PLANNER, now switching to EXECUTOR for controlled rampage batch execution.
 
+**New Request**: Implement banner system with 3:1 ratio (1500x500) for all article pages and project cards, update glow article with GlowBanner.png
+
 ## Key Challenges and Analysis
 
 ### Code Duplication Issues
@@ -28,6 +30,13 @@
 - Complex type casting that could be simplified
 - Some any types in utility functions
 
+### Banner System Requirements
+- All banners must maintain 3:1 horizontal ratio (1500x500)
+- Update article hero sections to use proper banner dimensions
+- Update ProductCard components to use proper banner dimensions
+- Move GlowBanner.png from Downloads to public/images folder
+- Update glow article to use the new banner
+
 ## High-level Task Breakdown
 
 ### Phase 1: Quick Wins (Fixes 1-3)
@@ -44,6 +53,13 @@
 7. **Consolidate Button Patterns** - Unify button implementations
 8. **Clean Up Constants** - Ensure consistent usage of UI constants
 
+### Phase 4: Banner System Implementation (NEW)
+9. **Implement Banner System** - Create consistent 3:1 ratio banners across all components
+   - Move GlowBanner.png to public/images folder
+   - Update article hero sections to use proper banner dimensions
+   - Update ProductCard components to use proper banner dimensions
+   - Ensure all banners maintain 3:1 ratio (1500x500)
+
 ## Project Status Board
 
 ### Completed Tasks
@@ -53,9 +69,10 @@
 - [x] **PLANNER**: Created scratchpad.md for progress tracking
 
 ### Current Task
-- [ ] **EXECUTOR**: Begin Fix 1 - Remove Unused Components & Files
+- [ ] **EXECUTOR**: Implement Banner System with 3:1 ratio
 
 ### Pending Tasks
+- [ ] **EXECUTOR**: Fix 1 - Remove Unused Components & Files
 - [ ] **EXECUTOR**: Fix 2 - Consolidate Duplicate Icons
 - [ ] **EXECUTOR**: Fix 3 - Merge Similar Card Components
 - [ ] **EXECUTOR**: Fix 4 - Remove Inline Styles in Favor of Tokens
@@ -66,19 +83,20 @@
 
 ## Current Status / Progress Tracking
 
-**Status**: Switching from PLANNER to EXECUTOR mode
-**Current Phase**: Phase 1 - Quick Wins
-**Next Action**: Execute Fix 1 - Remove Unused Components & Files
-**Target LOC Reduction**: -50 to -100 lines for Fix 1
+**Status**: Switching to EXECUTOR mode for Banner System implementation
+**Current Phase**: Phase 4 - Banner System Implementation
+**Next Action**: Execute Banner System implementation
+**Target**: Consistent 3:1 ratio banners across all components
 
 ## Executor's Feedback or Assistance Requests
 
-**Ready to Execute**: All planning complete, switching to execution mode.
-**No Blockers**: Clear plan with rollback steps for each fix.
-**Execution Strategy**: Sequential fixes with full testing between each step.
+**Ready to Execute**: Banner system implementation plan ready.
+**No Blockers**: Clear requirements for 3:1 ratio implementation.
+**Execution Strategy**: Implement banner system before continuing with slop guard fixes.
 
 ## Lessons
 
 - **Code Analysis**: Found significant duplication opportunities (400-500 LOC reduction potential)
 - **Planning**: Breaking fixes into small, testable chunks with clear rollback paths
 - **Documentation**: Creating comprehensive tracking documents for accountability
+- **Banner System**: All banners must maintain 3:1 horizontal ratio (1500x500) for consistency

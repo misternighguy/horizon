@@ -113,14 +113,7 @@ export default function NewsletterCardPopOut() {
             <img 
               src="/images/join-newsletter-image.png" 
               alt="Join our newsletter for exclusive crypto research insights and updates"
-              className="w-full h-full object-cover object-center"
-              style={{
-                objectPosition: 'center',
-                objectFit: 'cover',
-                width: '100%',
-                height: '100%',
-                display: 'block'
-              }}
+              className="w-full h-full object-cover object-center block"
             />
           </div>
 

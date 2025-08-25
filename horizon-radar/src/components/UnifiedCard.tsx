@@ -66,11 +66,15 @@ export default function UnifiedCard({ protocol, variant = 'protocol', isCenter =
 
         {/* Image Section */}
         <div className="absolute top-28 left-4 right-4 bottom-16">
-          <div className="w-full h-[65%] bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-500 rounded-lg flex items-center justify-center">
-            <div className="text-white text-center">
-              <div className="text-4xl mb-2">☀️</div>
-              <div className="text-sm opacity-80">Solar Infrastructure</div>
-            </div>
+          <div 
+            className="w-full rounded-lg overflow-hidden"
+            style={{ aspectRatio: '3/1' }}
+          >
+            <img
+              src="/images/GlowBanner.png"
+              alt="Glow Protocol Banner"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 

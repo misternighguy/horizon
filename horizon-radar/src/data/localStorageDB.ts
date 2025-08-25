@@ -180,7 +180,7 @@ class LocalStorageDB {
             ]
           }
         },
-        featuredImage: '/solar-panels.jpg',
+        featuredImage: '/images/GlowBanner.png',
         tags: ['Solar Energy', 'DeFi', 'RWA', 'Sustainability', 'Tokenomics'],
         viewCount: 1247,
         likeCount: 89
