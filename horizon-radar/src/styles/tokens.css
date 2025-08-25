@@ -1,0 +1,38 @@
+:root {
+  /* BRAND COLORS */
+  --color-brand-600: 26 64 246;      /* rgb(26, 64, 246) */
+  --color-brand-500: 59 130 246;     /* rgb(59, 130, 246) */
+  --color-brand-400: 96 165 250;     /* rgb(96, 165, 250) */
+  
+  /* HORIZON RADAR SPECIFIC COLORS */
+  --color-horizon-green: 126 255 94; /* #7EFF5E */
+  --color-horizon-brown: 60 53 43;   /* #3c352b */
+  --color-horizon-brown-dark: 42 35 28; /* #2a231c */
+  --color-horizon-gray: 60 60 60;    /* #3C3C3C */
+  --color-horizon-gray-light: 128 128 128; /* #808080 */
+  
+  /* Foreground */
+  --fg-primary: 17 24 39;            /* #111827 */
+  --fg-secondary: 75 85 99;          /* #4B5563 */
+  --fg-inverse: 255 255 255;         /* #FFFFFF */
+
+  /* Surface */
+  --bg-default: 255 255 255;         /* #FFFFFF */
+  --bg-muted: 248 250 252;           /* #F8FAFC */
+
+  /* Border */
+  --border-default: 229 231 235;     /* #E5E7EB */
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.06), 0 1px 1px rgba(0,0,0,0.04);
+  --shadow-popover: 0 10px 15px rgba(0,0,0,0.10);
+  --shadow-modal: 0 20px 25px rgba(0,0,0,0.15);
+
+  /* Focus ring */
+  --ring-brand: 26 64 246;           /* same as brand-600 */
+}

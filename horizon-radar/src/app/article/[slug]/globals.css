@@ -1,0 +1,56 @@
+@import '../../globals.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(1200px 800px at 80% -10%, rgba(255,179,77,0.12) 0%, rgba(11,15,18,0) 60%);
+  }
+  
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-[#6FE06A] focus:ring-offset-2 focus:ring-offset-[#171E22];
+  }
+  
+  .hover-lime {
+    @apply hover:text-[#B4FF8C] transition-colors;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .progress-bar {
+    @apply transition-all duration-700 ease-out;
+  }
+  
+  .tokenomics-chip {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .tokenomics-chip.good {
+    @apply bg-green-600 text-white;
+  }
+  
+  .tokenomics-chip.neutral {
+    @apply bg-amber-500 text-white;
+  }
+  
+  .tokenomics-chip.bad {
+    @apply bg-red-500 text-white;
+  }
+}
