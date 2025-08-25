@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Icons } from '@/components/ui/Icons';
 
 /**
  * Interactive "glass" buttons with glow ring + diagonal shine on hover.
@@ -13,13 +14,13 @@ export default function ActionButtons() {
           href="/about"
           ariaLabel="What is Horizon?"
           label="WHAT IS HORIZON?"
-          icon={<IconInfo />}
+          icon={<Icons.Info />}
         />
         <FancyLink
           href="/research"
           ariaLabel="Browse research"
           label="BROWSE RESEARCH"
-          icon={<IconGrid />}
+          icon={<Icons.Grid />}
         />
       </div>
     </div>
@@ -50,6 +51,4 @@ function FancyLink({
   );
 }
 
-// Simple inline icons - no duplication
-const IconInfo = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" /><path d="M12 11v6M12 7h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
-const IconGrid = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="2" /><rect x="14" y="4" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="2" /><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="2" /><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="2" /></svg>;
+

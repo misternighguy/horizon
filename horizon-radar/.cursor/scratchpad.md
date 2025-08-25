@@ -1,114 +1,84 @@
-# Horizon Radar Admin Panel - Article Creation Feature
+# Horizon Radar Scratchpad
 
 ## Background and Motivation
 
-The user has requested a comprehensive article creation system within the admin panel that includes:
-- A main article creation form at `/admin/create/article`
-- A test article form at `/admin/create/test` (limited to one test article)
-- Integration with the existing admin panel
-- Drag & drop functionality for section reordering
-- Visibility toggles for sections using eye icons
-- Support for all blog fields (TLDR, abstract, project name, ticker, official links, etc.)
-- Flexible sections for team members, tokenomics, sources, and links
-- Pre-filled table of contents with editability
-- Publish functionality
-- Mock data population for the blog section
+**User Request**: [Slop Guard — Horizon Radar Controlled Rampage]
+- **Priority 1**: Reduce lines of code (net negative LOC)
+- **Priority 2**: Improve speed & stability  
+- **Priority 3**: Preserve UX/behavior
+
+**Mode**: Started in PLANNER, now switching to EXECUTOR for controlled rampage batch execution.
 
 ## Key Challenges and Analysis
 
-1. **Form Complexity**: The article creation form needs to handle multiple section types with different data structures
-2. **Drag & Drop**: Implementing reorderable sections requires state management and drag & drop libraries
-3. **Visibility Toggles**: Each section needs individual visibility controls
-4. **Flexible Arrays**: Team members, tokenomics, sources, and links need dynamic add/remove functionality
-5. **Data Validation**: Ensuring all required fields are filled before publishing
-6. **Integration**: Seamlessly integrating with existing admin panel and data structures
+### Code Duplication Issues
+- Massive duplication between ProductCard.tsx (107 lines) and ProtocolCard.tsx (14 lines)
+- Inline SVG icons scattered across multiple components
+- Similar button patterns repeated across components
+- Unused components and files taking up space
+
+### Performance Bottlenecks
+- localStorageDB.ts: 979 lines with heavy mock data initialization
+- Header.tsx: 584 lines with complex search logic
+- Inline styles causing unnecessary re-renders
+- Complex type assertions slowing development
+
+### Type Safety Concerns
+- Unsafe window type assertions in multiple components
+- Complex type casting that could be simplified
+- Some any types in utility functions
 
 ## High-level Task Breakdown
 
-### Phase 1: Admin Panel Integration
-- [ ] Add "Create Article" button to admin panel dashboard
-- [ ] Create navigation links to article creation pages
-- [ ] Update admin panel content management tab
+### Phase 1: Quick Wins (Fixes 1-3)
+1. **Remove Unused Components** - Delete unused files for immediate LOC reduction
+2. **Consolidate Icons** - Create shared icon system to eliminate duplication
+3. **Merge Card Components** - Unify ProductCard and ProtocolCard into single component
 
-### Phase 2: Article Creation Form Structure
-- [ ] Create `/admin/create/article` page with form layout
-- [ ] Create `/admin/create/test` page with similar structure
-- [ ] Implement form sections for all required fields
-- [ ] Add visibility toggle controls for each section
+### Phase 2: Style & Type Cleanup (Fixes 4-5)
+4. **Remove Inline Styles** - Replace with CSS tokens and utilities
+5. **Simplify Type Assertions** - Clean up unsafe type casting
 
-### Phase 3: Advanced Form Features
-- [ ] Implement drag & drop for section reordering
-- [ ] Add dynamic add/remove for flexible arrays (team, tokenomics, sources, links)
-- [ ] Create custom section addition functionality
-- [ ] Implement pre-filled table of contents with editability
-
-### Phase 4: Data Management & Publishing
-- [ ] Implement form validation
-- [ ] Add publish functionality
-- [ ] Create data persistence layer
-- [ ] Handle test article uniqueness constraint
-
-### Phase 5: Mock Data Population
-- [ ] Research and create 10 realistic project articles
-- [ ] Populate blog section with mock data
-- [ ] Ensure data follows established format and structure
-
-### Phase 6: Testing & Integration
-- [ ] Test all form functionality
-- [ ] Verify drag & drop works correctly
-- [ ] Test visibility toggles
-- [ ] Validate publish workflow
-- [ ] Test admin panel integration
+### Phase 3: Data & Pattern Optimization (Fixes 6-8)
+6. **Optimize Mock Data** - Lazy load and reduce mock data size
+7. **Consolidate Button Patterns** - Unify button implementations
+8. **Clean Up Constants** - Ensure consistent usage of UI constants
 
 ## Project Status Board
 
-### Current Status / Progress Tracking
-- **Status**: Implementation Phase - Article Management System Complete!
-- **Current Task**: Phase 1, 2, 3, and 5 completed - Full article management workflow implemented
-- **Next Milestone**: Phase 4 - Data persistence and advanced features
-
 ### Completed Tasks
-- ✅ Added "Create Article" and "View Drafts" buttons to admin panel dashboard
-- ✅ Updated admin panel content management tab with article management links
-- ✅ Created `/admin/create/article` page with comprehensive form
-- ✅ Created `/admin/drafts` page for managing all article drafts
-- ✅ Created `/admin/test` page for test articles (admin-only)
-- ✅ Implemented beginner/intermediate/advanced reading level switching
-- ✅ Fixed synchronization logic: now properly tracks sync state and shows correct buttons
-- ✅ Implemented independent visibility toggles per reading level
-- ✅ Added flexible arrays for team members, links, sources, categories, and chains
-- ✅ Created custom section addition functionality
-- ✅ Implemented pre-filled table of contents with editability
-- ✅ Implemented full article workflow: Save → Test → Publish
-- ✅ Added Save Article (saves to drafts), Test Article (moves to test), and Publish functionality
-- ✅ Created comprehensive draft management system
-- ✅ Test articles are automatically backed up to drafts
-- ✅ Installed required Heroicons package
-- ✅ Created comprehensive blog page at `/blog`
-- ✅ Populated blog with 10 realistic mock articles covering major crypto projects
-- ✅ Removed public navigation links - users find articles through search
-- ✅ Implemented search, filtering, and sorting functionality for blog articles
+- [x] **PLANNER**: Analyzed entire codebase
+- [x] **PLANNER**: Created slop-ledger.md with comprehensive analysis
+- [x] **PLANNER**: Created rampage-report.md with execution plan
+- [x] **PLANNER**: Created scratchpad.md for progress tracking
 
-### In Progress
-- Phase 4: Data persistence and advanced features (drag & drop, enhanced functionality)
+### Current Task
+- [ ] **EXECUTOR**: Begin Fix 1 - Remove Unused Components & Files
 
-### Blocked/Needs Attention
-- None currently
+### Pending Tasks
+- [ ] **EXECUTOR**: Fix 2 - Consolidate Duplicate Icons
+- [ ] **EXECUTOR**: Fix 3 - Merge Similar Card Components
+- [ ] **EXECUTOR**: Fix 4 - Remove Inline Styles in Favor of Tokens
+- [ ] **EXECUTOR**: Fix 5 - Simplify Type Assertions
+- [ ] **EXECUTOR**: Fix 6 - Optimize Mock Data Loading
+- [ ] **EXECUTOR**: Fix 7 - Consolidate Button Patterns
+- [ ] **EXECUTOR**: Fix 8 - Clean Up Constants Usage
+
+## Current Status / Progress Tracking
+
+**Status**: Switching from PLANNER to EXECUTOR mode
+**Current Phase**: Phase 1 - Quick Wins
+**Next Action**: Execute Fix 1 - Remove Unused Components & Files
+**Target LOC Reduction**: -50 to -100 lines for Fix 1
 
 ## Executor's Feedback or Assistance Requests
 
-- Ready to begin implementation once plan is approved
-- Will need to research drag & drop libraries for React
-- May need clarification on specific field requirements for articles
-
-## Important Notes
-
-- **Blog page**: Available at `/blog` but not linked in navigation (users find articles through search)
-- **Test page**: Admin-only at `/admin/test` - not publicly accessible
-- **Article URLs**: Will follow pattern `/article/[slug]` (e.g., `/article/glow`, `/article/eth`)
+**Ready to Execute**: All planning complete, switching to execution mode.
+**No Blockers**: Clear plan with rollback steps for each fix.
+**Execution Strategy**: Sequential fixes with full testing between each step.
 
 ## Lessons
 
-- Always read existing files before making changes
-- Consider the complexity of form state management for multi-section forms
-- Plan for flexible data structures that can accommodate varying numbers of items
+- **Code Analysis**: Found significant duplication opportunities (400-500 LOC reduction potential)
+- **Planning**: Breaking fixes into small, testable chunks with clear rollback paths
+- **Documentation**: Creating comprehensive tracking documents for accountability

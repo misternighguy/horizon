@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { mockSummaries } from '@/data/mock';
-import ProductCard from '@/components/ProductCard';
+import UnifiedCard from '@/components/UnifiedCard';
 import ActionButtons from '@/components/landing/ActionButtons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -136,7 +136,7 @@ export default function Page() {
                 tabIndex={0}
                 aria-label={`View details for ${mockSummaries[(currentIndex - 1 + mockSummaries.length) % mockSummaries.length].name}`}
               >
-                <ProductCard protocol={mockSummaries[(currentIndex - 1 + mockSummaries.length) % mockSummaries.length]} />
+                <UnifiedCard protocol={mockSummaries[(currentIndex - 1 + mockSummaries.length) % mockSummaries.length]} variant="product" />
               </div>
               
               {/* Center Card (Primary) */}
@@ -153,7 +153,7 @@ export default function Page() {
                   }
                 }}
               >
-                <ProductCard protocol={mockSummaries[currentIndex]} isCenter={true} />
+                <UnifiedCard protocol={mockSummaries[currentIndex]} variant="product" isCenter={true} />
               </div>
               
               {/* Right Card */}
@@ -170,7 +170,7 @@ export default function Page() {
                 tabIndex={0}
                 aria-label={`View details for ${mockSummaries[(currentIndex + 1) % mockSummaries.length].name}`}
               >
-                <ProductCard protocol={mockSummaries[(currentIndex + 1) % mockSummaries.length]} />
+                <UnifiedCard protocol={mockSummaries[(currentIndex + 1) % mockSummaries.length]} variant="product" />
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { localStorageDB } from "@/data/localStorageDB";
+import { Icons } from "@/components/ui/Icons";
 
 // Extend Window interface for our custom methods
 declare global {
@@ -103,18 +104,7 @@ export default function NewsletterCardPopOut() {
           aria-label="Close"
           className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 text-white hover:bg-black/40 transition-colors"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.24 7.76a.75.75 0 0 1 0 1.06L13.06 12l3.18 3.18a.75.75 0 1 1-1.06 1.06L12 13.06l-3.18 3.18a.75.75 0 0 1-1.06-1.06L10.94 12 7.76 8.82a.75.75 0 1 1 1.06-1.06L12 10.94l3.18-3.18a.75.75 0 0 1 1.06 0z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <Icons.CloseCircle />
         </button>
 
         <div className="flex flex-col md:flex-row">

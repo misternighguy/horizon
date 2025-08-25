@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ResearchColumn from '@/components/ResearchColumn';
+import ResearchCardComponent from '@/components/ResearchCard';
 import { localStorageDB } from '@/data/localStorageDB';
 import { ResearchCard } from '@/types';
 
@@ -51,7 +51,7 @@ export default function ResearchPage() {
         <section className="w-full px-8 pt-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Recently Published Column */}
-            <ResearchColumn 
+            <ResearchCardComponent 
               title="Recently Published"
               subtitle="Discover our most recent analysis."
               icon="clock"
@@ -66,7 +66,7 @@ export default function ResearchPage() {
             />
 
             {/* Most Read Column */}
-            <ResearchColumn 
+            <ResearchCardComponent 
               title="Most Read"
               subtitle="Discover our most recent analysis."
               icon="bookmark"
@@ -81,7 +81,7 @@ export default function ResearchPage() {
             />
 
             {/* Trending Column */}
-            <ResearchColumn 
+            <ResearchCardComponent 
               title="Trending"
               subtitle="Discover our most recent analysis."
               icon="target"
