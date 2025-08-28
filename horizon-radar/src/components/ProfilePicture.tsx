@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { generateInitials, createInitialsAvatar } from '@/utils/imageProcessing';
 
 export interface ProfilePictureProps {
@@ -69,10 +70,11 @@ export default function ProfilePicture({
       >
         {/* Main Image or Fallback */}
         {src && !imageError ? (
-          <img
+          <Image
             src={imageSrc}
             alt={alt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
             onError={handleImageError}
           />
         ) : username ? (
@@ -82,10 +84,11 @@ export default function ProfilePicture({
             </span>
           </div>
         ) : (
-          <img
+          <Image
             src={imageSrc}
             alt={alt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
             onError={handleImageError}
           />
         )}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Article, ReadingLevel } from '@/types';
 import WatchlistButton from '@/components/WatchlistButton';
 
@@ -168,12 +169,11 @@ export default function ArticleHero({
             maxHeight: '500px'
           }}
         >
-          <img
+          <Image
             src={article.featuredImage || '/images/GlowBanner.png'}
             alt={`${article.title} featured image`}
-            className="w-full h-full object-cover"
-            onError={(e) => console.error('Image failed to load:', (e.target as HTMLImageElement).src)}
-            onLoad={() => console.log('Image loaded successfully:', article.featuredImage || '/images/GlowBanner.png')}
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
         </div>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { localStorageDB } from "@/data/localStorageDB";
 import { Icons } from "@/components/ui/Icons";
 
@@ -109,10 +110,11 @@ export default function NewsletterCardPopOut() {
         <div className="flex flex-col md:flex-row">
           {/* Left Section - Image (40% width) */}
           <div className="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden bg-black">
-            <img 
+            <Image 
               src="/images/join-newsletter-image.png" 
               alt="Join our newsletter for exclusive crypto research insights and updates"
-              className="w-full h-full object-cover object-center block"
+              fill
+              className="object-cover object-center"
             />
           </div>
 

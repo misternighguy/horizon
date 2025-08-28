@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -169,10 +170,12 @@ export default function Header() {
                    onClick={() => setShowDropdown(!showDropdown)}
                  >
                    {userAvatar ? (
-                     <img
+                     <Image
                        src={userAvatar}
                        alt={`${username}'s profile picture`}
-                       className="w-6 h-6 rounded-full object-cover"
+                       width={24}
+                       height={24}
+                       className="rounded-full object-cover"
                      />
                    ) : (
                      <div className="w-6 h-6 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center text-xs font-bold text-black">
@@ -249,22 +252,12 @@ export default function Header() {
 function Brand() {
   return (
     <Link href="/" className="shrink-0 hover:bg-[rgb(var(--color-horizon-brown))] transition-colors px-3 py-1.5 rounded-full mr-8 flex items-center justify-center" aria-label="Go to homepage">
-      <img 
+      <Image 
         src="/logo.png" 
         alt="Horizon Radar" 
-        width="48" 
-        height="48" 
+        width={48} 
+        height={48} 
         className="object-contain"
-        onError={(e) => {
-          console.error('Logo failed to load:', e);
-          // Fallback to text if image fails
-          e.currentTarget.style.display = 'none';
-          e.currentTarget.nextSibling?.remove();
-          const fallback = document.createElement('span');
-          fallback.textContent = 'Horizon Radar';
-          fallback.className = 'font-semibold tracking-tight text-lg';
-          e.currentTarget.parentNode?.appendChild(fallback);
-        }}
       />
     </Link>
   );

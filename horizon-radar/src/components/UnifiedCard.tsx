@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link';
+import Image from 'next/image';
 import type { ProtocolSummary } from '@/types';
 
 interface UnifiedCardProps {
@@ -40,10 +41,11 @@ export default function UnifiedCard({ protocol, variant = 'protocol', isCenter =
           <div 
             className="w-full rounded-lg overflow-hidden aspect-[3/1]"
           >
-            <img
+            <Image
               src="/images/GlowBanner.png"
               alt="Glow Protocol Banner"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
         </div>

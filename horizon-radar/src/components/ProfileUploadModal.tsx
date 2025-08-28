@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { validateImageFile, compressImage, loadPresetProfilePicture } from '@/utils/imageProcessing';
 
 export interface ProfileUploadModalProps {
@@ -92,10 +93,12 @@ export default function ProfileUploadModal({
                   className="flex flex-col items-center gap-3 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl hover:bg-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-blue-400/50">
-                    <img
+                    <Image
                       src="/images/MalePFP.jpeg"
                       alt="Male Avatar"
-                      className="w-full h-full object-cover"
+                      width={160}
+                      height={160}
+                      className="object-cover"
                     />
                   </div>
 
@@ -108,10 +111,12 @@ export default function ProfileUploadModal({
                   className="flex flex-col items-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-pink-400/50">
-                    <img
+                    <Image
                       src="/images/FemalePFP.jpeg"
                       alt="Female Avatar"
-                      className="w-full h-full object-cover"
+                      width={160}
+                      height={160}
+                      className="object-cover"
                     />
                   </div>
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { localStorageDB } from '@/data/localStorageDB';
 import UnifiedCard from '@/components/UnifiedCard';
 import ActionButtons from '@/components/landing/ActionButtons';
@@ -152,7 +153,7 @@ export default function Page() {
                     disabled={isTransitioning}
                     aria-label="Previous protocol"
                   >
-                    <img src="/LeftArrowLanding.png" alt="Previous" className="w-6 h-6 brightness-0 invert" />
+                    <Image src="/LeftArrowLanding.png" alt="Previous" width={24} height={24} className="brightness-0 invert" />
                   </button>
                   
                   <button 
@@ -161,7 +162,7 @@ export default function Page() {
                     disabled={isTransitioning}
                     aria-label="Next protocol"
                   >
-                    <img src="/RightArrowLanding.png" alt="Next" className="w-6 h-6 brightness-0 invert" />
+                    <Image src="/RightArrowLanding.png" alt="Next" width={24} height={24} className="brightness-0 invert" />
                   </button>
                 </div>
               </div>
@@ -183,7 +184,7 @@ export default function Page() {
                 disabled={isTransitioning}
                 aria-label="View previous protocol"
               >
-                <img src="/LeftArrowLanding.png" alt="Previous" className="w-12 h-12" />
+                <Image src="/LeftArrowLanding.png" alt="Previous" width={48} height={48} />
               </button>
 
               {/* Right Arrow */}
@@ -194,7 +195,7 @@ export default function Page() {
                 disabled={isTransitioning}
                 aria-label="View next protocol"
               >
-                <img src="/RightArrowLanding.png" alt="Next" className="w-12 h-12" />
+                <Image src="/RightArrowLanding.png" alt="Next" width={48} height={48} />
               </button>
 
               {/* Carousel Cards Container - Extended padding to accommodate glow */}

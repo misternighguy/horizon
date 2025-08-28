@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Icons } from '@/components/ui/Icons';
@@ -358,7 +359,7 @@ export default function AboutPage() {
             <div className="animate-fade-in-up">
               {/* Horizon Logo */}
               <div className="mb-8">
-                <img src="/logo.png" alt="Horizon Radar" className="w-[360px] mx-auto" />
+                <Image src="/logo.png" alt="Horizon Radar" width={360} height={120} className="mx-auto" />
               </div>
               
               <h1 className="text-6xl mb-8 font-inter">
@@ -422,9 +423,11 @@ export default function AboutPage() {
               
               {/* Full Story Graphic */}
               <div className="flex justify-center mb-12">
-                <img 
+                <Image 
                   src="/images/FullStoryGraphic.png" 
                   alt="Full Story Graphic - Web3 Research Fragmentation" 
+                  width={800}
+                  height={600}
                   className="max-w-full h-auto rounded-lg shadow-lg"
                 />
               </div>
@@ -468,9 +471,11 @@ export default function AboutPage() {
               
               {/* Stiching Story Graphic */}
               <div className="flex justify-center mb-16">
-                <img 
+                <Image 
                   src="/images/StichingStory.png" 
                   alt="Stiching Story - AI Agents Amplifying Research Depth" 
+                  width={800}
+                  height={600}
                   className="max-w-full h-auto rounded-lg"
                 />
               </div>
@@ -514,9 +519,11 @@ export default function AboutPage() {
               
               {/* How It Works Graphic */}
               <div className="flex justify-center mb-16">
-                <img 
+                <Image 
                   src="/images/HowItWorks.png" 
                   alt="How It Works - Perfect Reading Experience" 
+                  width={800}
+                  height={600}
                   className="max-w-full h-auto rounded-lg"
                 />
               </div>

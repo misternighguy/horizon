@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/ui/Icons';
 
@@ -25,7 +26,7 @@ export default function Footer() {
             <Icons.Star className="w-5 h-5 text-white" />
           </Link>
           <Link href="https://x.com/horizonradar" className={`inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium transition-colors ${isResearchPage ? 'text-white bg-white hover:bg-gray-100' : 'text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))]'}`}>
-            <img src="/images/WhiteXLogo.png" alt="X (Twitter)" className="w-5 h-5" />
+            <Image src="/images/WhiteXLogo.png" alt="X (Twitter)" width={20} height={20} />
           </Link>
         </div>
       </div>

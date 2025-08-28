@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { localStorageDB } from '@/data/localStorageDB';
@@ -103,10 +104,11 @@ export default function ResearchPage() {
                     {/* Banner Image */}
                     <div className="relative w-full h-24 bg-gray-100">
                       {card.bannerImage ? (
-                        <img
+                        <Image
                           src={card.bannerImage}
                           alt={`Banner for ${card.title}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
@@ -143,10 +145,11 @@ export default function ResearchPage() {
                     {/* Banner Image */}
                     <div className="relative w-full h-24 bg-gray-100">
                       {card.bannerImage ? (
-                        <img
+                        <Image
                           src={card.bannerImage}
                           alt={`Banner for ${card.title}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
@@ -183,10 +186,11 @@ export default function ResearchPage() {
                     {/* Banner Image */}
                     <div className="relative w-full h-24 bg-gray-100">
                       {card.bannerImage ? (
-                        <img
+                        <Image
                           src={card.bannerImage}
                           alt={`Banner for ${card.title}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">

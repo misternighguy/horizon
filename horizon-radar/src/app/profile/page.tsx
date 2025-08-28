@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Icons } from '@/components/ui/Icons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -319,7 +320,7 @@ export default function ProfilePage() {
                 <div className="flex items-start justify-between mb-6">
                   {/* Logo/Brand */}
                   <div className="flex items-center gap-3">
-                    <img src="/logo.png" alt="Horizon Radar Logo" className="w-12 h-12 object-contain" />
+                    <Image src="/logo.png" alt="Horizon Radar Logo" width={48} height={48} className="object-contain" />
                     <div>
                       <h3 className="text-black/80 text-sm font-medium tracking-wider uppercase">HORIZON RADAR</h3>
                     </div>
