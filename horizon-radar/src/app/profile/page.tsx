@@ -417,11 +417,11 @@ export default function ProfilePage() {
                   <span className="text-white">Browse Research</span>
                 </Link>
                 <Link
-                  href="/request"
+                  href={user.memberStyle === 'free' ? "/search" : "/request"}
                   className="flex items-center justify-center gap-3 p-3 bg-gray-700/50 border border-white/10 rounded-lg hover:bg-gray-700/70 transition-colors"
                 >
                   <Icons.Plus className="w-5 h-5 text-white/60" />
-                  <span className="text-white">Request Research</span>
+                  <span className="text-white">{user.memberStyle === 'free' ? 'Advanced Search' : 'Request Research'}</span>
                 </Link>
                 {user.memberStyle === 'admin' && (
                   <Link
