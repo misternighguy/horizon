@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { localStorageDB } from '@/data/localStorageDB';
@@ -1167,10 +1168,12 @@ function CreateArticlePageContent() {
                         minWidth={100}
                         minHeight={50}
                       >
-                        <img
+                        <Image
                           ref={imgRef}
                           src={originalImage}
                           alt="Crop preview"
+                          width={800}
+                          height={600}
                           className="max-h-96 max-w-full"
                         />
                       </ReactCrop>
@@ -1193,10 +1196,11 @@ function CreateArticlePageContent() {
                 </div>
               ) : imagePreview ? (
                 <div className="relative">
-                  <img 
+                  <Image 
                     src={imagePreview} 
                     alt="Banner preview" 
-                    className="w-full h-48 object-cover rounded-lg border border-white/20"
+                    fill
+                    className="object-cover rounded-lg border border-white/20"
                   />
                   <button
                     onClick={removeImage}
@@ -1295,10 +1299,12 @@ function CreateArticlePageContent() {
             <div className="space-y-4">
               {formData.interTextImages.map((image) => (
                 <div key={image.id} className="flex items-center space-x-4 p-4 bg-white/5 border border-white/10 rounded-lg">
-                  <img 
+                  <Image 
                     src={image.imageUrl} 
                     alt={image.title}
-                    className="w-16 h-16 object-cover rounded border border-white/20"
+                    width={64}
+                    height={64}
+                    className="object-cover rounded border border-white/20"
                   />
                   <div className="flex-1">
                     <h4 className="font-medium text-white/90">{image.title}</h4>
@@ -2058,10 +2064,12 @@ function CreateArticlePageContent() {
                     minWidth={50}
                     minHeight={50}
                   >
-                    <img
+                    <Image
                       ref={interTextImgRef}
                       src={interTextOriginalImage}
                       alt="Crop preview"
+                      width={800}
+                      height={600}
                       className="max-h-80 max-w-full"
                     />
                   </ReactCrop>
