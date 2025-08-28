@@ -622,30 +622,36 @@ export default function ProfilePage() {
                 )}
               </div>
 
-
-            </div>
-
-            {/* Right Column - Sidebar */}
-            <div className="space-y-6">
-              {/* Premium Upgrade CTA - Only for free users */}
+              {/* Premium Upgrade CTA - Only for free users - Horizontal card below Profile Information */}
               {user.memberStyle === 'free' && (
-                <div className="bg-gradient-to-br from-[rgb(var(--color-horizon-green))] to-[rgb(var(--color-brand-400))] rounded-2xl p-6">
-                  <div className="text-center">
-                    <Icons.Crown />
-                    <h3 className="text-xl font-medium text-black mb-2">Upgrade to Premium</h3>
-                    <p className="text-black/80 mb-4">
-                      Unlock exclusive research, advanced analytics, and priority support.
-                    </p>
+                <div className="bg-gradient-to-br from-[rgb(var(--color-horizon-green))] to-[rgb(var(--color-brand-400))] rounded-2xl p-8">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="text-3xl">
+                        <Icons.Crown />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-medium text-black mb-2">Upgrade to Premium</h3>
+                        <p className="text-black/80">
+                          Unlock exclusive research, advanced analytics, and priority support.
+                        </p>
+                      </div>
+                    </div>
                     <Link
                       href="/premium"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-black/90 transition-colors"
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white font-medium rounded-lg hover:bg-black/90 transition-colors"
                     >
-                      <Icons.ArrowRight className="w-4 h-4" />
+                      <Icons.ArrowRight className="w-5 h-5" />
                       Learn More
                     </Link>
                   </div>
                 </div>
               )}
+
+            </div>
+
+            {/* Right Column - Sidebar */}
+            <div className="space-y-6">
 
               {/* Premium Features - Only for premium users */}
               {user.memberStyle === 'premium' && (
