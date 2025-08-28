@@ -71,10 +71,11 @@ export default function ProfilePicture({
             console.log('No onClick function provided');
           }
         }}
-        className={`w-full h-full p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 ${
+        className={`w-full h-full p-2 border-2 border-red-500 bg-yellow-200 cursor-pointer rounded-lg hover:bg-yellow-300 transition-all duration-200 ${
           onClick ? 'cursor-pointer' : 'cursor-default'
         }`}
         disabled={!onClick}
+        style={{ zIndex: 9999 }}
       >
         {/* Main Image */}
         <img
@@ -85,6 +86,10 @@ export default function ProfilePicture({
           }`}
           onError={handleImageError}
         />
+        {/* Overlay text to show it's clickable */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-lg">
+          <span className="text-white font-bold text-sm">CLICK ME!</span>
+        </div>
       </button>
 
       {/* Upload Overlay */}
