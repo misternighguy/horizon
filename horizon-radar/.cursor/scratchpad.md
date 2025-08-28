@@ -848,3 +848,38 @@
 - **Documentation**: Creating comprehensive tracking documents for accountability
 - **Banner System**: All banners must maintain 3:1 horizontal ratio (1500x500) for consistency
 - **Layout Grid Issues**: When using CSS Grid, always specify explicit column spans (`col-span-X`) to ensure proper content distribution. Default behavior can cause content to be cramped in unexpected ways.
+
+## Planner: AI Slop Reduction & Security Hardening Plan (NEW)
+
+### Background and Motivation
+- Reduce low-signal, verbose outputs ("AI slop") in agent interactions and commits.
+- Tighten security across development workflow and app surface (client, server, CI/CD).
+
+### Key Challenges and Analysis
+- Inconsistent prompting leads to verbose, unfocused diffs and PRs.
+- Missing guardrails allow speculative code, hallucinated APIs, and over-editing.
+- Client-side only storage (e.g., profile avatar base64 in `localStorage`) risks bloat and XSS if unsanitized.
+- Upload/processing paths lack explicit validation, type-safe schemas, and limits.
+- Package drift and transitive vulnerabilities not continuously audited.
+- Secrets/keys risk appearing in logs or diffs during agent-driven edits.
+
+### High-level Task Breakdown (copyable prompts below implement these)
+1) Standardize agent operation modes and output constraints.
+2) Enforce test-first diffs and minimal, targeted edits.
+3) Add strong input validation and encoding for user data and uploads.
+4) Harden dependency and build pipeline (audit, pinning, SCA).
+5) Lock down secrets handling and logging redaction.
+6) Strengthen browser-side defenses (CSP, SRI, headers) and SSR boundaries.
+7) Add security checks to PR gates (lint, type, dependency, basic DAST).
+
+### Success Criteria
+- Agent outputs are concise, task-scoped, and include only necessary edits/diffs.
+- All user inputs and uploads are validated against strict schemas.
+- CI fails on vulnerability thresholds, unpinned deps, or type/lint regressions.
+- No secrets or tokens in logs, commits, or PR bodies; redaction verified.
+- CSP/SRI present and effective; no reflected or stored XSS in profile and upload flows.
+
+### Notes for Executor (when authorized later)
+- Avoid large refactors; apply incremental changes with tests.
+- Prefer server-side processing for uploads; avoid base64 storage in `localStorage`.
+- Introduce `zod` or `valibot` for runtime validation at boundaries.
