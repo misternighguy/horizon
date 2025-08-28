@@ -307,7 +307,6 @@ export default function ProfilePage() {
                     <img src="/logo.png" alt="Horizon Radar Logo" className="w-12 h-12 object-contain" />
                     <div>
                       <h3 className="text-black/80 text-sm font-medium tracking-wider uppercase">HORIZON RADAR</h3>
-                      <p className="text-black/60 text-xs">PREMIUM CARD</p>
                     </div>
                   </div>
                   
@@ -332,12 +331,7 @@ export default function ProfilePage() {
                       alt={`${user.username}'s profile picture`}
                       username={user.username}
                       size="md"
-                      onClick={() => {
-                        console.log('Profile picture clicked in profile page!');
-                        console.log('About to call openUploadModal...');
-                        openUploadModal();
-                        console.log('openUploadModal called from profile page');
-                      }}
+                      onClick={openUploadModal}
                       showUploadOverlay={true}
                       showVerification={false}
                     />

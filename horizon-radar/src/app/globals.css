@@ -254,53 +254,12 @@ html { scroll-behavior: smooth; }
 
 /* Reusable component classes powered by tokens */
 @layer components {
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 select-none;
-    @apply rounded-md px-4 py-2 text-sm font-medium;
-    @apply transition-colors focus-visible:outline-none;
-    box-shadow: none;
-  }
-  .btn-primary {
-    background-color: rgb(var(--color-brand-600));
-    color: rgb(var(--fg-inverse));
-  }
-  .btn-primary:hover { filter: brightness(0.95); }
-  .btn-primary:active { filter: brightness(0.92); }
-  .btn-primary:focus-visible {
-    box-shadow: 0 0 0 3px rgba(var(--ring-brand), 0.35);
-  }
-
-  .btn-secondary {
-    background-color: rgb(var(--bg-default));
-    color: rgb(var(--fg-primary));
-    border: 1px solid rgb(var(--border-default));
-  }
-  .btn-secondary:hover { background-color: rgb(249 250 251); }
-  .btn-secondary:focus-visible {
-    box-shadow: 0 0 0 3px rgba(var(--ring-brand), 0.25);
-  }
-
-  .pill {
-    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium;
-    background-color: rgb(243 244 246);
-    color: rgb(var(--fg-secondary));
-    border: 1px solid rgb(var(--border-default));
-  }
-
-  .card {
+    .card {
     @apply rounded-lg border bg-white;
     border-color: rgb(var(--border-default));
     box-shadow: var(--shadow-card);
   }
-
-  .input {
-    @apply w-full rounded-md border px-3 py-2 text-sm;
-    border-color: rgb(var(--border-default));
-  }
-  .input:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--ring-brand), 0.3);
-  }
+}
 
   /* === Fancy Buttons (glass + glow + shine) === */
   .fancy-btn {
@@ -384,7 +343,6 @@ html { scroll-behavior: smooth; }
   @keyframes hr-shine {
     to { transform: translateX(250%) rotate(10deg); }
   }
-}
 
 /* Mobile-optimized animations */
 @media (prefers-reduced-motion: reduce) {

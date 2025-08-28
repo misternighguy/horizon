@@ -40,26 +40,105 @@
 
 ## High-level Task Breakdown
 
-### Phase 1: Quick Wins (Fixes 1-3)
-1. **Remove Unused Components** - Delete unused files for immediate LOC reduction
-2. **Consolidate Icons** - Create shared icon system to eliminate duplication
-3. **Merge Card Components** - Unify ProductCard and ProtocolCard into single component
+### Phase 1: Remove Unused Components (Quick Wins)
+**Plan**: Delete unused files for immediate LOC reduction
+- **Target**: Unused components and files taking up space
+- **Approach**:
+  1. Search for files with 0 imports in codebase
+  2. Check for components not used in any page or component
+  3. Verify files are truly unused (not dynamically imported)
+  4. Delete confirmed unused files
+  5. Remove any orphaned imports
+- **Success Criteria**: Reduced LOC without breaking functionality
+- **Files**: All component files, focus on those with no imports
 
-### Phase 2: Style & Type Cleanup (Fixes 4-5)
-4. **Remove Inline Styles** - Replace with CSS tokens and utilities
-5. **Simplify Type Assertions** - Clean up unsafe type casting
+### Phase 2: Profile Icon Popup Fix (UI Fix)
+**Plan**: Fix profile icon popup functionality on golden card in /profile page
+- **Target**: ProfilePicture component in golden card section
+- **Approach**: 
+  1. Check ProfilePicture component for onClick handler
+  2. Verify ProfileUploadModal state management (isOpen, onClose)
+  3. Test click event propagation and modal trigger
+  4. Ensure modal renders above other content (z-index)
+  5. Test modal close functionality (X button, backdrop click)
+- **Success Criteria**: Clicking profile icon opens upload modal, modal closes properly
+- **Files**: `src/components/ProfilePicture.tsx`, `src/components/ProfileUploadModal.tsx`, `src/app/profile/page.tsx`
 
-### Phase 3: Data & Pattern Optimization (Fixes 6-8)
-6. **Optimize Mock Data** - Lazy load and reduce mock data size
-7. **Consolidate Button Patterns** - Unify button implementations
-8. **Clean Up Constants** - Ensure consistent usage of UI constants
+### Phase 3: Merge Card Components (Backend Only - No UI Changes)
+**Plan**: Unify ProductCard and ProtocolCard into single UnifiedCard component
+- **Target**: Eliminate duplication between ProductCard.tsx (107 lines) and ProtocolCard.tsx (14 lines)
+- **Approach**:
+  1. Compare ProductCard and ProtocolCard props and structure
+  2. Extend UnifiedCard to handle both card types via `variant` prop
+  3. Move unique logic from each card to UnifiedCard
+  4. Update all imports: ProductCard → UnifiedCard, ProtocolCard → UnifiedCard
+  5. Delete ProductCard.tsx and ProtocolCard.tsx
+  6. Test that all existing functionality works
+- **Success Criteria**: All existing functionality preserved, no visual changes, reduced LOC
+- **Files**: `src/components/UnifiedCard.tsx`, `src/components/ProductCard.tsx`, `src/components/ProtocolCard.tsx`
 
-### Phase 4: Banner System Implementation (NEW)
-9. **Implement Banner System** - Create consistent 3:1 ratio banners across all components
-   - Move GlowBanner.png to public/images folder
-   - Update article hero sections to use proper banner dimensions
-   - Update ProductCard components to use proper banner dimensions
-   - Ensure all banners maintain 3:1 ratio (1500x500)
+### Phase 4: Remove Inline Styles (Backend Only - No UI Changes)
+**Plan**: Replace inline styles with CSS classes and utilities
+- **Target**: Components with inline style objects
+- **Approach**:
+  1. Search for `style={{` patterns in all component files
+  2. For each inline style, find equivalent Tailwind utility classes
+  3. Replace `style={{color: 'red'}}` with `className="text-red-500"`
+  4. For complex styles, add custom CSS classes to `tokens.css`
+  5. Test that visual appearance remains identical
+- **Success Criteria**: No inline styles remain, identical visual output
+- **Files**: All component files, focus on those with style props
+
+### Phase 5: Simplify Type Assertions (Backend Only - No UI Changes)
+**Plan**: Clean up unsafe type casting and complex type assertions
+- **Target**: Components with `as any`, `as HTMLElement`, complex type casting
+- **Approach**:
+  1. Search for `as` keyword in all TypeScript files
+  2. Replace `as any` with proper interface or type definition
+  3. Replace `as HTMLElement` with proper type guards
+  4. Remove unnecessary type assertions where TypeScript can infer types
+  5. Add null checks for DOM element access
+- **Success Criteria**: No unsafe type assertions, proper TypeScript types
+- **Files**: All TypeScript files, focus on components with DOM manipulation
+
+### Phase 6: Database Schema Audit & Validation (Data Integrity)
+**Plan**: Comprehensive review of database usage across all pages and components
+- **Target**: Ensure all UI elements have corresponding database fields
+- **Approach**:
+  1. **Profile Page**: Check user form fields map to User type in localStorageDB
+  2. **Article Pages**: Verify article fields, reading levels, watchlist in Article type
+  3. **Admin Panel**: Check CRUD operations use proper database methods
+  4. **Login System**: Verify user authentication uses localStorageDB
+  5. **Watchlist System**: Ensure watchlist array in User type
+  6. **Research Requests**: Check request form fields in localStorageDB
+  7. **Fix any mismatches**: Add missing fields or remove orphaned data
+- **Success Criteria**: Every UI element has proper database backing, no orphaned data
+- **Files**: `src/data/localStorageDB.ts`, `src/types/index.ts`, all page components
+
+### Phase 7: Consolidate Button Patterns (Backend Only - No UI Changes)
+**Plan**: Unify button implementations across components
+- **Target**: Similar button patterns repeated across components
+- **Approach**:
+  1. Identify 3-4 common button patterns (primary, secondary, glass, icon)
+  2. Create Button component with variant prop in `src/components/ui/Button.tsx`
+  3. Replace custom button JSX with `<Button variant="primary">`
+  4. Ensure all button props (onClick, disabled, etc.) work consistently
+  5. Test that all buttons function identically
+- **Success Criteria**: Consistent button behavior, reduced duplication, no visual changes
+- **Files**: Create `src/components/ui/Button.tsx`, update all button usage
+
+### Phase 8: Clean Up Constants (Data & Pattern Optimization)
+**Plan**: Ensure consistent usage of UI constants and design tokens
+- **Target**: `src/constants/ui.ts`, `src/styles/tokens.css`
+- **Approach**:
+  1. Search for hardcoded colors (hex codes, rgb values) in components
+  2. Replace with constants from `ui.ts` or CSS custom properties
+  3. Search for hardcoded spacing values (px, rem) in components
+  4. Replace with Tailwind utilities or CSS custom properties
+  5. Remove duplicate constants in `ui.ts`
+  6. Ensure consistent naming (kebab-case for CSS, camelCase for JS)
+- **Success Criteria**: All styling uses consistent constants, no hardcoded values
+- **Files**: `src/constants/ui.ts`, `src/styles/tokens.css`, all component files
 
 ## Project Status Board
 
@@ -67,39 +146,57 @@
 - [x] **PLANNER**: Analyzed previous failures and root causes
 - [x] **PLANNER**: Created new step-by-step implementation plan
 - [x] **PLANNER**: Identified safeguards to prevent repeat failures
-- [x] **EXECUTOR**: Phase 1 - Add Article Sidebar Data Section (minimal changes) - COMPLETED
-- [x] **EXECUTOR**: Phase 2 - Fix responsive breakpoint (1226px) - COMPLETED
+- [x] **EXECUTOR**: Banner System Implementation - COMPLETED
+- [x] **EXECUTOR**: Data Source Interconnection - COMPLETED
+- [x] **EXECUTOR**: Date Handling Improvements - COMPLETED
+- [x] **EXECUTOR**: Landing Carousel Slop Guard - COMPLETED
+- [x] **EXECUTOR**: Profile Page Creation - COMPLETED
+- [x] **EXECUTOR**: Watchlist System Implementation - COMPLETED
+- [x] **EXECUTOR**: Dynamic Reading Level Content System - COMPLETED
+- [x] **EXECUTOR**: Article Editing and Content Management - COMPLETED
+- [x] **EXECUTOR**: Research Requests Management - COMPLETED
+- [x] **EXECUTOR**: Premium Page Dark Theme - COMPLETED
+- [x] **EXECUTOR**: Why Page Navigation and Scrolling - COMPLETED
 
 ### Current Task
-- [ ] **EXECUTOR**: Phase 3 - Add horizontal padding to components
+- [ ] **EXECUTOR**: Phase 1 - Remove Unused Components (Quick Wins)
 
 ### Pending Tasks
-- [ ] **EXECUTOR**: Phase 4 - Database integration and testing
+- [ ] **EXECUTOR**: Phase 2 - Fix Profile Icon Popup on Golden Card (UI Fix)
+- [ ] **EXECUTOR**: Phase 3 - Merge Card Components (Backend Only - No UI Changes)
+- [ ] **EXECUTOR**: Phase 4 - Remove Inline Styles (Backend Only - No UI Changes)
+- [ ] **EXECUTOR**: Phase 5 - Simplify Type Assertions (Backend Only - No UI Changes)
+- [ ] **EXECUTOR**: Phase 6 - Database Schema Audit & Validation (Data Integrity)
+- [ ] **EXECUTOR**: Phase 7 - Consolidate Button Patterns (Backend Only - No UI Changes)
+- [ ] **EXECUTOR**: Phase 8 - Clean Up Constants (Data & Pattern Optimization)
 
 ## Current Status / Progress Tracking
 
-**Status**: EXECUTOR mode - Phase 2 completed successfully
-**Current Phase**: Phase 2 complete, ready for Phase 3
-**Next Action**: Proceed with Phase 3 - Add horizontal padding to components
-**Target**: Fix article creation form using safer, step-by-step approach
+**Status**: EXECUTOR mode - All major features complete, ready for optimization phase
+**Current Phase**: Ready to begin Phase 1 - Quick Wins optimization
+**Next Action**: Begin Phase 1 - Remove unused components for immediate LOC reduction
+**Target**: Reduce codebase size and improve maintainability through systematic optimization
 **Progress**: 
-- ✅ **COMPLETED**: Analyzed previous failures and identified root causes
-- ✅ **COMPLETED**: Created new implementation plan with safeguards
-- ✅ **COMPLETED**: Identified "add new fields without changing existing ones" approach
-- ✅ **COMPLETED**: Phase 1 - Added Article Sidebar Data section to form
-  - Added radarRating fields (growthPotential, investmentOpportunity, memberOpportunities)
-  - Added dynamic notableStats array with add/remove functionality
-  - Added dynamic tokenomicsData array with add/remove functionality
-  - All new fields properly integrated with existing form structure
-  - Form compiles successfully without breaking existing functionality
-- ✅ **COMPLETED**: Phase 2 - Fixed responsive breakpoint to 1226px
-  - Added custom 'sidebar' breakpoint (1226px) to Tailwind config
-  - Updated article page to use sidebar: breakpoint instead of lg: (1024px)
-  - Changed sidebar visibility from 1024px to 1226px
-  - Mobile TOC and sidebar components now show until 1226px
-  - Build successful, custom breakpoint working correctly
-- ⏳ **PENDING**: Phase 3 - Add horizontal padding to components
-- ⏳ **PENDING**: Phase 4 - Database integration and testing
+- ✅ **COMPLETED**: Banner system implementation (3:1 ratio banners)
+- ✅ **COMPLETED**: Data source interconnection fixes
+- ✅ **COMPLETED**: Date handling improvements
+- ✅ **COMPLETED**: Landing carousel slop guard optimizations
+- ✅ **COMPLETED**: Profile page creation with comprehensive functionality
+- ✅ **COMPLETED**: Watchlist system implementation
+- ✅ **COMPLETED**: Dynamic reading level content system
+- ✅ **COMPLETED**: Article editing and content management fixes
+- ✅ **COMPLETED**: Research requests management
+- ✅ **COMPLETED**: Premium page dark theme implementation
+- ✅ **COMPLETED**: Why page navigation and scrolling improvements
+- ✅ **COMPLETED**: Development server running on localhost:3000
+- ⏳ **READY**: Phase 1 - Remove unused components (400-500 LOC reduction potential)
+- ⏳ **PENDING**: Phase 2 - Fix profile icon popup functionality on golden card
+- ⏳ **PENDING**: Phase 3 - Merge ProductCard and ProtocolCard components (backend only)
+- ⏳ **PENDING**: Phase 4 - Remove inline styles (backend only)
+- ⏳ **PENDING**: Phase 5 - Simplify type assertions (backend only)
+- ⏳ **PENDING**: Phase 6 - Comprehensive database schema audit
+- ⏳ **PENDING**: Phase 7 - Consolidate button patterns (backend only)
+- ⏳ **PENDING**: Phase 8 - Clean up constants and ensure consistent usage
 
 ## /why Scroll Assistant Refactor
 
@@ -826,20 +923,40 @@
   - ✅ Implemented Escape key to reset focus states
   - ✅ Enhanced arrow z-index to prevent occlusion
 - ✅ Development server running on localhost:3000
-- 🔄 Ready for testing improved landing carousel
+- ✅ **Phase 1 - Task 1.1 COMPLETED**: Removed unused ResearchCard.tsx (100 lines)
+- ✅ **Phase 1 - Task 1.2 COMPLETED**: Skip icon consolidation (analysis paralysis, Icons.tsx already well-organized)
+- ✅ **Phase 1 - Task 1.3 COMPLETED**: Removed unused CSS classes (btn, btn-primary, btn-secondary, pill, input) (~50 lines)
+- ✅ **PHASE 1 COMPLETED**: Total LOC reduction ~150 lines
+- ✅ **PHASE 2 COMPLETED**: Fixed profile icon popup functionality on golden card
+- 🔄 **Phase 3**: Ready to begin component consolidation optimizations
 
 ## Executor's Feedback or Assistance Requests
 
-**Ready to Execute**: Banner system implementation complete + data source interconnection fixed + date handling fixed + landing carousel slop guard complete.
-**No Blockers**: All components updated with 3:1 ratio, unified data source, proper error handling, and improved carousel UX.
-**Execution Strategy**: Landing carousel improvements complete, ready for testing and next slop guard tasks.
-**Testing Status**: Development server running on localhost:3000, ready for manual verification of carousel improvements.
+**Phase 1 COMPLETED**: Successfully removed ~150 lines of unused code
+- ✅ Removed unused ResearchCard.tsx component (100 lines)
+- ✅ Removed unused CSS utility classes (btn, btn-primary, btn-secondary, pill, input) (~50 lines)
+- ✅ Skipped icon consolidation (analysis paralysis, Icons.tsx already well-organized)
+
+**Phase 2 COMPLETED**: Fixed profile icon popup functionality
+- ✅ Cleaned up ProfilePicture component (removed debugging styles)
+- ✅ Fixed click handler implementation with proper event handling
+- ✅ Improved upload overlay styling (more professional)
+- ✅ Fixed fallback initials styling (consistent with design)
+- ✅ Added visual click indicators (blue border) and debugging logs
+- ✅ Fixed overlapping elements that were blocking clicks
+- ✅ Moved MalePFP.jpeg and FemalePFP.jpeg from Downloads to public/images/
+- ✅ Fixed modal image display (actual profile pictures now show)
+- ✅ Removed debugging console logs for clean production code
+
+**Ready for Phase 3**: Component consolidation optimizations
+**No Blockers**: All Phase 2 tasks completed successfully
+**Execution Strategy**: Ready to begin Phase 3 optimizations focusing on merging duplicate components
+**Testing Status**: Development server running on localhost:3000, ready for Phase 3 execution
 **Next Steps**: 
-1. Test improved landing carousel behavior and spacing
-2. Verify arrow positioning and hover effects
-3. Test keyboard navigation and focus management
-4. Continue with next slop guard fixes (remove unused components, consolidate icons, etc.)
-5. Verify no layout shift on hover and proper transform-based scaling
+1. Begin Phase 3: Merge ProductCard and ProtocolCard components
+2. Focus on component consolidation opportunities
+3. Identify and merge duplicate code patterns
+4. Continue systematic LOC reduction approach
 
 ## Lessons
 
@@ -848,3 +965,4 @@
 - **Documentation**: Creating comprehensive tracking documents for accountability
 - **Banner System**: All banners must maintain 3:1 horizontal ratio (1500x500) for consistency
 - **Layout Grid Issues**: When using CSS Grid, always specify explicit column spans (`col-span-X`) to ensure proper content distribution. Default behavior can cause content to be cramped in unexpected ways.
+- **Icon Consolidation**: Analysis paralysis - Icons.tsx already well-organized, inline SVGs are mostly unique use cases. Better to focus on higher-impact optimizations first.

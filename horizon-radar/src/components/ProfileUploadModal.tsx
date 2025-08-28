@@ -29,7 +29,9 @@ export default function ProfileUploadModal({
     // Validate file
     const validation = validateImageFile(file);
     if (!validation.isValid) {
-      alert(validation.error);
+      if (typeof window !== 'undefined' && (window as any).showToast) {
+        (window as any).showToast(validation.error, 'error', 4000);
+      }
       return;
     }
 
@@ -46,7 +48,9 @@ export default function ProfileUploadModal({
       onUpload(compressedImage);
     } catch (error) {
       console.error('Error processing image:', error);
-      alert('Error processing image. Please try again.');
+      if (typeof window !== 'undefined' && (window as any).showToast) {
+        (window as any).showToast('Error processing image. Please try again.', 'error', 4000);
+      }
     }
   };
 
@@ -56,7 +60,9 @@ export default function ProfileUploadModal({
       onUpload(imageDataUrl);
     } catch (error) {
       console.error('Error loading preset image:', error);
-      alert('Error loading preset image. Please try again.');
+      if (typeof window !== 'undefined' && (window as any).showToast) {
+        (window as any).showToast('Error loading preset image. Please try again.', 'error', 4000);
+      }
     }
   };
 
@@ -85,23 +91,14 @@ export default function ProfileUploadModal({
                   disabled={isUploading}
                   className="flex flex-col items-center gap-3 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl hover:bg-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-400/50">
+                  <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-blue-400/50">
                     <img
                       src="/images/MalePFP.jpeg"
                       alt="Male Avatar"
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to colored placeholder if image fails to load
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = '<div class="w-full h-full bg-blue-500 rounded-full flex items-center justify-center"><span class="text-white font-bold text-lg">M</span></div>';
-                      }}
                     />
                   </div>
-                  <div className="text-center">
-                    <div className="text-white font-medium text-sm">Male Avatar</div>
-                    <div className="text-white/60 text-xs">MalePFP.jpeg</div>
-                  </div>
+
                 </button>
 
                 {/* Female Avatar Option */}
@@ -110,23 +107,14 @@ export default function ProfileUploadModal({
                   disabled={isUploading}
                   className="flex flex-col items-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-400/50">
+                  <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-pink-400/50">
                     <img
                       src="/images/FemalePFP.jpeg"
                       alt="Female Avatar"
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to colored placeholder if image fails to load
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = '<div class="w-full h-full bg-pink-500 rounded-full flex items-center justify-center"><span class="text-white font-bold text-lg">F</span></div>';
-                      }}
                     />
                   </div>
-                  <div className="text-center">
-                    <div className="text-white font-medium text-sm">Female Avatar</div>
-                    <div className="text-white/60 text-xs">FemalePFP.jpeg</div>
-                  </div>
+
                 </button>
               </div>
 
@@ -142,7 +130,7 @@ export default function ProfileUploadModal({
                   </svg>
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-medium">Upload Custom Image</div>
+                  <div className="text-white font-medium">Upload your PFP</div>
                   <div className="text-white/60 text-sm">Choose a photo from your computer</div>
                 </div>
               </button>

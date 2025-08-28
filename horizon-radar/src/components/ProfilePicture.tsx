@@ -59,61 +59,50 @@ export default function ProfilePicture({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Simple Clickable Button */}
+      {/* Clickable Profile Picture */}
       <button
-        onClick={() => {
-          console.log('ProfilePicture button clicked!', { onClick: !!onClick });
-          if (onClick) {
-            console.log('Calling onClick function...');
-            onClick();
-            console.log('onClick function called successfully');
-          } else {
-            console.log('No onClick function provided');
-          }
-        }}
-        className={`w-full h-full p-2 border-2 border-red-500 bg-yellow-200 cursor-pointer rounded-lg hover:bg-yellow-300 transition-all duration-200 ${
-          onClick ? 'cursor-pointer' : 'cursor-default'
+        onClick={onClick}
+        className={`w-full h-full rounded-lg overflow-hidden transition-all duration-200 relative border-2 ${
+          onClick ? 'cursor-pointer hover:opacity-80 border-blue-400 hover:border-blue-500' : 'cursor-default border-transparent'
         }`}
         disabled={!onClick}
-        style={{ zIndex: 9999 }}
       >
-        {/* Main Image */}
-        <img
-          src={imageSrc}
-          alt={alt}
-          className={`w-full h-full rounded-lg object-cover border-2 border-black/20 shadow-lg transition-all duration-200 ${
-            isHovered && onClick ? 'opacity-80' : ''
-          }`}
-          onError={handleImageError}
-        />
-        {/* Overlay text to show it's clickable */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-lg">
-          <span className="text-white font-bold text-sm">CLICK ME!</span>
-        </div>
+        {/* Main Image or Fallback */}
+        {src && !imageError ? (
+          <img
+            src={imageSrc}
+            alt={alt}
+            className="w-full h-full object-cover"
+            onError={handleImageError}
+          />
+        ) : username ? (
+          <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-600 rounded-lg flex items-center justify-center">
+            <span className={`font-bold text-white ${textSizes[size]}`}>
+              {generateInitials(username)}
+            </span>
+          </div>
+        ) : (
+          <img
+            src={imageSrc}
+            alt={alt}
+            className="w-full h-full object-cover"
+            onError={handleImageError}
+          />
+        )}
       </button>
 
       {/* Upload Overlay */}
       {showUploadOverlay && onClick && (
         <div 
-          className={`absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1 pointer-events-none ${
+          className={`absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none ${
             isHovered ? 'opacity-100' : ''
           }`}
         >
-          <div className="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+            <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </div>
-          <span className="text-white text-xs font-medium">Choose PFP</span>
-        </div>
-      )}
-
-      {/* Fallback Initials (if no image and username provided) */}
-      {!src && username && !imageError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#95EC6E] to-[#E4B74D] rounded-lg flex items-center justify-center">
-          <span className={`font-bold text-black ${textSizes[size]}`}>
-            {generateInitials(username)}
-          </span>
         </div>
       )}
     </div>
