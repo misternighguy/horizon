@@ -16,6 +16,6 @@ export const UI_CONSTANTS = {
   OVERLAY_Z_INDEX: 40,
   TOOLTIP_Z_INDEX: 60,
   // Carousel positioning constants
-  CAROUSEL_LEFT_ARROW_POSITION: 'calc(50% - 300px - 48px)',
-  CAROUSEL_RIGHT_ARROW_POSITION: 'calc(50% - 300px - 48px)',
+  CAROUSEL_LEFT_ARROW_POSITION: 'calc(50% - 400px)',
+  CAROUSEL_RIGHT_ARROW_POSITION: 'calc(50% - 400px)',
 } as const;

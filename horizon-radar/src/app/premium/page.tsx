@@ -27,49 +27,28 @@ const plans: Plan[] = [
     price: 0,
     yearlyPrice: 0,
     features: [
-      { text: 'Top 5 popular protocols', included: true },
-      { text: 'Top 3 trending protocols', included: true },
-      { text: 'Basic protocol summaries', included: true },
-      { text: 'Beginner level content only', included: true },
-      { text: 'Limited research access', included: true }
+      { text: 'Research Scope', included: true },
+      { text: 'Weekly Newsletter', included: true },
+      { text: 'Comment & Interact with Experts', included: true },
+      { text: 'Novice & Technical Writing Styles', included: true }
     ],
     buttonText: 'EXPLORE FOR FREE',
     buttonVariant: 'secondary'
   },
   {
-    name: 'PRO PLAN',
+    name: 'PREMIUM PLAN',
     subtitle: 'Unlock comprehensive research insights',
-    price: 29,
-    yearlyPrice: 290,
+    price: 14.95,
+    yearlyPrice: 99.95,
     features: [
-      { text: 'All Free features', included: true },
-      { text: 'Unlimited protocol access', included: true },
-      { text: 'Intermediate & Advanced content', included: true },
-      { text: 'Detailed protocol dossiers', included: true },
-      { text: 'Protocol comparison tools', included: true },
-      { text: 'Research bookmarking', included: true },
-      { text: 'Priority support access', included: true },
-      { text: 'Weekly research digests', included: true }
+      { text: 'All Free Features', included: true },
+      { text: 'Unlock "Analyst" Writing Style', included: true },
+      { text: 'Request Research', included: true },
+      { text: 'Access to Videos', included: true },
+      { text: 'Create Watchlist', included: true },
+      { text: 'Premium Support', included: true }
     ],
-    buttonText: 'SUBSCRIBE TO PRO',
-    buttonVariant: 'primary'
-  },
-  {
-    name: 'ULTIMATE PLAN',
-    subtitle: 'Access enterprise-level research tools',
-    price: 99,
-    yearlyPrice: 990,
-    features: [
-      { text: 'All Pro features', included: true },
-      { text: 'Advanced analytics dashboard', included: true },
-      { text: 'Custom research reports', included: true },
-      { text: 'Team collaboration tools', included: true },
-      { text: 'API access for integrations', included: true },
-      { text: 'Dedicated account manager', included: true },
-      { text: 'Early access to new features', included: true },
-      { text: 'White-label research solutions', included: true }
-    ],
-    buttonText: 'SUBSCRIBE TO ULTIMATE',
+    buttonText: 'SUBSCRIBE TO PREMIUM',
     buttonVariant: 'primary'
   }
 ]
@@ -88,7 +67,7 @@ export default function PremiumPage() {
     if (selectedCycle === 'yearly') {
       return `$${plan.yearlyPrice}`
     } else if (selectedCycle === 'quarterly') {
-      return `$${Math.round(plan.price * 3 * 0.9)}`
+      return `$${29.95}`
     }
     return `$${plan.price}`
   }
@@ -103,23 +82,26 @@ export default function PremiumPage() {
     if (plan.price === 0 || selectedCycle === 'monthly') return null
     if (selectedCycle === 'yearly') {
       const savings = (plan.price * 12) - plan.yearlyPrice
-      return `Save $${savings} annually`
+      return `Save $${savings.toFixed(2)} annually`
     }
     if (selectedCycle === 'quarterly') {
-      const savings = (plan.price * 3) - Math.round(plan.price * 3 * 0.9)
-      return `Save $${savings} quarterly`
+      const savings = (plan.price * 3) - 29.95
+      return `Save $${savings.toFixed(2)} quarterly`
     }
     return null
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Solid black background */}
+      <div className="absolute inset-0 bg-black"></div>
+      
       {/* Header */}
       <div className="relative z-20">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <Link 
             href="/"
-            className="inline-flex items-center text-white/80 hover:text-white transition-colors"
+            className="inline-flex items-center text-white/70 hover:text-white transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -130,29 +112,30 @@ export default function PremiumPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12 relative z-10">
         {/* Title */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-light mb-4">
-            <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient">
               SUBSCRIBE TO HORIZON RADAR
             </span>
           </h1>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Unlock comprehensive Web3 research insights with structured protocol dossiers and level-appropriate content
           </p>
         </div>
 
-        {/* Billing Cycle Selector */}
-        <div className="flex justify-center mb-12">
-          <div className="flex bg-white/10 rounded-lg p-1 backdrop-blur-sm">
+        {/* Billing Cycle Selector and CTA Button */}
+        <div className="flex justify-between items-center mb-12">
+          {/* Billing Cycle Selector */}
+          <div className="flex bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-1 shadow-lg">
             {billingCycles.map((cycle) => (
               <button
                 key={cycle.value}
                 onClick={() => setSelectedCycle(cycle.value)}
                 className={`px-6 py-3 rounded-md font-medium transition-all duration-300 ${
                   selectedCycle === cycle.value
-                    ? 'bg-white text-black'
+                    ? 'bg-[rgb(var(--color-horizon-green))] text-[rgb(var(--color-horizon-brown-dark))]'
                     : 'text-white/70 hover:text-white'
                 }`}
               >
@@ -160,85 +143,114 @@ export default function PremiumPage() {
               </button>
             ))}
           </div>
+          
+          {/* CTA Button - Right Aligned */}
+          <Link
+            href="/about"
+            className="group inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-light tracking-[-0.01em] bg-white/71 border border-white whitespace-nowrap backdrop-blur-sm hover:bg-white/90 transition-all duration-300"
+          >
+            <span className="text-white group-hover:text-black transition-colors duration-300">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+            <span className="text-white group-hover:text-[#3c3c3c] transition-colors duration-300">WHAT IS HORIZON?</span>
+          </Link>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`relative rounded-2xl overflow-hidden ${
+              className={`relative rounded-2xl overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg hover:shadow-xl transition-all ${
                 plan.buttonVariant === 'primary' 
-                  ? 'bg-white/5 border border-white/20' 
-                  : 'bg-white/3 border border-white/10'
+                  ? 'border-2 border-[rgb(var(--color-horizon-green))]' 
+                  : 'border border-white/20'
               }`}
             >
-              {/* Plan Image Placeholder */}
-              <div className="h-48 bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-500 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <div className="text-4xl mb-2">
-                      {index === 0 ? '🔍' : index === 1 ? '📊' : '🚀'}
-                    </div>
-                    <div className="text-sm opacity-80">
-                      {index === 0 ? 'Free Research' : index === 1 ? 'Pro Analytics' : 'Ultimate Tools'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Plan Content */}
-              <div className="p-8">
-                <h3 className="text-2xl font-light mb-2">{plan.name}</h3>
-                <p className="text-white/70 mb-6">{plan.subtitle}</p>
-                
-                {/* Pricing */}
-                <div className="mb-6">
-                  <div className="text-4xl font-light mb-1">
-                    {getPrice(plan)}
-                  </div>
-                  <div className="text-sm text-white/50">
-                    {plan.price > 0 ? getPeriod() : 'FOREVER'}
-                  </div>
-                  {getSavings(plan) && (
-                    <div className="text-sm text-[rgb(var(--color-horizon-green))] mt-1">
-                      {getSavings(plan)}
-                    </div>
-                  )}
-                </div>
-
-                {/* Features */}
-                <div className="space-y-3 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center">
-                      <div className={`w-4 h-4 rounded-full mr-3 flex items-center justify-center ${
-                        feature.included 
-                          ? 'bg-[rgb(var(--color-horizon-green))]' 
-                          : 'bg-white/20'
-                      }`}>
-                        {feature.included && (
-                          <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              {/* Plan Header with Image and Content Side by Side */}
+              <div className="flex flex-col lg:flex-row">
+                {/* Plan Image Placeholder */}
+                <div className="lg:w-1/3 h-48 lg:h-auto bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-500 relative overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-white text-center">
+                      <div className="text-4xl mb-2 text-white">
+                        {index === 0 ? (
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="inline-block">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                            <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        ) : (
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="inline-block">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="9" y1="9" x2="9" y2="21"/>
+                            <line x1="15" y1="9" x2="15" y2="21"/>
+                            <line x1="9" y1="9" x2="15" y2="9"/>
+                            <line x1="9" y1="15" x2="15" y2="15"/>
                           </svg>
                         )}
                       </div>
-                      <span className={`text-sm ${feature.included ? 'text-white' : 'text-white/40'}`}>
-                        {feature.text}
-                      </span>
+                      <div className="text-sm opacity-80">
+                        {index === 0 ? 'Free Research' : 'Premium Analytics'}
+                      </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
 
-                {/* CTA Button */}
-                <button
-                  className={`w-full py-4 px-6 rounded-full font-medium transition-all duration-300 ${
-                    plan.buttonVariant === 'primary'
-                      ? 'bg-[rgb(var(--color-horizon-green))] text-black hover:bg-[rgb(var(--color-horizon-green))]/90'
-                      : 'bg-white/10 text-white border border-white/30 hover:bg-white/20'
-                  }`}
-                >
-                  {plan.buttonText}
-                </button>
+                {/* Plan Content */}
+                <div className="lg:w-2/3 p-8">
+                  <h3 className="text-2xl font-light mb-2 text-white">{plan.name}</h3>
+                  <p className="text-white/80 mb-6">{plan.subtitle}</p>
+                  
+                  {/* Pricing */}
+                  <div className="mb-6">
+                    <div className="text-4xl font-light mb-1 text-white">
+                      {getPrice(plan)}
+                    </div>
+                    <div className="text-sm text-white/70">
+                      {plan.price > 0 ? getPeriod() : 'FOREVER'}
+                    </div>
+                    {getSavings(plan) && (
+                      <div className="text-sm text-[rgb(var(--color-horizon-green))] mt-1">
+                        {getSavings(plan)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-3 mb-8">
+                    {plan.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center">
+                        <div className={`w-4 h-4 rounded-full mr-3 flex items-center justify-center ${
+                          feature.included 
+                            ? 'bg-[rgb(var(--color-horizon-green))]' 
+                            : 'bg-white/20'
+                        }`}>
+                          {feature.included && (
+                            <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-sm ${feature.included ? 'text-white' : 'text-white/60'}`}>
+                          {feature.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <button
+                    className={`w-full py-4 px-6 rounded-full font-medium transition-all duration-300 ${
+                      plan.buttonVariant === 'primary'
+                        ? 'bg-[rgb(var(--color-horizon-green))] text-black hover:bg-[rgb(var(--color-horizon-green))]/90'
+                        : 'bg-white/10 text-white border border-white/30 hover:bg-white/20'
+                    }`}
+                  >
+                    {plan.buttonText}
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -247,7 +259,7 @@ export default function PremiumPage() {
         {/* Bottom Information */}
         <div className="text-center text-white/70">
           <p className="mb-4">
-            Horizon Radar Ultimate is also available for enterprise teams and research institutions.
+            Horizon Radar Premium provides comprehensive research tools for serious crypto investors.
           </p>
           <div className="flex justify-center items-center space-x-4 text-sm">
             <Link href="/about" className="text-white hover:text-[rgb(var(--color-horizon-green))] transition-colors">
@@ -261,14 +273,7 @@ export default function PremiumPage() {
         </div>
       </div>
 
-      {/* Chat Support */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="w-12 h-12 rounded-full bg-[rgb(var(--color-horizon-green))] text-black flex items-center justify-center hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </button>
-      </div>
+
     </div>
   )
 }

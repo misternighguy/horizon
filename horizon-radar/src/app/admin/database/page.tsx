@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { localStorageDB } from '@/data/localStorageDB';
 import { DatabaseSchema } from '@/types';
 
@@ -57,10 +58,35 @@ export default function DatabasePage() {
     }
   };
 
-  const handleReinitialize = () => {
-    if (confirm('This will reinitialize the database with fresh mock data. Continue?')) {
-      localStorage.clear();
-      window.location.reload();
+  const handleExportJSON = () => {
+    if (!backupData) return;
+    
+    try {
+      // Parse the backup data to ensure it's valid JSON
+      const jsonData = JSON.parse(backupData);
+      
+      // Create a blob with the JSON data
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { 
+        type: 'application/json' 
+      });
+      
+      // Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `horizon-radar-backup-${new Date().toISOString().split('T')[0]}.json`;
+      
+      // Trigger the download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      setMessage({ type: 'success', text: 'JSON file exported successfully!' });
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to export JSON: ' + error });
     }
   };
 
@@ -78,13 +104,22 @@ export default function DatabasePage() {
     <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-light mb-4">
-            <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
-              DATABASE STATUS
-            </span>
-          </h1>
-          <p className="text-white/60">Horizon Radar Local Storage Database Management</p>
+        <div className="relative">
+          <Link 
+            href="/admin" 
+            className="absolute top-0 left-0 text-white/60 hover:text-white transition-colors flex items-center space-x-2"
+          >
+            <span>←</span>
+            <span>Return to Admin Panel</span>
+          </Link>
+          <div className="text-center">
+            <h1 className="text-4xl font-light mb-4">
+              <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
+                DATABASE STATUS
+              </span>
+            </h1>
+            <p className="text-white/60">Horizon Radar Local Storage Database Management</p>
+          </div>
         </div>
 
         {/* Message Display */}
@@ -169,6 +204,14 @@ export default function DatabasePage() {
                   rows={8}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white text-sm font-mono resize-none"
                 />
+                <div className="mt-3">
+                  <button
+                    onClick={handleExportJSON}
+                    className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    📥 Export as JSON File
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -201,22 +244,16 @@ export default function DatabasePage() {
         {/* Danger Zone */}
         <div className="bg-red-500/10 backdrop-blur-sm border border-red-500/30 rounded-xl p-6">
           <h3 className="text-xl font-medium text-red-400 mb-4">⚠️ Danger Zone</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-center">
             <button
               onClick={handleClearDatabase}
               className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
             >
               Clear Database
             </button>
-            <button
-              onClick={handleReinitialize}
-              className="px-6 py-3 bg-yellow-600 text-white font-medium rounded-lg hover:bg-yellow-700 transition-colors"
-            >
-              Reinitialize with Mock Data
-            </button>
           </div>
-          <p className="text-red-400/80 text-sm mt-4">
-            These actions will permanently affect your database. Use with extreme caution.
+          <p className="text-red-400/80 text-sm mt-4 text-center">
+            This action will permanently clear all data from your database. Use with extreme caution.
           </p>
         </div>
 

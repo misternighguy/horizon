@@ -13,14 +13,36 @@ html { scroll-behavior: smooth; }
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
   }
   
   body {
     @apply text-gray-900 antialiased;
+    overflow-x: hidden;
   }
 }
 
 @layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
+  
+  .sticky-container {
+    position: relative;
+    overflow: visible;
+  }
+  
+  .sticky-sidebar {
+    position: sticky;
+    top: 32px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient-shift 3s ease-in-out infinite;
@@ -34,6 +56,191 @@ html { scroll-behavior: smooth; }
       background-position: 100% 50%;
     }
   }
+  
+  .gradient-brand-text {
+    background: linear-gradient(135deg, #FFFFFF 0%, #E4E4E4 25%, rgb(var(--color-brand-400)) 50%, rgb(var(--color-horizon-green)) 75%, #7EFF5E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: rgb(var(--color-horizon-green)); /* Fallback for forced-colors mode */
+  }
+  
+  @media (forced-colors: active) {
+  .gradient-brand-text {
+    color: rgb(var(--color-horizon-green));
+    background: none;
+    -webkit-text-fill-color: unset;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better mobile spacing */
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Mobile-optimized text sizes */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  
+  .mobile-text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  
+  /* Mobile carousel improvements */
+  .mobile-carousel {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .mobile-carousel-item {
+    scroll-snap-align: center;
+  }
+  
+  /* Mobile navigation improvements */
+  .mobile-nav-overlay {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Mobile button improvements */
+  .mobile-btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Mobile search improvements */
+  .mobile-search-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  .hover\:opacity-100:hover {
+    opacity: inherit;
+  }
+  
+  /* Add active states for touch */
+  .touch\:scale-95:active {
+    transform: scale(0.95);
+  }
+  
+  .touch\:opacity-80:active {
+    opacity: 0.8;
+  }
+}
+
+/* Why Horizon Page Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(90deg); }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-left {
+  0% { opacity: 0; transform: translateX(-30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in-right {
+  0% { opacity: 0; transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+/* Electric Orange Loading Animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    border-color: rgb(251 146 60); /* orange-400 */
+    box-shadow: 0 0 8px rgba(251, 146, 60, 0.3), 0 0 16px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    border-color: rgb(249 115 22); /* orange-500 */
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.5), 0 0 24px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1s ease-in-out infinite;
+  animation-play-state: running;
+}
+
+/* Glass container utility for research sections */
+.glass-container {
+  background: rgba(60, 53, 43, 0.6); /* Darker gray glass ~60% opacity */
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.animate-fade-in-left {
+  animation: fade-in-left 1s ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fade-in-right 1s ease-out forwards;
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
   
   .scrollbar-hide {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -177,4 +384,40 @@ html { scroll-behavior: smooth; }
   @keyframes hr-shine {
     to { transform: translateX(250%) rotate(10deg); }
   }
+}
+
+/* Mobile-optimized animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient,
+  .hover\:scale-105,
+  .hover\:scale-110 {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Mobile-specific keyframes for better performance */
+@keyframes mobile-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mobile-slide-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Mobile animation classes */
+.mobile-fade-in {
+  animation: mobile-fade-in 0.3s ease-out;
+}
+
+.mobile-slide-up {
+  animation: mobile-slide-up 0.4s ease-out;
 }

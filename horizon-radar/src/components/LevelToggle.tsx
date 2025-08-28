@@ -3,7 +3,7 @@
 import { useLevel } from '@/contexts/LevelContext'
 import type { ReadingLevel } from '@/types'
 
-const levels: ReadingLevel[] = ['beginner', 'intermediate', 'advanced']
+const levels: ReadingLevel[] = ['novice', 'technical', 'analyst']
 
 export default function LevelToggle() {
   const { level, setLevel } = useLevel()

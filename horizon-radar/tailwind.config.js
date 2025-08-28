@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        'sidebar': '1226px',
+      },
       colors: {
         primary: {
           50: '#eff6ff',

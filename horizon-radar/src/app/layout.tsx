@@ -4,7 +4,6 @@ import { LevelProvider } from '@/contexts/LevelContext'
 import NewsletterCardPopOut from '@/components/NewsletterCardPopOut'
 import ToastContainer from '@/components/Toast'
 import DatabaseInitializer from '@/components/DatabaseInitializer'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {

@@ -245,8 +245,8 @@ export default function DraftsPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredDrafts.map((draft) => (
-              <div key={draft.id} className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            {filteredDrafts.map((draft, index) => (
+              <div key={`${draft.id}-${index}`} className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-3">
@@ -295,7 +295,7 @@ export default function DraftsPage() {
                   
                   <div className="flex items-center space-x-2 ml-6">
                     <Link
-                      href={`/admin/edit/${draft.id}`}
+                      href={`/admin/create/article?edit=${draft.id}`}
                       className="p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg text-blue-400 hover:bg-blue-600/30 transition-colors"
                       title="Edit Article"
                     >

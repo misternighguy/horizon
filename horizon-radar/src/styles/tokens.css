@@ -35,4 +35,12 @@
 
   /* Focus ring */
   --ring-brand: 26 64 246;           /* same as brand-600 */
+  
+  /* Enhanced Brand Gradient */
+  --gradient-brand: linear-gradient(135deg, #FFFFFF 0%, #E4E4E4 25%, rgb(var(--color-brand-400)) 50%, rgb(var(--color-horizon-green)) 75%, #7EFF5E 100%);
+  --gradient-brand-text: from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))];
+  
+  /* Card Layout Variables */
+  --card-padding: 16px;
+  --card-section-gap: 16px;
 }

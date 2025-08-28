@@ -4,6 +4,7 @@ import {
   User, 
   Comment, 
   Protocol, 
+  ProtocolSummary,
   ResearchCard,
   NewsletterSubscription,
   STORAGE_KEYS
@@ -53,7 +54,7 @@ class LocalStorageDB {
         createdAt: new Date('2024-11-15'),
         updatedAt: new Date('2024-12-01'),
         author: 'Horizon Research Team',
-        readingLevels: ['beginner', 'intermediate', 'advanced'],
+        readingLevels: ['novice', 'technical', 'analyst'],
         abstract: [
           'Glow Protocol represents a novel approach to financing renewable energy infrastructure through decentralized tokenomics. By leveraging blockchain technology and smart contracts, the protocol creates a sustainable incentive structure that aligns stakeholders across the solar energy value chain.',
           'The project introduces innovative mechanisms for token distribution, governance, and revenue sharing that mirror successful models from the Bitcoin ecosystem while addressing the specific needs of renewable energy financing.'
@@ -137,7 +138,7 @@ class LocalStorageDB {
           { category: 'Treasury', percentage: 15, status: 'neutral' }
         ],
         content: {
-          beginner: {
+          novice: {
             sections: [
               {
                 title: 'What is Glow Protocol?',
@@ -151,7 +152,7 @@ class LocalStorageDB {
               }
             ]
           },
-          intermediate: {
+          technical: {
             sections: [
               {
                 title: 'Technical Architecture',
@@ -165,7 +166,7 @@ class LocalStorageDB {
               }
             ]
           },
-          advanced: {
+          analyst: {
             sections: [
               {
                 title: 'Mechanism Design',
@@ -198,7 +199,7 @@ class LocalStorageDB {
         createdAt: new Date('2024-11-01'),
         updatedAt: new Date('2024-11-20'),
         author: 'Horizon Research Team',
-        readingLevels: ['beginner', 'intermediate', 'advanced'],
+        readingLevels: ['novice', 'technical', 'analyst'],
         abstract: [
           'SolarXYZ enables retail investors to fund real-world solar projects with crypto rewards.',
           'The protocol channels capital into solar infrastructure with bitcoin-style incentives.'
@@ -261,7 +262,7 @@ class LocalStorageDB {
           { category: 'Development', percentage: 30, status: 'good' }
         ],
         content: {
-          beginner: {
+          novice: {
             sections: [
               {
                 title: 'Introduction',
@@ -270,7 +271,7 @@ class LocalStorageDB {
               }
             ]
           },
-          intermediate: {
+          technical: {
             sections: [
               {
                 title: 'Technical Overview',
@@ -279,7 +280,7 @@ class LocalStorageDB {
               }
             ]
           },
-          advanced: {
+          analyst: {
             sections: [
               {
                 title: 'Deep Dive',
@@ -308,11 +309,13 @@ class LocalStorageDB {
         isActive: true,
         lastLogin: new Date(),
         profile: {
+          avatar: '/images/default-avatar.svg',
           bio: 'Horizon Radar Administrator',
-          twitter: 'https://twitter.com/thenighguy'
+          twitter: 'https://twitter.com/thenighguy',
+          linkedin: ''
         },
         preferences: {
-          readingLevel: 'advanced',
+          readingLevel: 'analyst',
           notifications: true,
           newsletter: false
         }
@@ -327,8 +330,14 @@ class LocalStorageDB {
         expiresAt: new Date('2025-06-01'),
         isActive: true,
         lastLogin: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        profile: {
+          avatar: '/images/default-avatar.svg',
+          bio: '',
+          twitter: '',
+          linkedin: ''
+        },
         preferences: {
-          readingLevel: 'intermediate',
+          readingLevel: 'technical',
           notifications: true,
           newsletter: true
         }
@@ -343,10 +352,38 @@ class LocalStorageDB {
         expiresAt: new Date('2025-01-15'),
         isActive: true,
         lastLogin: new Date(Date.now() - 48 * 60 * 60 * 1000),
+        profile: {
+          avatar: '/images/default-avatar.svg',
+          bio: '',
+          twitter: '',
+          linkedin: ''
+        },
         preferences: {
-          readingLevel: 'beginner',
+          readingLevel: 'novice',
           notifications: false,
           newsletter: true
+        }
+      },
+      {
+        id: '4',
+        username: 'test_user',
+        email: 'test@gmail.com',
+        memberStyle: 'free',
+        duration: 1,
+        createdAt: new Date('2024-12-20'),
+        expiresAt: new Date('2025-01-20'),
+        isActive: true,
+        lastLogin: new Date(),
+        profile: {
+          avatar: '/images/default-avatar.svg',
+          bio: '',
+          twitter: '',
+          linkedin: ''
+        },
+        preferences: {
+          readingLevel: 'novice',
+          notifications: true,
+          newsletter: false
         }
       }
     ];
@@ -467,73 +504,73 @@ class LocalStorageDB {
         investmentOpportunityText: 'Compelling if RWA execution continues; see risks.',
         sections: {
           abstract: {
-            beginner: 'SolarXYZ enables retail to fund real-world solar projects with crypto rewards.',
-            intermediate: 'SolarXYZ channels capital into solar infra with bitcoin-style incentives.',
-            advanced: 'Mechanism design mirrors UTXO-era issuance; collateralized RWAs back yield streams.',
+            novice: 'SolarXYZ enables retail to fund real-world solar projects with crypto rewards.',
+            technical: 'SolarXYZ channels capital into solar infra with bitcoin-style incentives.',
+            analyst: 'Mechanism design mirrors UTXO-era issuance; collateralized RWAs back yield streams.',
           },
-          architecture: {
-            beginner: 'On-chain contracts hold capital; off-chain oracles track solar output.',
-            intermediate: 'Core contracts manage deposits, rewards; oracles feed production data.',
-            advanced: 'UUPS proxies for upgradeability; cross-chain settlement via messaging bridge.',
-          },
+                      architecture: {
+              novice: 'On-chain contracts hold capital; off-chain oracles track solar output.',
+              technical: 'Core contracts manage deposits, rewards; oracles feed production data.',
+              analyst: 'UUPS proxies for upgradeability; cross-chain settlement via messaging bridge.',
+            },
           mechanics: {
             deposit: {
-              beginner: 'Users deposit tokens.',
-              intermediate: 'LP deposits accrue rewards.',
-              advanced: 'AMM routing + staking adapters.',
+              novice: 'Users deposit tokens.',
+              technical: 'LP deposits accrue rewards.',
+              analyst: 'AMM routing + staking adapters.',
             },
             withdraw: {
-              beginner: 'Users can withdraw anytime.',
-              intermediate: 'Fees may apply.',
-              advanced: 'Timelocks protect liquidity shocks.',
+              novice: 'Users can withdraw anytime.',
+              technical: 'Fees may apply.',
+              analyst: 'Timelocks protect liquidity shocks.',
             },
             incentives: {
-              beginner: 'Earn SLR tokens.',
-              intermediate: 'Rewards decay over time.',
-              advanced: 'Emissions curve matches growth targets.',
+              novice: 'Earn SLR tokens.',
+              technical: 'Rewards decay over time.',
+              analyst: 'Emissions curve matches growth targets.',
             },
             riskEngine: {
-              beginner: 'Risks are monitored.',
-              intermediate: 'Oracle failures handled.',
-              advanced: 'Circuit breakers & TWA oracles.',
+              novice: 'Risks are monitored.',
+              technical: 'Oracle failures handled.',
+              analyst: 'Circuit breakers & TWA oracles.',
             },
           },
           problemUsersValue: {
             problem: {
-              beginner: 'Green energy needs funding.',
-              intermediate: 'Capex heavy infra underfunded.',
-              advanced: 'Fragmented financing & volatility.',
+              novice: 'Green energy needs funding.',
+              technical: 'Capex heavy infra underfunded.',
+              analyst: 'Fragmented financing & volatility.',
             },
             users: {
-              beginner: 'Retail and solar operators.',
-              intermediate: 'Yield seekers & providers.',
-              advanced: 'Creditworthy operators + DeFi LPs.',
+              novice: 'Retail and solar operators.',
+              technical: 'Yield seekers & providers.',
+              analyst: 'Creditworthy operators + DeFi LPs.',
             },
             value: {
-              beginner: 'Simple yield from solar.',
-              intermediate: 'Transparent metrics.',
-              advanced: 'Capital-efficient RWA on-chain exposures.',
+              novice: 'Simple yield from solar.',
+              technical: 'Transparent metrics.',
+              analyst: 'Capital-efficient RWA on-chain exposures.',
             },
           },
           tokenomics: {
-            beginner: 'SLR rewards early users.',
-            intermediate: 'Vesting and cliffs protect long-term holders.',
-            advanced: 'Allocation: Team 20% (48m, 12m cliff); Emissions decay; fee buybacks.',
+            novice: 'SLR rewards early users.',
+            technical: 'Vesting and cliffs protect long-term holders.',
+            analyst: 'Allocation: Team 20% (48m, 12m cliff); Emissions decay; fee buybacks.',
           },
           authorSources: {
-            beginner: 'Compiled from docs & dashboards.',
-            intermediate: 'Citations with timestamps.',
-            advanced: 'Snapshot block recorded for metrics.',
+            novice: 'Compiled from docs & dashboards.',
+            technical: 'Citations with timestamps.',
+            analyst: 'Snapshot block recorded for metrics.',
           },
           disclaimer: {
-            beginner: 'Not financial advice.',
-            intermediate: 'Use at your own risk.',
-            advanced: 'Methodology notes & caveats available.',
+            novice: 'Not financial advice.',
+            technical: 'Use at your own risk.',
+            analyst: 'Methodology notes & caveats available.',
           },
           community: {
-            beginner: 'Member ratings coming soon.',
-            intermediate: 'Bull/Bear theses stubs.',
-            advanced: 'Opinion data stored separately.',
+            novice: 'Member ratings coming soon.',
+            technical: 'Bull/Bear theses stubs.',
+            analyst: 'Opinion data stored separately.',
           },
         },
         metricSnapshots: [
@@ -723,7 +760,20 @@ class LocalStorageDB {
       ...userData,
       id: Date.now().toString(),
       createdAt: new Date(),
-      expiresAt: new Date(Date.now() + userData.duration * 30 * 24 * 60 * 60 * 1000)
+      expiresAt: new Date(Date.now() + userData.duration * 30 * 24 * 60 * 60 * 1000),
+              profile: {
+          avatar: '/images/default-avatar.svg',
+          bio: '',
+          twitter: '',
+          linkedin: '',
+          ...userData.profile
+        },
+      preferences: {
+        readingLevel: 'novice',
+        notifications: true,
+        newsletter: false,
+        ...userData.preferences
+      }
     };
     
     users.unshift(newUser);
@@ -751,6 +801,23 @@ class LocalStorageDB {
     this.updateSystemStats();
     
     return users[index];
+  }
+
+  public updateUserProfile(id: string, profileUpdates: Partial<User['profile']>): User | null {
+    const users = this.getUsers();
+    const index = users.findIndex(user => user.id === id);
+    
+    if (index === -1) return null;
+    
+    const user = users[index];
+    const updatedProfile = { ...user.profile, ...profileUpdates };
+    const updatedUser = { ...user, profile: updatedProfile };
+    
+    users[index] = updatedUser;
+    this.saveToStorage(STORAGE_KEYS.USERS, users);
+    this.updateSystemStats();
+    
+    return updatedUser;
   }
 
   public deleteUser(id: string): boolean {
@@ -826,8 +893,29 @@ class LocalStorageDB {
   }
 
   public getResearchCardsByCategory(category: ResearchCard['category']): ResearchCard[] {
-    const cards = this.getResearchCards();
-    return cards.filter(card => card.category === category);
+    // Get articles and convert them to research cards with banner images
+    const articles = this.getArticles();
+    const researchCards: ResearchCard[] = articles.map(article => ({
+      id: `${article.slug}-card`,
+      title: article.title,
+      description: article.subtitle || 'No description available',
+      growthScore: 7.5, // Default score, can be enhanced later
+      opportunityScore: 7.5, // Default score, can be enhanced later
+      slug: article.slug,
+      bannerImage: article.featuredImage, // Use the article's featured image
+      category: 'recently-published' as ResearchCard['category'], // Default category
+      publishedAt: article.publishedAt || new Date(),
+      viewCount: 0, // Default view count
+      author: article.author,
+      tags: article.productArchitecture?.tags || []
+    }));
+    
+    // Filter by category if specified
+    if (category) {
+      return researchCards.filter(card => card.category === category);
+    }
+    
+    return researchCards;
   }
 
   // Protocol Operations
@@ -937,6 +1025,15 @@ class LocalStorageDB {
     console.log('🗑️ Horizon Radar Local Database cleared');
   }
 
+  public forceReinitialize(): void {
+    if (typeof window === 'undefined') return;
+    
+    console.log('🔄 Force reinitializing Horizon Radar Local Database...');
+    this.clearDatabase();
+    this.initializeMockData();
+    console.log('✅ Database reinitialized with updated data');
+  }
+
   public backupDatabase(): string {
     const data = this.exportDatabase();
     const backup = {
@@ -968,6 +1065,37 @@ class LocalStorageDB {
       console.error('Failed to restore database:', error);
       return false;
     }
+  }
+
+  // Convert Articles to ProtocolSummaries for landing page
+  public getProtocolSummaries(): ProtocolSummary[] {
+    const articles = this.getArticles();
+    return articles.map(article => {
+      // Handle updatedAt which might be a Date object or string from localStorage
+      let lastUpdated: string;
+      const updatedAt = article.updatedAt as any; // Type assertion to handle localStorage serialization
+      
+      if (updatedAt instanceof Date) {
+        lastUpdated = updatedAt.toISOString().split('T')[0];
+      } else if (typeof updatedAt === 'string') {
+        lastUpdated = updatedAt.split('T')[0];
+      } else {
+        // Fallback to current date if updatedAt is invalid
+        lastUpdated = new Date().toISOString().split('T')[0];
+      }
+
+      return {
+        slug: article.slug,
+        name: article.title,
+        ticker: article.ticker,
+        category: [article.classification],
+        chains: article.location,
+        status: article.status === 'published' ? 'Mainnet' : 'Development',
+        premium: false, // Default to false, can be enhanced later
+        radarRating: Math.round((article.radarRating.growthPotential + article.radarRating.investmentOpportunity) / 2),
+        lastUpdated
+      };
+    });
   }
 }
 

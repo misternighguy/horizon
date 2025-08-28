@@ -8,7 +8,7 @@ function Section({
   copy,
 }: {
   title: string
-  copy?: { beginner?: string; intermediate?: string; advanced?: string }
+  copy?: { novice?: string; technical?: string; analyst?: string }
 }) {
   return (
     <section className="space-y-2">

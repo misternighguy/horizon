@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
 import { UI_CONSTANTS } from '@/constants/ui';
 import { Article } from '@/types';
 import { Icons } from '@/components/ui/Icons';
+import { performOptimizedSearch, SearchResult } from '@/utils/search';
 
 type NavItem = { href: string; label: string };
 
@@ -13,15 +15,18 @@ const NAV: NavItem[] = [
   { href: '/about', label: 'About' },
   { href: '/premium', label: 'Premium' },
   { href: '/research', label: 'Research' },
-  { href: '/request', label: 'Request' }
+  { href: '/request', label: 'Request' },
+  { href: '/watchlist', label: 'Watchlist' }
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userAvatar, setUserAvatar] = useState<string>('');
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
@@ -32,13 +37,30 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    // Check if user is logged in (check localStorage for admin session or other auth tokens)
-    const adminSession = localStorage.getItem('adminSession');
-    const userSession = localStorage.getItem('userSession');
+    // Check for existing login sessions
+    const adminSession = localStorage.getItem('adminSession')
+    const userSession = localStorage.getItem('userSession')
     
     if (adminSession || userSession) {
-      setIsLoggedIn(true);
-      setUsername(adminSession || userSession || 'User');
+      setIsLoggedIn(true)
+      setUsername(adminSession || userSession || '')
+      
+      // Check if user is admin by looking up their role in the database
+      try {
+        const localStorageDB = (window as { localStorageDB?: any }).localStorageDB;
+        if (localStorageDB) {
+          const username = adminSession || userSession;
+          const user = localStorageDB.getUserByUsername(username);
+          if (user && user.memberStyle === 'admin') {
+            setIsAdmin(true);
+          }
+          if (user?.profile?.avatar) {
+            setUserAvatar(user.profile.avatar);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+      }
     }
   }, []);
 
@@ -52,12 +74,16 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('adminSession');
-    localStorage.removeItem('userSession');
-    setIsLoggedIn(false);
-    setUsername('');
-    // Redirect to home page after logout
-    window.location.href = '/';
+    // Clear sessions
+    localStorage.removeItem('adminSession')
+    localStorage.removeItem('userSession')
+    
+    // Reset state
+    setIsLoggedIn(false)
+    setUsername('')
+    
+    // Redirect to home page
+    window.location.href = '/'
   };
 
   const handleDropdownEnter = () => {
@@ -70,7 +96,7 @@ export default function Header() {
   const handleDropdownLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setShowDropdown(false);
-    }, 1000); // 1 second delay
+    }, 300); // Reduced delay for better UX
   };
 
   // Spec: no header on About page
@@ -85,76 +111,117 @@ export default function Header() {
       ].join(' ')}
       aria-label="Primary"
     >
-      <div className="w-full px-8 py-5">
-        <div className="h-20 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Brand />
-            <DesktopNav />
-          </div>
-          <div className="flex items-center gap-5">
-            <SearchBox />
-            {isLoggedIn ? (
-              <div 
-                className="relative"
-                onMouseEnter={handleDropdownEnter}
-                onMouseLeave={handleDropdownLeave}
-              >
-                <button 
-                  className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-[rgb(var(--color-horizon-green))] bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))] transition-colors cursor-pointer"
-                  aria-label="User menu"
-                >
-                  {username}
-                </button>
-                {/* Dropdown menu with hover linger */}
-                <div 
-                  className={`absolute right-0 top-full mt-2 bg-[#3c352b] border border-[#263036] rounded-lg shadow-lg transition-all duration-300 z-50 min-w-[120px] ${
-                    showDropdown 
-                      ? 'opacity-100 pointer-events-auto' 
-                      : 'opacity-0 pointer-events-none'
-                  }`}
-                >
-                  <Link
-                    href="/profile"
-                    className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm rounded-t-lg"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    href="/settings"
-                    className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
-                  >
-                    Settings
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
-                  >
-                    Logout
-                  </button>
-                  {username === 'thenighguy' && (
-                    <Link
-                      href="/admin"
-                      className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <Link 
-                href="/login" 
-                className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown))] transition-colors"
-                aria-label="Login to your account"
-              >
-                <Icons.Profile />
-                Login
-              </Link>
-            )}
-            <MobileMenu />
-          </div>
-        </div>
-      </div>
+             <div className="w-full px-8 py-5">
+         <div className="h-20 flex items-center justify-between gap-4">
+           {/* Left side - Logo (hidden on mobile) and Menu button (mobile only) */}
+           <div className="flex items-center gap-4">
+             {/* Mobile Menu Button - Left side on mobile */}
+             <div className="md:hidden">
+               <MobileMenu />
+             </div>
+             
+             {/* Logo - Hidden on mobile, visible on desktop */}
+             <div className="hidden md:block">
+               <Brand />
+             </div>
+             
+             {/* Desktop Navigation - Hidden on mobile */}
+             <div className="hidden md:block">
+               <DesktopNav />
+             </div>
+           </div>
+           
+           {/* Right side - Search, Login/User, Desktop Menu */}
+           <div className="flex items-center gap-5">
+             {/* Search - Hidden on mobile, visible on desktop */}
+             <div className="hidden md:block">
+               <SearchBox />
+             </div>
+             
+             {/* Login/User section */}
+             {isLoggedIn ? (
+               <div 
+                 className="relative"
+                 onMouseEnter={handleDropdownEnter}
+                 onMouseLeave={handleDropdownLeave}
+               >
+                 <button 
+                   className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-[rgb(var(--color-horizon-green))] bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))] transition-colors cursor-pointer"
+                   aria-label="User menu"
+                   onClick={() => setShowDropdown(!showDropdown)}
+                 >
+                   {userAvatar ? (
+                     <img
+                       src={userAvatar}
+                       alt={`${username}'s profile picture`}
+                       className="w-6 h-6 rounded-full object-cover"
+                     />
+                   ) : (
+                     <div className="w-6 h-6 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center text-xs font-bold text-black">
+                       {username.charAt(0).toUpperCase()}
+                     </div>
+                   )}
+                   <span>{username}</span>
+                 </button>
+                 {/* Dropdown menu with hover linger */}
+                 <div 
+                   className={`absolute right-0 top-full mt-2 bg-[#3c352b] border border-[#263036] rounded-lg shadow-lg transition-all duration-300 z-50 min-w-[120px] ${
+                     showDropdown 
+                       ? 'opacity-100 pointer-events-auto' 
+                       : 'opacity-0 pointer-events-none'
+                   }`}
+                 >
+                   <Link
+                     href="/profile"
+                     className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm rounded-t-lg"
+                   >
+                     Profile
+                   </Link>
+                   <Link
+                     href="/watchlist"
+                     className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
+                   >
+                     Watchlist
+                   </Link>
+                   <button
+                     onClick={handleLogout}
+                     className="w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
+                   >
+                     Logout
+                   </button>
+                   {isAdmin && (
+                     <Link
+                       href="/admin"
+                       className="block w-full px-4 py-2 text-left text-white hover:bg-[#4a4238] transition-colors text-sm border-t border-[#263036]"
+                     >
+                       Admin Panel
+                     </Link>
+                   )}
+                 </div>
+               </div>
+             ) : (
+               <Link 
+                 href="/login" 
+                 className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown))] transition-colors"
+                 aria-label="Login to your account"
+               >
+                 <Icons.Profile />
+                 Login
+               </Link>
+             )}
+             
+             {/* Mobile Search Button - Right side on mobile */}
+             <div className="md:hidden">
+               <MobileSearchButton />
+             </div>
+             
+             {/* Desktop Menu Button - Hidden on mobile */}
+             <div className="hidden md:block">
+               <MobileMenu />
+             </div>
+           </div>
+         </div>
+       </div>
     </header>
   );
 }
@@ -163,7 +230,7 @@ export default function Header() {
 
 function Brand() {
   return (
-    <Link href="/" className="shrink-0 hover:bg-[rgb(var(--color-horizon-brown))] transition-colors px-3 py-1.5 rounded-full mr-8" aria-label="Go to homepage">
+    <Link href="/" className="shrink-0 hover:bg-[rgb(var(--color-horizon-brown))] transition-colors px-3 py-1.5 rounded-full mr-8 flex items-center justify-center" aria-label="Go to homepage">
       <img 
         src="/logo.png" 
         alt="Horizon Radar" 
@@ -223,18 +290,14 @@ function SearchBox() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Separate state for loading animation that runs continuously
+  const [showLoadingAnimation, setShowLoadingAnimation] = useState(false);
 
   const active = hover || focus;
 
-  // Advanced search function
+  // Use shared optimized search function
   const performSearch = (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      return;
-    }
-
-    setIsSearching(true);
-
     try {
       const localStorageDB = (window as { localStorageDB?: typeof import('@/data/localStorageDB').localStorageDB }).localStorageDB;
       console.log('🔍 Search query:', query);
@@ -242,98 +305,25 @@ function SearchBox() {
       
       if (!localStorageDB) {
         console.log('❌ localStorageDB not available');
-        setIsSearching(false);
         return;
       }
 
       const articles = localStorageDB.getArticles() || [];
-      const results: Array<{
-        article: Article;
-        relevance: number;
-        matchedFields: string[];
-        highlightedText: string;
-      }> = [];
-
-      // const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
-
-      articles.forEach((article: Article) => {
-        let relevance = 0;
-        const matchedFields: string[] = [];
-        let highlightedText = '';
-
-        // Search in title (highest priority)
-        if (article.title && article.title.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 100;
-          matchedFields.push('title');
-          highlightedText = article.title;
-        }
-
-        // Search in ticker
-        if (article.ticker && article.ticker.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 80;
-          matchedFields.push('ticker');
-          if (!highlightedText) highlightedText = `$${article.ticker}`;
-        }
-
-        // Search in team names
-        if (article.team) {
-          article.team.forEach((member: { name: string; role: string; twitter?: string; linkedin?: string }) => {
-            if (member.name && member.name.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 60;
-              matchedFields.push('team');
-              if (!highlightedText) highlightedText = `${member.role}: ${member.name}`;
-            }
-          });
-        }
-
-        // Search in abstract
-        if (article.abstract) {
-          article.abstract.forEach((text: string) => {
-            if (text.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 40;
-              matchedFields.push('abstract');
-              if (!highlightedText) highlightedText = text.substring(0, 100) + '...';
-            }
-          });
-        }
-
-        // Search in tags
-        if (article.tags) {
-          article.tags.forEach((tag: string) => {
-            if (tag.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 30;
-              matchedFields.push('tags');
-              if (!highlightedText) highlightedText = tag;
-            }
-          });
-        }
-
-        // Search in classification and location
-        if (article.classification && article.classification.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 20;
-          matchedFields.push('classification');
-          if (!highlightedText) highlightedText = article.classification;
-        }
-
-        if (article.location && article.location.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 20;
-          matchedFields.push('location');
-          if (!highlightedText) highlightedText = article.location;
-        }
-
-        if (relevance > 0) {
-          results.push({
-            article,
-            relevance,
-            matchedFields,
-            highlightedText
-          });
-        }
+      const results = performOptimizedSearch(query, articles);
+      
+      // Limit to 5 results for header dropdown
+      const limitedResults = results.slice(0, 5);
+      setSearchResults(limitedResults);
+      
+      console.log('🔍 Search completed:', {
+        query,
+        totalResults: results.length,
+        limitedResults: limitedResults.length,
+        results: limitedResults.map(r => r.article.title)
       });
-
-      // Sort by relevance and limit results
-      results.sort((a, b) => b.relevance - a.relevance);
-      setSearchResults(results.slice(0, 5));
+      
+      // Always hide loading animation after search completes
+      setShowLoadingAnimation(false);
     } catch (error) {
       console.error('Search error:', error);
       setSearchResults([]);
@@ -346,13 +336,23 @@ function SearchBox() {
   const handleSearchChange = (value: string) => {
     setQ(value);
     
+    // Show loading animation immediately when typing
+    if (value.trim()) {
+      setShowLoadingAnimation(true);
+      setIsSearching(true);
+    } else {
+      setShowLoadingAnimation(false);
+      setIsSearching(false);
+      setSearchResults([]);
+    }
+    
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
     searchTimeoutRef.current = setTimeout(() => {
       performSearch(value);
-    }, 300);
+    }, 150); // Reduced from 300ms to 150ms for faster response
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -398,6 +398,20 @@ function SearchBox() {
       }
     };
   }, []);
+  
+  // Hide loading animation and show results when they're available
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      setShowLoadingAnimation(false);
+      setShowResults(true);
+    } else if (q.trim() && !isSearching) {
+      // Show "no results" message after search completes
+      setShowLoadingAnimation(false);
+      setShowResults(true);
+    } else if (q.trim()) {
+      setShowResults(false);
+    }
+  }, [searchResults, q, isSearching]);
 
   return (
     <div className="relative">
@@ -413,11 +427,7 @@ function SearchBox() {
         onMouseLeave={() => setHover(false)}
       >
         <span className="pl-3 pr-1 grid place-items-center">
-          {isSearching ? (
-            <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <Icons.Search className={active ? "text-neutral-400" : "text-white/80"} />
-          )}
+          <Icons.Search className={active ? "text-neutral-400" : "text-white/80"} />
         </span>
         <input
           ref={inputRef}
@@ -429,58 +439,83 @@ function SearchBox() {
           placeholder={active ? "Search Research Database" : "Search"}
           aria-label="Search Research Database"
           className={[
-            'peer bg-transparent outline-none w-full placeholder:opacity-60',
+            'peer bg-transparent outline-none w-full placeholder:opacity-60 pr-10',
             active ? 'text-neutral-800' : 'text-white placeholder:text-white/80'
           ].join(' ')}
         />
+        {/* Loading indicator on the right side */}
+        {q.trim() && showLoadingAnimation && (
+          <span className="absolute right-3 grid place-items-center">
+            <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-pulse-glow"></div>
+          </span>
+        )}
       </div>
 
       {/* Search Results Dropdown */}
-      {showResults && searchResults.length > 0 && (
+      {q.trim() && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-[#3c352b] border border-[#263036] rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-          {searchResults.map((result, index) => (
-            <div
-              key={`${result.article.id}-${index}`}
-              className="px-4 py-3 hover:bg-[#4a4238] transition-colors cursor-pointer border-b border-[#263036] last:border-b-0"
-              onClick={() => handleResultClick(result.article)}
-            >
-              <div className="flex items-start justify-between mb-2">
-                <h4 className="text-white font-medium text-sm truncate flex-1">
-                  {result.article.title}
-                </h4>
-                {result.article.ticker && (
-                  <span className="text-[rgb(var(--color-horizon-green))] text-xs font-medium ml-2">
-                    ${result.article.ticker}
-                  </span>
-                )}
-              </div>
+          {searchResults.length > 0 ? (
+            <>
+              {searchResults.map((result, index) => (
+                <div
+                  key={`${result.article.id}-${index}`}
+                  className="px-4 py-3 hover:bg-[#4a4238] transition-colors cursor-pointer border-b border-[#263036] last:border-b-0"
+                  onClick={() => handleResultClick(result.article)}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="text-white font-medium text-sm truncate flex-1">
+                      {result.article.title}
+                    </h4>
+                    {result.article.ticker && (
+                      <span className="text-[rgb(var(--color-horizon-green))] text-xs font-medium ml-2">
+                        ${result.article.ticker}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="text-xs text-gray-400 mb-1">
+                    {result.article.publishedAt ? 
+                      new Date(result.article.publishedAt).toLocaleDateString() : 
+                      'Draft'
+                    }
+                  </div>
+                  
+                  <div className="text-xs text-white/80 leading-relaxed">
+                    <HighlightedText 
+                      text={result.highlightedText} 
+                      searchTerm={q} 
+                    />
+                  </div>
+                </div>
+              ))}
               
-              <div className="text-xs text-gray-400 mb-1">
-                {result.article.publishedAt ? 
-                  new Date(result.article.publishedAt).toLocaleDateString() : 
-                  'Draft'
-                }
+              <div className="px-4 py-2 text-center border-t border-[#263036]">
+                <button
+                  onClick={() => {
+                    router.push(`/search?q=${encodeURIComponent(q)}`);
+                    setShowResults(false);
+                  }}
+                  className="text-[rgb(var(--color-horizon-green))] text-xs hover:text-[rgb(var(--color-horizon-green))]/80 transition-colors"
+                >
+                  View all results →
+                </button>
               </div>
-              
-              <div className="text-xs text-white/80 leading-relaxed">
-                <HighlightedText 
-                  text={result.highlightedText} 
-                  searchTerm={q} 
-                />
+            </>
+          ) : (
+            <div className="px-4 py-6 text-center">
+              <div className="mb-3 flex justify-center">
+                <Icons.Search className="w-8 h-8 text-white/40" />
               </div>
-            </div>
-          ))}
-          
-          {searchResults.length > 0 && (
-            <div className="px-4 py-2 text-center border-t border-[#263036]">
+              <p className="text-white/60 text-sm mb-2">No search results found</p>
+              <p className="text-white/40 text-xs mb-4">Try different keywords or check spelling</p>
               <button
                 onClick={() => {
                   router.push(`/search?q=${encodeURIComponent(q)}`);
                   setShowResults(false);
                 }}
-                className="text-[rgb(var(--color-horizon-green))] text-xs hover:text-[rgb(var(--color-horizon-green))]/80 transition-colors"
+                className="px-4 py-2 bg-[rgb(var(--color-horizon-green))] text-black text-xs font-medium rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors"
               >
-                View all results →
+                Use Advanced Search
               </button>
             </div>
           )}
@@ -518,61 +553,116 @@ function MobileMenu() {
 
   return (
     <>
-              <button
-          className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white/70 hover:bg-white"
-          aria-label="Open menu"
-          onClick={() => setOpen(true)}
-        >
-          <Icons.Menu />
-        </button>
+                             <button
+           className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
+           aria-label="Open menu"
+           onClick={() => setOpen(true)}
+         >
+           <Icons.Menu />
+         </button>
 
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between p-3 border-b">
-              <span className="font-medium">Menu</span>
-              <button aria-label="Close menu" onClick={() => setOpen(false)} className="p-2">
-                <Icons.Close />
-              </button>
-            </div>
+       {open && (
+         <div
+           role="dialog"
+           aria-modal="true"
+           className="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm"
+           onClick={() => setOpen(false)}
+           style={{ zIndex: 99999 }}
+         >
+           <div
+             className="absolute left-0 top-0 h-full w-80 bg-[#3c352b] shadow-xl border-r border-[#263036]"
+             onClick={(e) => e.stopPropagation()}
+             style={{ zIndex: 99999 }}
+           >
+             <div className="flex items-center justify-between p-4 border-b border-[#263036]">
+               <span className="font-medium text-white text-lg">Menu</span>
+               <button 
+                 aria-label="Close menu" 
+                 onClick={() => setOpen(false)} 
+                 className="p-2 rounded-md hover:bg-[#4a4238] transition-colors"
+               >
+                 <span className="text-white">
+                   <Icons.Close />
+                 </span>
+               </button>
+             </div>
 
-            <nav className="p-2">
-              {NAV.map((n) => {
-                const active = pathname === n.href;
-                return (
-                  <Link
-                    key={n.href}
-                    href={n.href}
-                    onClick={() => setOpen(false)}
-                    className={[
-                      'block rounded-md px-3 py-2 text-sm',
-                      active ? 'bg-neutral-100 font-medium' : 'hover:bg-neutral-50'
-                    ].join(' ')}
-                  >
-                    {n.label}
-                  </Link>
-                );
-              })}
-              <Link
-                href="/login"
-                onClick={() => setOpen(false)}
-                className="mt-1 block rounded-md px-3 py-2 text-sm hover:bg-neutral-50"
-              >
-                Login
-              </Link>
-            </nav>
-          </div>
-        </div>
-      )}
+             <nav className="p-4 space-y-3">
+               {/* Home link - First option */}
+               <Link
+                 href="/"
+                 onClick={() => setOpen(false)}
+                 className={[
+                   'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
+                   pathname === '/' ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
+                 ].join(' ')}
+               >
+                 <Icons.Home />
+                 Home
+               </Link>
+               
+               {NAV.map((n) => {
+                 const active = pathname === n.href;
+                 return (
+                   <Link
+                     key={n.href}
+                     href={n.href}
+                     onClick={() => setOpen(false)}
+                     className={[
+                       'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
+                       active ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
+                     ].join(' ')}
+                   >
+                     {n.href === '/about' && <Icons.Info />}
+                     {n.href === '/premium' && <Icons.Shield />}
+                     {n.href === '/research' && <Icons.Grid />}
+                     {n.href === '/request' && <Icons.Users />}
+                     {n.href === '/watchlist' && <Icons.Eye />}
+                     {n.label}
+                   </Link>
+                 );
+               })}
+               
+               {/* Search link for mobile */}
+               <Link
+                 href="/search"
+                 onClick={() => setOpen(false)}
+                 className="flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
+               >
+                 <Icons.Search />
+                 Search
+               </Link>
+               
+               <Link
+                 href="/login"
+                 onClick={() => setOpen(false)}
+                 className="mt-4 flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
+               >
+                 <Icons.Profile />
+                 Login
+               </Link>
+             </nav>
+           </div>
+         </div>
+       )}
     </>
+  );
+}
+
+function MobileSearchButton() {
+  const router = useRouter();
+  
+  return (
+    <button
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
+      aria-label="Open search"
+      onClick={() => {
+        // On mobile, redirect to search page instead of showing dropdown
+        router.push('/search');
+      }}
+    >
+      <Icons.Search />
+    </button>
   );
 }
 

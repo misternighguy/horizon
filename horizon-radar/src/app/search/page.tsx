@@ -4,22 +4,8 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Article, ReadingLevel } from '@/types';
-
-interface SearchResult {
-  article: Article;
-  relevance: number;
-  matchedFields: string[];
-  highlightedText: string;
-}
-
-interface FilterOptions {
-  classification: string[];
-  location: string[];
-  readingLevel: ReadingLevel[];
-  tags: string[];
-  dateRange: string;
-}
+import { Article } from '@/types';
+import { performOptimizedSearch, SearchResult, FilterOptions } from '@/utils/search';
 
 function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -30,7 +16,6 @@ function SearchPageContent() {
   const [filters, setFilters] = useState<FilterOptions>({
     classification: [],
     location: [],
-    readingLevel: [],
     tags: [],
     dateRange: 'all'
   });
@@ -44,6 +29,8 @@ function SearchPageContent() {
     tags: []
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [filtersEnabled, setFiltersEnabled] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize available filter options
@@ -65,8 +52,16 @@ function SearchPageContent() {
     }
   }, []);
 
-  // Perform advanced search
-  const performSearch = (query: string, filterOpts: FilterOptions = filters) => {
+  // Auto-execute search when component mounts with a search query
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      // Force the initial search when navigating with URL parameters
+      performSearch(searchQuery, filters, true);
+    }
+  }, []); // Only run once when component mounts
+
+  // Use shared optimized search function
+  const performSearch = (query: string, filterOpts: FilterOptions = filters, forceSearch: boolean = false) => {
     if (!query.trim()) {
       setSearchResults([]);
       return;
@@ -79,131 +74,9 @@ function SearchPageContent() {
       if (!localStorageDB) return;
 
       const articles = localStorageDB.getArticles() || [];
-      const results: SearchResult[] = [];
-
-      articles.forEach((article: Article) => {
-        // Apply filters first
-        if (filterOpts.classification.length > 0 && !filterOpts.classification.includes(article.classification)) {
-          return;
-        }
-        if (filterOpts.location.length > 0 && !filterOpts.location.includes(article.location)) {
-          return;
-        }
-        if (filterOpts.readingLevel.length > 0 && !filterOpts.readingLevel.some(level => article.readingLevels.includes(level))) {
-          return;
-        }
-        if (filterOpts.tags.length > 0 && !filterOpts.tags.some(tag => article.tags.includes(tag))) {
-          return;
-        }
-
-        let relevance = 0;
-        const matchedFields: string[] = [];
-        let highlightedText = '';
-
-        // Search in title (highest priority)
-        if (article.title && article.title.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 100;
-          matchedFields.push('title');
-          highlightedText = article.title;
-        }
-
-        // Search in ticker
-        if (article.ticker && article.ticker.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 80;
-          matchedFields.push('ticker');
-          if (!highlightedText) highlightedText = `$${article.ticker}`;
-        }
-
-        // Search in team names
-        if (article.team) {
-          article.team.forEach((member: { name: string; role: string; twitter?: string; linkedin?: string }) => {
-            if (member.name && member.name.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 60;
-              matchedFields.push('team');
-              if (!highlightedText) highlightedText = `${member.role}: ${member.name}`;
-            }
-          });
-        }
-
-        // Search in abstract
-        if (article.abstract) {
-          article.abstract.forEach((text: string) => {
-            if (text.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 40;
-              matchedFields.push('abstract');
-              if (!highlightedText) highlightedText = text.substring(0, 100) + '...';
-            }
-          });
-        }
-
-        // Search in tags
-        if (article.tags) {
-          article.tags.forEach((tag: string) => {
-            if (tag.toLowerCase().includes(query.toLowerCase())) {
-              relevance += 30;
-              matchedFields.push('tags');
-              if (!highlightedText) highlightedText = tag;
-            }
-          });
-        }
-
-        // Search in classification and location
-        if (article.classification && article.classification.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 20;
-          matchedFields.push('classification');
-          if (!highlightedText) highlightedText = article.classification;
-        }
-
-        if (article.location && article.location.toLowerCase().includes(query.toLowerCase())) {
-          relevance += 20;
-          matchedFields.push('location');
-          if (!highlightedText) highlightedText = article.location;
-        }
-
-        if (relevance > 0) {
-          results.push({
-            article,
-            relevance,
-            matchedFields,
-            highlightedText
-          });
-        }
-      });
-
-      // Sort by relevance and apply date filter
-      results.sort((a, b) => b.relevance - a.relevance);
+      const results = performOptimizedSearch(query, articles, filterOpts, filtersEnabled);
       
-      // Apply date filtering
-      let filteredResults = results;
-      if (filterOpts.dateRange !== 'all') {
-        const now = new Date();
-        const cutoffDate = new Date();
-        
-        switch (filterOpts.dateRange) {
-          case '1week':
-            cutoffDate.setDate(now.getDate() - 7);
-            break;
-          case '1month':
-            cutoffDate.setMonth(now.getMonth() - 1);
-            break;
-          case '3months':
-            cutoffDate.setMonth(now.getMonth() - 3);
-            break;
-          case '6months':
-            cutoffDate.setMonth(now.getMonth() - 6);
-            break;
-          case '1year':
-            cutoffDate.setFullYear(now.getFullYear() - 1);
-            break;
-        }
-        
-        filteredResults = results.filter(result => {
-          const articleDate = new Date(result.article.publishedAt || result.article.createdAt);
-          return articleDate >= cutoffDate;
-        });
-      }
-
-      setSearchResults(filteredResults);
+      setSearchResults(results);
     } catch (error) {
       console.error('Search error:', error);
       setSearchResults([]);
@@ -215,14 +88,15 @@ function SearchPageContent() {
   // Debounced search
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
+    setHasUserInteracted(true);
     
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
     searchTimeoutRef.current = setTimeout(() => {
-      performSearch(value);
-    }, 300);
+      performSearch(value, filters, false);
+    }, 150); // Reduced from 300ms to 150ms for faster response
   };
 
   // Handle filter changes
@@ -231,7 +105,7 @@ function SearchPageContent() {
     setFilters(newFilters);
     
     if (searchQuery.trim()) {
-      performSearch(searchQuery, newFilters);
+      performSearch(searchQuery, newFilters, true);
     }
   };
 
@@ -240,14 +114,13 @@ function SearchPageContent() {
     const clearedFilters: FilterOptions = {
       classification: [],
       location: [],
-      readingLevel: [],
       tags: [],
       dateRange: 'all'
     };
     setFilters(clearedFilters);
     
     if (searchQuery.trim()) {
-      performSearch(searchQuery, clearedFilters);
+      performSearch(searchQuery, clearedFilters, true);
     }
   };
 
@@ -281,7 +154,7 @@ function SearchPageContent() {
         {/* Hero Section */}
         <section className="space-y-4 text-center">
           <h1 className="text-6xl font-medium drop-shadow-lg">
-            <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient">
+            <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient">
               Search
             </span>
             <span className="text-white font-light ml-4">Research Database</span>
@@ -313,7 +186,14 @@ function SearchPageContent() {
           {/* Filter Toggle */}
           <div className="text-center">
             <button
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={() => {
+                const newShowFilters = !showFilters;
+                setShowFilters(newShowFilters);
+                // Enable filters when user opens the filter panel
+                if (newShowFilters) {
+                  setFiltersEnabled(true);
+                }
+              }}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))] transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white">
@@ -326,7 +206,7 @@ function SearchPageContent() {
           {/* Filters Panel */}
           {showFilters && (
             <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Classification */}
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-2">Classification</label>
@@ -360,30 +240,14 @@ function SearchPageContent() {
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm"
                   >
                     {availableFilters.locations.map(location => (
-                      <option key={location} value={location} className="bg-[#3c352b] text-white">
+                      <option key={location} value={location} className="bg-[rgb(var(--color-horizon-green))] text-black">
                         {location}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Reading Level */}
-                <div>
-                  <label className="block text-sm font-medium text-white/80 mb-2">Reading Level</label>
-                  <select
-                    multiple
-                    value={filters.readingLevel}
-                    onChange={(e) => {
-                      const values = Array.from(e.target.selectedOptions, option => option.value);
-                      handleFilterChange('readingLevel', values);
-                    }}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm"
-                  >
-                    <option value="beginner" className="bg-[#3c352b] text-white">Beginner</option>
-                    <option value="intermediate" className="bg-[#3c352b] text-white">Intermediate</option>
-                    <option value="advanced" className="bg-[#3c352b] text-white">Advanced</option>
-                  </select>
-                </div>
+
 
                 {/* Date Range */}
                 <div>
@@ -428,7 +292,7 @@ function SearchPageContent() {
               <div className="text-center py-4">
                 <p className="text-white/80">
                   Found <span className="text-[rgb(var(--color-horizon-green))] font-medium">{searchResults.length}</span> results
-                  {filters.classification.length > 0 || filters.location.length > 0 || filters.readingLevel.length > 0 || filters.tags.length > 0 || filters.dateRange !== 'all' ? ' with filters applied' : ''}
+                  {filtersEnabled && (filters.classification.length > 0 || filters.location.length > 0 || filters.tags.length > 0 || filters.dateRange !== 'all') ? ' with filters applied' : ''}
                 </p>
               </div>
             )}
@@ -438,7 +302,7 @@ function SearchPageContent() {
                 {searchResults.map((result, index) => (
                   <div
                     key={`${result.article.id}-${index}`}
-                    className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+                    className="bg-black/80 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-black/90 transition-all duration-200 cursor-pointer"
                     onClick={() => handleResultClick(result.article)}
                   >
                     <div className="flex items-start justify-between mb-3">

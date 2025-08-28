@@ -8,6 +8,9 @@ export default function DatabaseInitializer() {
     // Make localStorageDB globally accessible for search functionality
     (window as { localStorageDB?: typeof localStorageDB }).localStorageDB = localStorageDB;
     
+    // Force database initialization
+    localStorageDB.getUsers(); // This will trigger initialization if needed
+    
     console.log('🗄️ Horizon Radar Database initialized and accessible globally');
   }, []);
 

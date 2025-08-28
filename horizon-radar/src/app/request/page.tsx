@@ -50,6 +50,7 @@ export default function RequestResearch() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showMoreFields, setShowMoreFields] = useState(false);
   const [submissionSummary, setSubmissionSummary] = useState<{
     id: string;
     type: 'informal' | 'formal';
@@ -58,10 +59,39 @@ export default function RequestResearch() {
     [key: string]: unknown;
   } | null>(null);
 
-  const validateInformalForm = (): boolean => {
-    if (!informalForm.projectName.trim()) return false;
-    if (!informalForm.website?.trim() && !informalForm.twitter?.trim()) return false;
-    return true;
+  // URL formatting function
+  const formatUrl = (url: string): string => {
+    if (!url.trim()) return url;
+    
+    // If it already has a protocol, return as is
+    if (url.match(/^https?:\/\//)) {
+      return url;
+    }
+    
+    // If it starts with www., add https://
+    if (url.startsWith('www.')) {
+      return `https://${url}`;
+    }
+    
+    // Otherwise, add https:// to the beginning
+    return `https://${url}`;
+  };
+
+  const validateInformalForm = (): { isValid: boolean; errors: string[] } => {
+    const errors: string[] = [];
+    
+    if (!informalForm.projectName.trim()) {
+      errors.push('Project name is required');
+    }
+    
+    if (!informalForm.website?.trim() && !informalForm.twitter?.trim()) {
+      errors.push('Either website or Twitter is required');
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
   };
 
   const validateFormalForm = (): boolean => {
@@ -72,16 +102,26 @@ export default function RequestResearch() {
 
   const handleInformalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateInformalForm()) return;
+    const validation = validateInformalForm();
+    if (!validation.isValid) return;
 
     setIsSubmitting(true);
     
     try {
+      // Format URLs before saving
+      const formattedForm = {
+        ...informalForm,
+        website: formatUrl(informalForm.website || ''),
+        docsLink: formatUrl(informalForm.docsLink || ''),
+        helpfulLink1: formatUrl(informalForm.helpfulLink1 || ''),
+        helpfulLink2: formatUrl(informalForm.helpfulLink2 || '')
+      };
+
       // Store in localStorage for now (in real app, this would go to server)
       const request = {
         id: Date.now().toString(),
         type: 'informal' as const,
-        ...informalForm,
+        ...formattedForm,
         submittedAt: new Date(),
         submittedBy: localStorage.getItem('adminSession') || localStorage.getItem('userSession') || null,
         status: 'new' as const
@@ -91,6 +131,23 @@ export default function RequestResearch() {
       const existing = JSON.parse(localStorage.getItem('research_requests') || '[]');
       existing.push(request);
       localStorage.setItem('research_requests', JSON.stringify(existing));
+
+      // Add activity log entry
+      const adminActivities = JSON.parse(localStorage.getItem('admin_activities') || '[]');
+      const newActivity = {
+        id: `req_${request.id}`,
+        type: 'research_requested',
+        data: {
+          projectName: request.projectName,
+          twitter: request.twitter,
+          website: request.website
+        },
+        timestamp: request.submittedAt.toISOString()
+      };
+      adminActivities.unshift(newActivity);
+      // Keep only last 100 activities
+      const recentActivities = adminActivities.slice(0, 100);
+      localStorage.setItem('admin_activities', JSON.stringify(recentActivities));
 
       setSubmissionSummary(request);
       setShowSuccess(true);
@@ -109,10 +166,17 @@ export default function RequestResearch() {
     setIsSubmitting(true);
     
     try {
+      // Format URLs before saving
+      const formattedForm = {
+        ...formalForm,
+        website: formatUrl(formalForm.website || ''),
+        docsLinks: formatUrl(formalForm.docsLinks || '')
+      };
+
       const request = {
         id: Date.now().toString(),
         type: 'formal' as const,
-        ...formalForm,
+        ...formattedForm,
         submittedAt: new Date(),
         submittedBy: localStorage.getItem('adminSession') || localStorage.getItem('userSession') || null,
         status: 'new' as const
@@ -121,6 +185,23 @@ export default function RequestResearch() {
       const existing = JSON.parse(localStorage.getItem('research_requests') || '[]');
       existing.push(request);
       localStorage.setItem('research_requests', JSON.stringify(existing));
+
+      // Add activity log entry
+      const adminActivities = JSON.parse(localStorage.getItem('admin_activities') || '[]');
+      const newActivity = {
+        id: `req_${request.id}`,
+        type: 'research_requested',
+        data: {
+          projectName: request.projectName,
+          twitter: request.twitter,
+          website: request.website
+        },
+        timestamp: request.submittedAt.toISOString()
+      };
+      adminActivities.unshift(newActivity);
+      // Keep only last 100 activities
+      const recentActivities = adminActivities.slice(0, 100);
+      localStorage.setItem('admin_activities', JSON.stringify(recentActivities));
 
       setSubmissionSummary(request);
       setShowSuccess(true);
@@ -190,16 +271,16 @@ export default function RequestResearch() {
       </div>
       
       {/* Content with overlay */}
-      <div className="relative z-10 w-full py-10">
+      <div className="relative z-10 w-full py-10 pb-20">
         <div className="max-w-4xl mx-auto px-4">
           {/* Page Title */}
           <section className="text-center mb-12">
             <h1 className="text-6xl font-medium mb-4">
-              <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
                 Request Research
               </span>
             </h1>
-            <p className="text-lg max-w-2xl mx-auto text-white/80">
+            <p className="text-lg max-w-2xl mx-auto text-white/80 lg:whitespace-nowrap sm:whitespace-normal">
               Submit a research request for protocols, projects, or topics you&apos;d like us to cover.
             </p>
           </section>
@@ -258,11 +339,11 @@ export default function RequestResearch() {
                         Official Website
                       </label>
                       <input
-                        type="url"
+                        type="text"
                         value={informalForm.website}
                         onChange={(e) => setInformalForm(prev => ({ ...prev, website: e.target.value }))}
                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
-                        placeholder="https://example.com"
+                        placeholder="example.com or https://example.com"
                       />
                     </div>
                     <div>
@@ -279,36 +360,52 @@ export default function RequestResearch() {
                     </div>
                   </div>
 
-                  <div className="text-sm text-white/60 bg-white/5 rounded-lg p-4">
-                    <p className="mb-2">💡 <strong>Note:</strong> At least one of Website or Twitter is required.</p>
-                    <p>You can also provide up to 3 additional helpful links below.</p>
+                  {/* Show More Fields Toggle */}
+                  <div className="flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setShowMoreFields(!showMoreFields)}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:text-white transition-colors"
+                    >
+                      <span>{showMoreFields ? 'Hide' : 'Show'} more fields</span>
+                      <svg 
+                        className={`w-4 h-4 transition-transform ${showMoreFields ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </div>
 
                   {/* Optional Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {showMoreFields && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-white/80 mb-2">
                         Documentation Link
                       </label>
                       <input
-                        type="url"
+                        type="text"
                         value={informalForm.docsLink}
                         onChange={(e) => setInformalForm(prev => ({ ...prev, docsLink: e.target.value }))}
                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
-                        placeholder="https://docs.example.com"
+                        placeholder="docs.example.com or https://docs.example.com"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-white/80 mb-2">
                         Helpful Link #1
                       </label>
-                      <input
-                        type="url"
-                        value={informalForm.helpfulLink1}
-                        onChange={(e) => setInformalForm(prev => ({ ...prev, helpfulLink1: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
-                        placeholder="Any helpful resource"
-                      />
+                                          <input
+                      type="text"
+                      value={informalForm.helpfulLink1}
+                      onChange={(e) => setInformalForm(prev => ({ ...prev, helpfulLink1: e.target.value }))}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
+                      placeholder="Any helpful resource (URL optional)"
+                    />
                     </div>
                   </div>
 
@@ -317,11 +414,11 @@ export default function RequestResearch() {
                       Helpful Link #2
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       value={informalForm.helpfulLink2}
                       onChange={(e) => setInformalForm(prev => ({ ...prev, helpfulLink2: e.target.value }))}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
-                      placeholder="Any helpful resource"
+                      placeholder="Any helpful resource (URL optional)"
                     />
                   </div>
 
@@ -337,11 +434,28 @@ export default function RequestResearch() {
                       placeholder="Any additional context or specific areas you'd like us to focus on..."
                     />
                   </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* Validation Errors */}
+                {(() => {
+                  const validation = validateInformalForm();
+                  return validation.errors.length > 0 ? (
+                    <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4">
+                      <div className="text-red-400 text-sm font-medium mb-2">Please fix the following errors:</div>
+                      <ul className="text-red-300 text-sm space-y-1">
+                        {validation.errors.map((error, index) => (
+                          <li key={index}>• {error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null;
+                })()}
 
                 <button
                   type="submit"
-                  disabled={!validateInformalForm() || isSubmitting}
+                  disabled={!validateInformalForm().isValid || isSubmitting}
                   className="w-full py-4 bg-[rgb(var(--color-horizon-green))] text-black rounded-lg font-medium hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Informal Request'}
@@ -372,11 +486,11 @@ export default function RequestResearch() {
                         Official Website <span className="text-red-400">*</span>
                       </label>
                       <input
-                        type="url"
+                        type="text"
                         value={formalForm.website}
                         onChange={(e) => setFormalForm(prev => ({ ...prev, website: e.target.value }))}
                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))] focus:border-transparent"
-                        placeholder="https://example.com"
+                        placeholder="example.com or https://example.com"
                         required
                       />
                     </div>

@@ -40,12 +40,12 @@ export interface Protocol extends ProtocolSummary {
 }
 
 export interface SectionCopy {
-  beginner?: string;
-  intermediate?: string;
-  advanced?: string;
+  novice?: string;
+  technical?: string;
+  analyst?: string;
 }
 
-export type ReadingLevel = 'beginner' | 'intermediate' | 'advanced';
+export type ReadingLevel = 'novice' | 'technical' | 'analyst';
 
 // Article System Types
 export interface Article {
@@ -118,6 +118,16 @@ export interface Article {
     };
   };
   featuredImage?: string;
+  interTextImages?: Array<{
+    id: string;
+    title: string;
+    imageUrl: string;
+    aspectRatio: string;
+    caption?: string;
+    width: number;
+    height: number;
+  }>;
+  tableOfContents?: string[];
   tags: string[];
   viewCount: number;
   likeCount: number;
@@ -135,7 +145,7 @@ export interface User {
   isActive: boolean;
   lastLogin?: Date;
   profile?: {
-    avatar?: string;
+    avatar?: string; // URL to profile picture
     bio?: string;
     twitter?: string;
     linkedin?: string;
@@ -145,6 +155,7 @@ export interface User {
     notifications: boolean;
     newsletter: boolean;
   };
+  watchlist?: string[]; // Array of article IDs
 }
 
 export interface UserFormData {
@@ -153,6 +164,13 @@ export interface UserFormData {
   email: string;
   memberStyle: 'free' | 'premium' | 'admin';
   duration: number;
+}
+
+export interface ProfileUpdateData {
+  avatar?: string;
+  bio?: string;
+  twitter?: string;
+  linkedin?: string;
 }
 
 // Comment System Types
@@ -188,6 +206,7 @@ export interface ResearchCard {
   growthScore: number;
   opportunityScore: number;
   slug: string;
+  bannerImage?: string;
   category: 'recently-published' | 'most-read' | 'trending';
   publishedAt: Date;
   viewCount: number;
@@ -237,4 +256,16 @@ export const STORAGE_KEYS = {
   NEWSLETTER_SUBSCRIPTIONS: 'horizon_radar_newsletter_subscriptions',
   SYSTEM: 'horizon_radar_system',
   SESSIONS: 'horizon_radar_sessions',
-} as const; 
+} as const;
+
+export interface LocalStorageDB {
+  getArticleBySlug: (slug: string) => Article | null;
+  getCommentsByArticle: (slug: string) => Comment[];
+  createComment: (commentData: Omit<Comment, 'id' | 'timestamp'>) => Comment;
+}
+
+declare global {
+  interface Window {
+    localStorageDB?: LocalStorageDB;
+  }
+} 
