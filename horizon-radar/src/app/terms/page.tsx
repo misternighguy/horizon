@@ -20,7 +20,7 @@ export default function TermsPage() {
           
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
             <p className="text-yellow-800 font-medium font-inter">
-              <strong>IMPORTANT:</strong> By accessing or using Horizon Radar's websites, applications, content, or services (collectively, the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree, do not use the Services.
+              <strong>IMPORTANT:</strong> By accessing or using Horizon Radar&apos;s websites, applications, content, or services (collectively, the &quot;Services&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree, do not use the Services.
             </p>
           </div>
 

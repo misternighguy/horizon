@@ -1,15 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import '../styles/tokens.css';
 
+/* stylelint-disable at-rule-no-unknown */
+/* stylelint-disable property-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
+/* stylelint-enable property-no-unknown */
 
 /* You can keep your existing custom rules below */
 
 :root { --radius: var(--radius-md); }
 html { scroll-behavior: smooth; }
 
+/* stylelint-disable at-rule-no-unknown */
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
@@ -17,11 +22,15 @@ html { scroll-behavior: smooth; }
   }
   
   body {
+    /* stylelint-disable at-rule-no-unknown */
     @apply text-gray-900 antialiased;
+    /* stylelint-enable at-rule-no-unknown */
     overflow-x: hidden;
   }
 }
+/* stylelint-enable at-rule-no-unknown */
 
+/* stylelint-disable at-rule-no-unknown */
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -251,15 +260,20 @@ html { scroll-behavior: smooth; }
     display: none;  /* Safari and Chrome */
   }
 }
+/* stylelint-enable at-rule-no-unknown */
 
 /* Reusable component classes powered by tokens */
+/* stylelint-disable at-rule-no-unknown */
 @layer components {
     .card {
+    /* stylelint-disable at-rule-no-unknown */
     @apply rounded-lg border bg-white;
+    /* stylelint-enable at-rule-no-unknown */
     border-color: rgb(var(--border-default));
     box-shadow: var(--shadow-card);
   }
 }
+/* stylelint-enable at-rule-no-unknown */
 
   /* === Fancy Buttons (glass + glow + shine) === */
   .fancy-btn {

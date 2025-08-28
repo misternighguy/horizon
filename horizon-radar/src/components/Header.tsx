@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { UI_CONSTANTS } from '@/constants/ui';
-import { Article } from '@/types';
+import { Article, LocalStorageDB } from '@/types';
 import { Icons } from '@/components/ui/Icons';
 import { performOptimizedSearch, SearchResult } from '@/utils/search';
 
@@ -47,15 +47,17 @@ export default function Header() {
       
       // Check if user is admin by looking up their role in the database
       try {
-        const localStorageDB = (window as { localStorageDB?: any }).localStorageDB;
+        const localStorageDB = (window as { localStorageDB?: LocalStorageDB }).localStorageDB;
         if (localStorageDB) {
           const username = adminSession || userSession;
-          const user = localStorageDB.getUserByUsername(username);
-          if (user && user.memberStyle === 'admin') {
-            setIsAdmin(true);
-          }
-          if (user?.profile?.avatar) {
-            setUserAvatar(user.profile.avatar);
+          if (username) {
+            const user = localStorageDB.getUserByUsername(username);
+            if (user && user.memberStyle === 'admin') {
+              setIsAdmin(true);
+            }
+            if (user?.profile?.avatar) {
+              setUserAvatar(user.profile.avatar);
+            }
           }
         }
       } catch (error) {

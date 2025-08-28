@@ -366,7 +366,7 @@ export default function ProfilePage() {
                   {/* Bio if available */}
                   {user.profile?.bio && (
                     <p className="text-black/80 text-sm italic border-l-2 border-black/30 pl-4">
-                      "{user.profile.bio}"
+                      &quot;{user.profile.bio}&quot;
                     </p>
                   )}
                 </div>
@@ -706,7 +706,7 @@ export default function ProfilePage() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <Icons.Star className="w-5 h-5 text-black" />
-                      <span className="text-white text-sm">Unlock "Analyst" Writing Style</span>
+                      <span className="text-white text-sm">Unlock &quot;Analyst&quot; Writing Style</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Icons.Search className="w-5 h-5 text-black" />

@@ -7,6 +7,7 @@ import ActionButtons from '@/components/landing/ActionButtons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { UI_CONSTANTS } from '@/constants/ui';
+import { ProtocolSummary } from '@/types';
 
 
 
@@ -16,7 +17,7 @@ export default function Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lastKeyPress, setLastKeyPress] = useState(0);
-  const [protocolSummaries, setProtocolSummaries] = useState<any[]>([]);
+  const [protocolSummaries, setProtocolSummaries] = useState<ProtocolSummary[]>([]);
 
   const handleNextCard = () => {
     if (isTransitioning || protocolSummaries.length === 0) return;

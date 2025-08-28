@@ -26,7 +26,7 @@ export default function LoginPage() {
       console.log('🔍 Found users in database:', users);
       console.log('🔍 Looking for email:', email);
       
-      const user = users.find((u: any) => u.email === email);
+      const user = users.find((u: { email: string }) => u.email === email);
       console.log('🔍 Found user:', user);
       
       if (user) {

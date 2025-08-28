@@ -541,7 +541,7 @@ export default function AboutPage() {
                   className="group inline-flex items-center gap-4 px-8 py-4 text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
                 >
                   <Icons.ArrowDown className="w-5 h-5" />
-                  <span>I'M READY</span>
+                  <span>I&apos;M READY</span>
                   <Icons.ArrowDown className="w-5 h-5" />
                 </button>
               </div>

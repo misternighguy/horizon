@@ -1115,7 +1115,7 @@ class LocalStorageDB {
     return articles.map(article => {
       // Handle updatedAt which might be a Date object or string from localStorage
       let lastUpdated: string;
-      const updatedAt = article.updatedAt as any; // Type assertion to handle localStorage serialization
+      const updatedAt = article.updatedAt as Date | string; // Type assertion to handle localStorage serialization
       
       if (updatedAt instanceof Date) {
         lastUpdated = updatedAt.toISOString().split('T')[0];

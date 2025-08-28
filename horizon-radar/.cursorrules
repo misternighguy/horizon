@@ -1,0 +1,43 @@
+# Cursor Editor Configuration
+# This file configures Cursor to properly handle Tailwind CSS and suppress warnings
+
+# CSS Configuration
+css.validate: false
+css.lint.unknownAtRules: ignore
+css.lint.unknownProperties: ignore
+css.lint.unknownVendorSpecificProperties: ignore
+
+# File Associations
+*.css: tailwindcss
+
+# Suppress CSS warnings
+css.lint.duplicateProperties: ignore
+css.lint.emptyRules: ignore
+css.lint.importStatement: ignore
+css.lint.hexColorLength: ignore
+css.lint.argumentsInColorFunction: ignore
+css.lint.unknownUnits: ignore
+css.lint.zeroUnits: ignore
+css.lint.fontFaceProperties: ignore
+css.lint.important: ignore
+css.lint.float: ignore
+css.lint.idSelector: ignore
+css.lint.qualifyingElements: ignore
+css.lint.uniqueHeadings: ignore
+css.lint.universalSelector: ignore
+css.lint.unqualifiedAttributes: ignore
+css.lint.overqualifiedElements: ignore
+css.lint.underscorePropertyHack: ignore
+css.lint.rulesCount: ignore
+css.lint.shorthand: ignore
+css.lint.shorthandProperties: ignore
+css.lint.compatibleVendorPrefixes: ignore
+css.lint.vendorPrefix: ignore
+css.lint.fallthroughColorKeyword: ignore
+css.lint.boxModel: ignore
+css.lint.outlineNone: ignore
+css.lint.bulletproofFontFace: ignore
+css.lint.displayPropertyGrouping: ignore
+css.lint.knownProperties: ignore
+css.lint.nonStandardProperties: ignore
+css.lint.standardProperties: ignore

@@ -77,7 +77,6 @@ export default function CommentSystem({ articleSlug, articleId, articleTitle }: 
         replies: [],
         isHidden: false,
         isFlagged: false,
-        likeCount: 0,
         parentId: undefined
       });
 
@@ -110,7 +109,6 @@ export default function CommentSystem({ articleSlug, articleId, articleTitle }: 
         replies: [],
         isHidden: false,
         isFlagged: false,
-        likeCount: 0,
         parentId: commentId
       });
 

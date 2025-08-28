@@ -775,7 +775,7 @@ export default function CreateArticlePage() {
         createdAt: new Date(),
         updatedAt: new Date(),
         author: 'Admin', // Default author
-        readingLevels: ['novice', 'technical', 'analyst'] as const,
+        readingLevels: ['novice', 'technical', 'analyst'] as ReadingLevel[],
         abstract: [
           formData.abstract.novice || '',
           formData.abstract.technical || '',
@@ -1282,7 +1282,7 @@ export default function CreateArticlePage() {
               <h3 className="text-lg font-medium mb-3 text-white/90">How to Use Inter-Text Images</h3>
               <div className="space-y-3 text-sm text-white/70">
                 <div>
-                  <strong>1. Upload Images:</strong> Add images below with titles like "TokenomicsChart" or "ArchitectureDiagram"
+                  <strong>1. Upload Images:</strong> Add images below with titles like &quot;TokenomicsChart&quot; or &quot;ArchitectureDiagram&quot;
                 </div>
                 <div>
                   <strong>2. Reference in Text:</strong> In any content section, type <code className="bg-white/20 px-1 rounded">**[ImageTitle]**</code> where you want the image to appear
@@ -1291,7 +1291,7 @@ export default function CreateArticlePage() {
                   <strong>3. Formatting:</strong> Images will be automatically centered with 2rem (32px) spacing above and below
                 </div>
                 <div>
-                  <strong>4. Example:</strong> "The tokenomics structure shows **[TokenomicsChart]** that 60% goes to liquidity..."
+                  <strong>4. Example:</strong> &quot;The tokenomics structure shows **[TokenomicsChart]** that 60% goes to liquidity...&quot;
                 </div>
                 <div>
                   <strong>5. Supported Formats:</strong> JPG, PNG, GIF, WebP. Images will be automatically cropped to your selected aspect ratio.
@@ -1333,7 +1333,7 @@ export default function CreateArticlePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   <p>No inter-text images added yet</p>
-                  <p className="text-sm">Click "Add Image" to get started</p>
+                  <p className="text-sm">Click &quot;Add Image&quot; to get started</p>
                 </div>
               )}
             </div>

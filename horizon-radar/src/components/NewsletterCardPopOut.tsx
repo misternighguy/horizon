@@ -10,7 +10,6 @@ declare global {
   interface Window {
     showSubscribePopout: () => void;
     hideSubscribePopout: () => void;
-    showToast: (message: string, type?: 'success' | 'error' | 'info', duration?: number) => void;
   }
 }
 
