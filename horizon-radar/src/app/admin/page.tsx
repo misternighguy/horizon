@@ -56,7 +56,14 @@ export default function AdminPage() {
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [researchRequestFilter, setResearchRequestFilter] = useState<'all' | 'new' | 'worth_considering' | 'unworthy' | 'completed'>('all')
 
-  const [activities, setActivities] = useState<any[]>([])
+  const [activities, setActivities] = useState<Array<{ 
+    id: string; 
+    type: string; 
+    data: Record<string, string>; 
+    timestamp: string 
+  }>>([])
+
+
 
   useEffect(() => {
     // Check if already logged in
@@ -836,11 +843,12 @@ export default function AdminPage() {
                             {activity.type === 'research_requested' && (
                               <>
                                 Research Requested{' '}
-                                {activity.data.twitter && (
+                                {activity.data.twitter && typeof activity.data.twitter === 'string' && (
                                   activity.data.twitter.includes('twitter.com') || activity.data.twitter.includes('x.com') ? (
                                     <button
                                       onClick={() => {
-                                        const url = activity.data.twitter.startsWith('http') ? activity.data.twitter : `https://${activity.data.twitter}`
+                                        const twitter = activity.data.twitter || ''
+                                        const url = twitter.startsWith('http') ? twitter : `https://${twitter}`
                                         window.open(url, '_blank', 'noopener,noreferrer')
                                       }}
                                       className="text-[rgb(var(--color-horizon-green))] hover:underline"
