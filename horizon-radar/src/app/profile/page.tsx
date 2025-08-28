@@ -624,7 +624,7 @@ export default function ProfilePage() {
 
               {/* Premium Upgrade CTA - Only for free users - Horizontal card below Profile Information */}
               {user.memberStyle === 'free' && (
-                <div className="bg-gradient-to-br from-[rgb(var(--color-horizon-green))]/20 to-[rgb(var(--color-brand-400))]/30 backdrop-blur-sm border border-[rgb(var(--color-horizon-green))]/30 rounded-2xl p-6">
+                <div className="bg-gradient-to-br from-gray-900 to-black backdrop-blur-sm border border-gray-700 rounded-2xl p-6">
                   <div className="flex items-center justify-between gap-6">
                     <div className="flex-1">
                       <h3 className="text-xl font-medium text-white mb-1">Upgrade to Premium</h3>
