@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ProfilePicture from '@/components/ProfilePicture';
+import ProfileUploadModal from '@/components/ProfileUploadModal';
+import { useProfilePicture } from '@/hooks/useProfilePicture';
 
 interface User {
   id: string;
@@ -43,65 +46,24 @@ export default function ProfilePage() {
     newsletter: true
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Function to compress and resize image
-  const compressImage = (file: File): Promise<string> => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
-      
-      img.onload = () => {
-        // Set canvas size to 256x256 (HD quality, reasonable file size)
-        canvas.width = 256;
-        canvas.height = 256;
-        
-        // Draw image maintaining aspect ratio and centering
-        const size = Math.min(img.width, img.height);
-        const startX = (img.width - size) / 2;
-        const startY = (img.height - size) / 2;
-        
-        ctx?.drawImage(img, startX, startY, size, size, 0, 0, 256, 256);
-        
-        // Convert to base64 with quality 0.8 (good balance of quality and size)
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
-        resolve(compressedDataUrl);
-      };
-      
-      img.src = URL.createObjectURL(file);
-    });
-  };
-
-  // Function to handle profile picture upload
-  const handleProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !user) return;
-
-    // Check file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
-      return;
-    }
-
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size must be less than 5MB');
-      return;
-    }
-
-    setIsUploading(true);
-    try {
-      const compressedImage = await compressImage(file);
+  // Profile picture upload hook
+  const {
+    isUploading,
+    showUploadModal,
+    handleUpload,
+    openUploadModal,
+    closeUploadModal
+  } = useProfilePicture({
+    onUploadSuccess: (imageDataUrl) => {
+      if (!user) return;
       
       // Update user profile with new avatar
       const updatedUser = {
         ...user,
         profile: {
           ...user.profile,
-          avatar: compressedImage
+          avatar: imageDataUrl
         }
       };
       
@@ -111,24 +73,8 @@ export default function ProfilePage() {
         localStorageDB.updateUser(updatedUser);
         setUser(updatedUser);
       }
-      
-      // Close modal and show success
-      setShowUploadModal(false);
-      setTimeout(() => {
-        alert('Profile picture updated successfully!');
-      }, 100);
-    } catch (error) {
-      console.error('Error uploading profile picture:', error);
-      alert('Error uploading image. Please try again.');
-    } finally {
-      setIsUploading(false);
     }
-  };
-
-  // Function to handle file selection from modal
-  const handleFileSelect = () => {
-    fileInputRef.current?.click();
-  };
+  });
 
   useEffect(() => {
     const loadUserData = () => {
@@ -381,34 +327,14 @@ export default function ProfilePage() {
                 <div className="mb-6">
                   {/* Avatar and Name Row */}
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="relative group cursor-pointer" onClick={() => setShowUploadModal(true)}>
-                      <img
-                        src={user.profile?.avatar || '/images/default-avatar.svg'}
-                        alt={`${user.username}'s profile picture`}
-                        className="w-12 h-12 rounded-lg object-cover border-2 border-black/20 shadow-lg transition-all duration-200 group-hover:opacity-80"
-                      />
-                      {/* Upload overlay with + icon */}
-                      <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center">
-                          <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                          </svg>
-                        </div>
-                      </div>
-                      {/* Verification badge */}
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-black/20 rounded-full border border-black/30 flex items-center justify-center">
-                        <svg className="w-2 h-2 text-black" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
-                    {/* Hidden file input */}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProfilePictureUpload}
-                      className="hidden"
+                    <ProfilePicture
+                      src={user.profile?.avatar}
+                      alt={`${user.username}'s profile picture`}
+                      username={user.username}
+                      size="md"
+                      onClick={openUploadModal}
+                      showUploadOverlay={true}
+                      showVerification={true}
                     />
                     <div>
                       <h2 className="text-xl font-bold text-black tracking-tight">{user.username}</h2>
@@ -813,83 +739,11 @@ export default function ProfilePage() {
       <div className="h-[20vh]"></div>
 
       {/* Profile Picture Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <div className="text-center">
-              {/* Header */}
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">Update Profile Picture</h3>
-                <p className="text-white/70 text-sm">How would you like to upload a photo?</p>
-              </div>
-
-              {/* Upload Options */}
-              <div className="space-y-4 mb-6">
-                {/* File Upload Option */}
-                <button
-                  onClick={handleFileSelect}
-                  disabled={isUploading}
-                  className="w-full flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <div className="w-10 h-10 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-white font-medium">Upload from Device</div>
-                    <div className="text-white/60 text-sm">Choose a photo from your computer</div>
-                  </div>
-                </button>
-
-                {/* Camera Option (placeholder for future) */}
-                <button
-                  disabled={true}
-                  className="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl opacity-50 cursor-not-allowed"
-                >
-                  <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-white/40 font-medium">Take Photo</div>
-                    <div className="text-white/30 text-sm">Coming soon</div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Loading State */}
-              {isUploading && (
-                <div className="mb-4 flex items-center justify-center gap-3 text-white/70">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Processing image...</span>
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowUploadModal(false)}
-                  disabled={isUploading}
-                  className="flex-1 px-4 py-3 bg-white/10 border border-white/20 text-white rounded-xl hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Hidden file input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleProfilePictureUpload}
-        className="hidden"
+      <ProfileUploadModal
+        isOpen={showUploadModal}
+        onClose={closeUploadModal}
+        onUpload={handleUpload}
+        isUploading={isUploading}
       />
     </div>
   );

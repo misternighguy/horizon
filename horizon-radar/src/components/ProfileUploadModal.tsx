@@ -1,0 +1,136 @@
+'use client';
+
+import { useRef } from 'react';
+import { validateImageFile, compressImage } from '@/utils/imageProcessing';
+
+export interface ProfileUploadModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onUpload: (imageDataUrl: string) => void;
+  isUploading?: boolean;
+}
+
+export default function ProfileUploadModal({
+  isOpen,
+  onClose,
+  onUpload,
+  isUploading = false
+}: ProfileUploadModalProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const validation = validateImageFile(file);
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
+
+    try {
+      // Compress image
+      const compressedImage = await compressImage(file, {
+        maxWidth: 256,
+        maxHeight: 256,
+        quality: 0.8,
+        format: 'jpeg'
+      });
+
+      // Call upload handler
+      onUpload(compressedImage);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      alert('Error processing image. Please try again.');
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Modal Backdrop */}
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+          <div className="text-center">
+            {/* Header */}
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Update Profile Picture</h3>
+              <p className="text-white/70 text-sm">How would you like to upload a photo?</p>
+            </div>
+
+            {/* Upload Options */}
+            <div className="space-y-4 mb-6">
+              {/* File Upload Option */}
+              <button
+                onClick={handleFileSelect}
+                disabled={isUploading}
+                className="w-full flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="w-10 h-10 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <div className="text-white font-medium">Upload from Device</div>
+                  <div className="text-white/60 text-sm">Choose a photo from your computer</div>
+                </div>
+              </button>
+
+              {/* Camera Option (placeholder for future) */}
+              <button
+                disabled={true}
+                className="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl opacity-50 cursor-not-allowed"
+              >
+                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <div className="text-white/40 font-medium">Take Photo</div>
+                  <div className="text-white/30 text-sm">Coming soon</div>
+                </div>
+              </button>
+            </div>
+
+            {/* Loading State */}
+            {isUploading && (
+              <div className="mb-4 flex items-center justify-center gap-3 text-white/70">
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>Processing image...</span>
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="flex gap-3">
+              <button
+                onClick={onClose}
+                disabled={isUploading}
+                className="flex-1 px-4 py-3 bg-white/10 border border-white/20 text-white rounded-xl hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="hidden"
+      />
+    </>
+  );
+}
