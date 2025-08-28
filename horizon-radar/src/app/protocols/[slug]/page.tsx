@@ -20,8 +20,9 @@ function Section({
   )
 }
 
-export default function ProtocolPage({ params }: { params: { slug: string } }) {
-  const p = mockProtocols[params.slug]
+export default async function ProtocolPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const p = mockProtocols[slug]
   if (!p) return notFound()
   
   return (
