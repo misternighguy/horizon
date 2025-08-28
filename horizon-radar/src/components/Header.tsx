@@ -583,12 +583,10 @@ function MobileMenu() {
            aria-modal="true"
            className="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm"
            onClick={() => setOpen(false)}
-           style={{ zIndex: 99999 }}
          >
            <div
              className="absolute left-0 top-0 h-full w-80 bg-[#3c352b] shadow-xl border-r border-[#263036]"
              onClick={(e) => e.stopPropagation()}
-             style={{ zIndex: 99999 }}
            >
              <div className="flex items-center justify-between p-4 border-b border-[#263036]">
                <span className="font-medium text-white text-lg">Menu</span>

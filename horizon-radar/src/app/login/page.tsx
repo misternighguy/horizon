@@ -67,7 +67,7 @@ export default function LoginPage() {
           <Header />
         </div>
         
-        <div className="relative z-10 flex items-center justify-center h-full px-4" style={{ marginTop: '-80px' }}>
+        <div className="relative z-10 flex items-center justify-center h-full px-4 -mt-20">
           <div className="w-full max-w-md">
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl text-center">
               <div className="w-16 h-16 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center mx-auto mb-6">
@@ -121,7 +121,7 @@ export default function LoginPage() {
         <Header />
       </div>
       
-      <div className="relative z-10 flex items-center justify-center h-full px-4" style={{ marginTop: '-80px' }}>
+      <div className="relative z-10 flex items-center justify-center h-full px-4 -mt-20">
         <div className="w-full max-w-md">
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl">
             <div className="text-center mb-8">

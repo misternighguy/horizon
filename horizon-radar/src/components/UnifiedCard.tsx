@@ -38,8 +38,7 @@ export default function UnifiedCard({ protocol, variant = 'protocol', isCenter =
         {/* Image Section */}
         <div className="absolute top-[calc(var(--card-padding)+var(--card-section-gap)*2+4rem+8px+3px)] left-[var(--card-padding)] right-[var(--card-padding)] bottom-[calc(var(--card-padding)+var(--card-section-gap)*2+4rem)]">
           <div 
-            className="w-full rounded-lg overflow-hidden"
-            style={{ aspectRatio: '3/1' }}
+            className="w-full rounded-lg overflow-hidden aspect-[3/1]"
           >
             <img
               src="/images/GlowBanner.png"

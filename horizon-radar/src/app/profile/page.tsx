@@ -278,7 +278,7 @@ export default function ProfilePage() {
           {/* Top Row - Combined Profile and Stats Card */}
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
             {/* Gold Credit Card */}
-            <div className="lg:col-span-4 relative overflow-hidden rounded-2xl group transition-all duration-300" id="goldCard" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="lg:col-span-4 relative overflow-hidden rounded-2xl group transition-all duration-300 preserve-3d" id="goldCard">
               {/* 3D Background - Gold for premium/admin, Silver for free */}
               <div className={`absolute inset-0 rounded-2xl shadow-2xl ${
                 user.memberStyle === 'free' 
@@ -290,14 +290,10 @@ export default function ProfilePage() {
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/40 rounded-2xl" />
               
               {/* Metallic Texture Pattern */}
-              <div className="absolute inset-0 opacity-30" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='metallic' x='0' y='0' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3Cpath d='M0 0l20 20M20 0L0 20' stroke='%23ffffff' stroke-width='0.5' opacity='0.1'/%3E%3Cpath d='M10 0v20M0 10h20' stroke='%23ffffff' stroke-width='0.3' opacity='0.05'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23metallic)'/%3E%3C/svg%3E")`
-              }} />
+              <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'var(--metallic-texture)' }} />
               
               {/* Metallic Shimmer Lines */}
-              <div className="absolute inset-0 opacity-40" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='shimmer' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffffff;stop-opacity:0'/%3E%3Cstop offset='50%25' style='stop-color:%23ffffff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%23ffffff;stop-opacity:0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='200' height='200' fill='url(%23shimmer)'/%3E%3C/svg%3E")`
-              }} />
+              <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'var(--metallic-shimmer)' }} />
               
               {/* Sci-fi glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
