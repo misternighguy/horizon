@@ -60,6 +60,7 @@ export default function ProfileUploadModal({
     }
   };
 
+  console.log('ProfileUploadModal render:', { isOpen, isUploading });
   if (!isOpen) return null;
 
   return (

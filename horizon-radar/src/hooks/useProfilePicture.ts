@@ -37,6 +37,7 @@ export function useProfilePicture({ onUploadSuccess, onUploadError }: UseProfile
   const openUploadModal = () => {
     console.log('openUploadModal called, setting showUploadModal to true');
     setShowUploadModal(true);
+    console.log('showUploadModal state should now be true');
   };
   const closeUploadModal = () => setShowUploadModal(false);
 

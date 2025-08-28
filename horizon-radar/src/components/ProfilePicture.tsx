@@ -63,14 +63,12 @@ export default function ProfilePicture({
       <button
         onClick={() => {
           console.log('ProfilePicture button clicked!', { onClick: !!onClick });
-          alert('Profile picture clicked!'); // Simple test
           onClick?.();
         }}
-        className={`w-full h-full p-0 border-2 border-red-500 bg-blue-500/20 cursor-pointer rounded-lg hover:bg-blue-500/40 transition-all duration-200 z-10 relative ${
+        className={`w-full h-full p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 ${
           onClick ? 'cursor-pointer' : 'cursor-default'
         }`}
         disabled={!onClick}
-        style={{ zIndex: 1000 }}
       >
         {/* Main Image */}
         <img
