@@ -6,7 +6,7 @@ import { Icons } from '@/components/ui/Icons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProfilePicture from '@/components/ProfilePicture';
-import ProfilePictureSelector from '@/components/ProfilePictureSelector';
+import ProfileUploadModal from '@/components/ProfileUploadModal';
 import { useProfilePicture } from '@/hooks/useProfilePicture';
 
 interface User {
@@ -738,14 +738,11 @@ export default function ProfilePage() {
       {/* Bottom spacing - 20% of screen height */}
       <div className="h-[20vh]"></div>
 
-      {/* Profile Picture Selector Modal */}
-      <ProfilePictureSelector
+      {/* Profile Picture Upload Modal */}
+      <ProfileUploadModal
         isOpen={showUploadModal}
         onClose={closeUploadModal}
-        onSelect={(imageDataUrl, source) => {
-          handleUpload(imageDataUrl);
-          console.log(`Selected ${source} profile picture`);
-        }}
+        onUpload={handleUpload}
         isUploading={isUploading}
       />
     </div>

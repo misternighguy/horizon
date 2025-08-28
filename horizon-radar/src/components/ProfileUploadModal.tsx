@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { validateImageFile, compressImage } from '@/utils/imageProcessing';
+import { validateImageFile, compressImage, loadPresetProfilePicture } from '@/utils/imageProcessing';
 
 export interface ProfileUploadModalProps {
   isOpen: boolean;
@@ -50,6 +50,16 @@ export default function ProfileUploadModal({
     }
   };
 
+  const handlePresetSelect = async (preset: 'male' | 'female') => {
+    try {
+      const imageDataUrl = await loadPresetProfilePicture(preset);
+      onUpload(imageDataUrl);
+    } catch (error) {
+      console.error('Error loading preset image:', error);
+      alert('Error loading preset image. Please try again.');
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -66,6 +76,36 @@ export default function ProfileUploadModal({
 
             {/* Upload Options */}
             <div className="space-y-4 mb-6">
+              {/* Male Avatar Option */}
+              <button
+                onClick={() => handlePresetSelect('male')}
+                disabled={isUploading}
+                className="w-full flex items-center justify-center gap-3 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl hover:bg-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">M</span>
+                </div>
+                <div className="text-left">
+                  <div className="text-white font-medium">Male Avatar</div>
+                  <div className="text-white/60 text-sm">Use MalePFP.jpeg</div>
+                </div>
+              </button>
+
+              {/* Female Avatar Option */}
+              <button
+                onClick={() => handlePresetSelect('female')}
+                disabled={isUploading}
+                className="w-full flex items-center justify-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">F</span>
+                </div>
+                <div className="text-left">
+                  <div className="text-white font-medium">Female Avatar</div>
+                  <div className="text-white/60 text-sm">Use FemalePFP.jpeg</div>
+                </div>
+              </button>
+
               {/* File Upload Option */}
               <button
                 onClick={handleFileSelect}
@@ -78,25 +118,8 @@ export default function ProfileUploadModal({
                   </svg>
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-medium">Upload from Device</div>
+                  <div className="text-white font-medium">Upload Custom Image</div>
                   <div className="text-white/60 text-sm">Choose a photo from your computer</div>
-                </div>
-              </button>
-
-              {/* Camera Option (placeholder for future) */}
-              <button
-                disabled={true}
-                className="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl opacity-50 cursor-not-allowed"
-              >
-                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <div className="text-white/40 font-medium">Take Photo</div>
-                  <div className="text-white/30 text-sm">Coming soon</div>
                 </div>
               </button>
             </div>
