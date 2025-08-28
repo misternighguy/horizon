@@ -279,8 +279,12 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
             {/* Gold Credit Card */}
             <div className="lg:col-span-4 relative overflow-hidden rounded-2xl group transition-all duration-300" id="goldCard" style={{ transformStyle: 'preserve-3d' }}>
-              {/* 3D Golden to Obsidian Background */}
-              <div className="absolute inset-0 bg-gradient-radial from-yellow-400 via-amber-600 to-gray-900 rounded-2xl shadow-2xl" />
+              {/* 3D Background - Gold for premium/admin, Silver for free */}
+              <div className={`absolute inset-0 rounded-2xl shadow-2xl ${
+                user.memberStyle === 'free' 
+                  ? 'bg-gradient-radial from-gray-300 via-gray-400 to-gray-600' 
+                  : 'bg-gradient-radial from-yellow-400 via-amber-600 to-gray-900'
+              }`} />
               
               {/* 3D Depth Layer */}
               <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/40 rounded-2xl" />
@@ -299,7 +303,11 @@ export default function ProfilePage() {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
               
               {/* Main Card Content */}
-              <div className="relative bg-gradient-to-br from-yellow-400/90 via-yellow-500/90 to-amber-600/90 backdrop-blur-sm border border-yellow-300/50 rounded-2xl p-6 h-full shadow-xl">
+              <div className={`relative backdrop-blur-sm rounded-2xl p-6 h-full shadow-xl ${
+                user.memberStyle === 'free'
+                  ? 'bg-gradient-to-br from-gray-300/90 via-gray-400/90 to-gray-500/90 border border-gray-300/50'
+                  : 'bg-gradient-to-br from-yellow-400/90 via-yellow-500/90 to-amber-600/90 border border-yellow-300/50'
+              }`}>
                 {/* Card Header */}
                 <div className="flex items-start justify-between mb-6">
                   {/* Logo/Brand */}
