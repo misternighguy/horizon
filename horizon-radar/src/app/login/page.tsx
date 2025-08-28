@@ -8,7 +8,6 @@ import Footer from '@/components/Footer';
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +32,6 @@ export default function LoginPage() {
         // Set session
         localStorage.setItem('userSession', user.username);
         setIsLoggedIn(true);
-        setUserEmail(email);
         setIsLoading(false);
         
         // Redirect to profile after successful login
@@ -53,7 +51,6 @@ export default function LoginPage() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUserEmail('');
   };
 
   // Show authenticated user dashboard

@@ -55,7 +55,7 @@ export default function AdminPage() {
   const [selectedRequest, setSelectedRequest] = useState<ResearchRequest | null>(null)
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [researchRequestFilter, setResearchRequestFilter] = useState<'all' | 'new' | 'worth_considering' | 'unworthy' | 'completed'>('all')
-  // @ts-expect-error - Temporarily ignoring type checking for deployment
+
   const [activities, setActivities] = useState<any[]>([])
 
   useEffect(() => {

@@ -204,12 +204,12 @@ export default function ProfilePage() {
     }
   };
 
-  const getAccountType = (memberStyle: string) => {
-    switch (memberStyle) {
+  const getAccountType = (style: string) => {
+    switch (style) {
       case 'free': return 'Free Account';
-      case 'premium': return 'Premium User';
+      case 'premium': return 'Premium Account';
       case 'admin': return 'Admin';
-      default: return 'Account';
+      default: return style;
     }
   };
 
@@ -220,14 +220,6 @@ export default function ProfilePage() {
       case 'admin': return 'Admin';
       default: return style;
     }
-  };
-
-  const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
   };
 
   if (isLoading) {

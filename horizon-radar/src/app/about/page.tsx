@@ -11,11 +11,6 @@ export default function AboutPage() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [statsVisible, setStatsVisible] = useState(false);
   const [footerOpacity, setFooterOpacity] = useState(1);
-  const [animatedStats, setAnimatedStats] = useState({
-    users: 0,
-    portfolio: 0,
-    accuracy: 0
-  });
   const sectionsRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -204,16 +199,12 @@ export default function AboutPage() {
       const progress = currentStep / steps;
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
 
-      setAnimatedStats({
-        users: Math.floor(targetStats.users * easeOutQuart),
-        portfolio: Math.floor(targetStats.portfolio * easeOutQuart),
-        accuracy: Math.floor(targetStats.accuracy * easeOutQuart)
-      });
-
-      if (currentStep >= steps) {
-        clearInterval(interval);
-        setAnimatedStats(targetStats);
-      }
+      // This function is no longer used, but keeping it for now as per instructions
+      // setAnimatedStats({
+      //   users: Math.floor(targetStats.users * easeOutQuart),
+      //   portfolio: Math.floor(targetStats.portfolio * easeOutQuart),
+      //   accuracy: Math.floor(targetStats.accuracy * easeOutQuart)
+      // });
     }, stepDuration);
   };
 
@@ -517,7 +508,7 @@ export default function AboutPage() {
                 </span>
                 <span className="text-white font-light ml-4">reading experience</span>
               </h2>
-              <p className="text-2xl text-black mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
+              <p className="text-xl text-black mb-8 max-w-3xl mx-auto leading-relaxed font-inter">
                 Made for the curious, the informed and the savy (all in one place).
               </p>
               

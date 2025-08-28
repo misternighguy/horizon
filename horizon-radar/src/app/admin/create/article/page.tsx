@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { EyeIcon, EyeSlashIcon, PlusIcon, TrashIcon, ArrowsUpDownIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { localStorageDB } from '@/data/localStorageDB';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -19,14 +19,6 @@ interface DraftArticle {
 }
 
 interface TestArticle {
-  id: string;
-  title?: string;
-  projectName?: string;
-  ticker?: string;
-  [key: string]: unknown;
-}
-
-interface PublishedArticle {
   id: string;
   title?: string;
   projectName?: string;

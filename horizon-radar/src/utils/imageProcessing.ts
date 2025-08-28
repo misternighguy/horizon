@@ -79,7 +79,7 @@ export const compressImage = (
         const compressedDataUrl = canvas.toDataURL(mimeType, finalOptions.quality);
         
         resolve(compressedDataUrl);
-      } catch (error) {
+      } catch (_error) {
         reject(new Error('Failed to process image'));
       }
     };
@@ -157,7 +157,7 @@ export const loadPresetProfilePicture = async (preset: 'male' | 'female'): Promi
       // Fallback to generated placeholder if file doesn't exist
       throw new Error('Preset file not found');
     }
-  } catch (error) {
+  } catch (_error) {
     // Generate a placeholder if the file doesn't exist
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');

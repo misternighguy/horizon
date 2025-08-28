@@ -1056,7 +1056,7 @@ class LocalStorageDB {
       }
       
       // Restore all data
-      Object.entries(backup.data).forEach(([key, value]) => {
+      Object.entries(backup.data as Record<string, unknown>).forEach(([key, value]) => {
         if (key in STORAGE_KEYS) {
           this.saveToStorage(key, value);
         }

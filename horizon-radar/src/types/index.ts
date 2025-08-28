@@ -292,6 +292,14 @@ export interface ResearchRequest {
   status: 'new' | 'worth_considering' | 'unworthy' | 'completed';
 }
 
+// Admin Activity Types
+export interface Activity {
+  id: string;
+  type: 'research_requested' | 'new_premium_user' | 'new_subscriber' | 'new_article_published' | 'new_draft_created' | 'database_backup_created';
+  data: Record<string, unknown>;
+  timestamp: string;
+}
+
 // Local Storage Keys
 export const STORAGE_KEYS = {
   ARTICLES: 'horizon_radar_articles',
