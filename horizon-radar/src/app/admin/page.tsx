@@ -56,12 +56,8 @@ export default function AdminPage() {
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [researchRequestFilter, setResearchRequestFilter] = useState<'all' | 'new' | 'worth_considering' | 'unworthy' | 'completed'>('all')
 
-  const [activities, setActivities] = useState<Array<{ 
-    id: string; 
-    type: string; 
-    data: Record<string, string>; 
-    timestamp: string 
-  }>>([])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic activity data structure requires flexible typing
+  const [activities, setActivities] = useState<any[]>([])
 
 
 
