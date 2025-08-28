@@ -136,3 +136,56 @@ export const createInitialsAvatar = (
 
   return canvas.toDataURL('image/png');
 };
+
+/**
+ * Loads a preset profile picture from the public folder
+ * Note: You'll need to move MalePFP.jpeg and FemalePFP.jpeg to public/images/
+ */
+export const loadPresetProfilePicture = async (preset: 'male' | 'female'): Promise<string> => {
+  try {
+    // Try to load the actual files from public/images/
+    const response = await fetch(`/images/${preset === 'male' ? 'MalePFP.jpeg' : 'FemalePFP.jpeg'}`);
+    
+    if (response.ok) {
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+    } else {
+      // Fallback to generated placeholder if file doesn't exist
+      throw new Error('Preset file not found');
+    }
+  } catch (error) {
+    // Generate a placeholder if the file doesn't exist
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 256;
+    canvas.height = 256;
+
+    if (ctx) {
+      // Create a gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 256, 256);
+      if (preset === 'male') {
+        gradient.addColorStop(0, '#3B82F6');
+        gradient.addColorStop(1, '#1E40AF');
+      } else {
+        gradient.addColorStop(0, '#EC4899');
+        gradient.addColorStop(1, '#BE185D');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 256, 256);
+
+      // Add text
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 48px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(preset === 'male' ? 'M' : 'F', 128, 128);
+    }
+
+    return canvas.toDataURL('image/jpeg', 0.8);
+  }
+};

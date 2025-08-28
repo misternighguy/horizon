@@ -33,7 +33,6 @@ export default function ProfilePicture({
   size = 'md',
   onClick,
   showUploadOverlay = false,
-  showVerification = false,
   className = ''
 }: ProfilePictureProps) {
   const [imageError, setImageError] = useState(false);
@@ -74,24 +73,16 @@ export default function ProfilePicture({
       {/* Upload Overlay */}
       {showUploadOverlay && onClick && (
         <div 
-          className={`absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center ${
+          className={`absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2 ${
             isHovered ? 'opacity-100' : ''
           }`}
         >
-          <div className="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center">
-            <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+            <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-        </div>
-      )}
-
-      {/* Verification Badge */}
-      {showVerification && (
-        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-black/20 rounded-full border border-black/30 flex items-center justify-center">
-          <svg className="w-2 h-2 text-black" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
+          <span className="text-white text-xs font-medium">Choose PFP</span>
         </div>
       )}
 
