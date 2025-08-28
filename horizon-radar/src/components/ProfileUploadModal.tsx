@@ -77,35 +77,58 @@ export default function ProfileUploadModal({
 
             {/* Upload Options */}
             <div className="space-y-4 mb-6">
-              {/* Male Avatar Option */}
-              <button
-                onClick={() => handlePresetSelect('male')}
-                disabled={isUploading}
-                className="w-full flex items-center justify-center gap-3 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl hover:bg-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">M</span>
-                </div>
-                <div className="text-left">
-                  <div className="text-white font-medium">Male Avatar</div>
-                  <div className="text-white/60 text-sm">Use MalePFP.jpeg</div>
-                </div>
-              </button>
+              {/* Preset Avatars Row */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {/* Male Avatar Option */}
+                <button
+                  onClick={() => handlePresetSelect('male')}
+                  disabled={isUploading}
+                  className="flex flex-col items-center gap-3 p-4 bg-blue-500/20 border border-blue-400/30 rounded-xl hover:bg-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-400/50">
+                    <img
+                      src="/images/MalePFP.jpeg"
+                      alt="Male Avatar"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to colored placeholder if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.parentElement!.innerHTML = '<div class="w-full h-full bg-blue-500 rounded-full flex items-center justify-center"><span class="text-white font-bold text-lg">M</span></div>';
+                      }}
+                    />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-white font-medium text-sm">Male Avatar</div>
+                    <div className="text-white/60 text-xs">MalePFP.jpeg</div>
+                  </div>
+                </button>
 
-              {/* Female Avatar Option */}
-              <button
-                onClick={() => handlePresetSelect('female')}
-                disabled={isUploading}
-                className="w-full flex items-center justify-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">F</span>
-                </div>
-                <div className="text-left">
-                  <div className="text-white font-medium">Female Avatar</div>
-                  <div className="text-white/60 text-sm">Use FemalePFP.jpeg</div>
-                </div>
-              </button>
+                {/* Female Avatar Option */}
+                <button
+                  onClick={() => handlePresetSelect('female')}
+                  disabled={isUploading}
+                  className="flex flex-col items-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-400/50">
+                    <img
+                      src="/images/FemalePFP.jpeg"
+                      alt="Female Avatar"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to colored placeholder if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.parentElement!.innerHTML = '<div class="w-full h-full bg-pink-500 rounded-full flex items-center justify-center"><span class="text-white font-bold text-lg">F</span></div>';
+                      }}
+                    />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-white font-medium text-sm">Female Avatar</div>
+                    <div className="text-white/60 text-xs">FemalePFP.jpeg</div>
+                  </div>
+                </button>
+              </div>
 
               {/* File Upload Option */}
               <button
