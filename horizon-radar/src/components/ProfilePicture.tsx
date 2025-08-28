@@ -59,16 +59,27 @@ export default function ProfilePicture({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Main Image */}
-      <img
-        src={imageSrc}
-        alt={alt}
-        className={`w-full h-full rounded-lg object-cover border-2 border-black/20 shadow-lg transition-all duration-200 ${
-          onClick ? 'cursor-pointer' : ''
-        } ${isHovered && onClick ? 'opacity-80' : ''}`}
-        onClick={onClick}
-        onError={handleImageError}
-      />
+      {/* Clickable Button Wrapper */}
+      <button
+        onClick={() => {
+          console.log('ProfilePicture button clicked!', { onClick: !!onClick });
+          onClick?.();
+        }}
+        className={`w-full h-full p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 ${
+          onClick ? 'cursor-pointer' : 'cursor-default'
+        }`}
+        disabled={!onClick}
+      >
+        {/* Main Image */}
+        <img
+          src={imageSrc}
+          alt={alt}
+          className={`w-full h-full rounded-lg object-cover border-2 border-black/20 shadow-lg transition-all duration-200 ${
+            isHovered && onClick ? 'opacity-80' : ''
+          }`}
+          onError={handleImageError}
+        />
+      </button>
 
       {/* Upload Overlay */}
       {showUploadOverlay && onClick && (

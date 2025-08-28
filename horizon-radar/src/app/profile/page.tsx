@@ -332,7 +332,10 @@ export default function ProfilePage() {
                       alt={`${user.username}'s profile picture`}
                       username={user.username}
                       size="md"
-                      onClick={openUploadModal}
+                      onClick={() => {
+                        console.log('Profile picture clicked in profile page!');
+                        openUploadModal();
+                      }}
                       showUploadOverlay={true}
                       showVerification={false}
                     />
