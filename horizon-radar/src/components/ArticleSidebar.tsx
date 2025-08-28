@@ -120,7 +120,7 @@ export default function ArticleSidebar({
                   return currentContent
                     .sort((a, b) => a.order - b.order)
                     .map((section) => ({
-                      id: section.id || `section-${section.order}`,
+                      id: `section-${section.order}`,
                       label: section.title
                     }));
                 }

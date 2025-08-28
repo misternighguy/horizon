@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -104,7 +104,7 @@ interface ArticleFormData {
   excerpt: string;
 }
 
-export default function CreateArticlePage() {
+function CreateArticlePageContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');
   const [currentLevel, setCurrentLevel] = useState<ReadingLevel>('novice');
@@ -2075,5 +2075,13 @@ export default function CreateArticlePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CreateArticlePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateArticlePageContent />
+    </Suspense>
   );
 }

@@ -30,7 +30,7 @@ export default function ProfileUploadModal({
     const validation = validateImageFile(file);
     if (!validation.isValid) {
       if (typeof window !== 'undefined' && window.showToast) {
-        window.showToast(validation.error, 'error', 4000);
+        window.showToast(validation.error || 'Invalid image file', 'error', 4000);
       }
       return;
     }
