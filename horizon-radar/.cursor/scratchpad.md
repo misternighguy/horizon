@@ -243,6 +243,43 @@
 1. **Git rollback**: `git reset --hard HEAD~1` to undo the image migration commit
 2. **Manual revert**: Replace all `Image` components with `img` tags and remove Image imports
 
+**Task Completed**: Fix Vercel Deployment Issues - Next.js 15 Compatibility
+
+**What Was Wrong**:
+1. **Commit Author Issue**: Git configuration was missing `user.name` and `user.email`, causing "a commit author is required" error
+2. **Turbopack Compatibility**: Build script used `--turbopack` flag which isn't supported in Vercel production
+3. **Next.js 15 Compatibility**: `params` prop in dynamic routes is now a Promise, causing TypeScript errors
+4. **Lockfile Warning**: Multiple lockfiles detected causing build warnings
+
+**What We Fixed**:
+1. ✅ **Git Configuration**: Set `user.name = "Akshay"` and `user.email = "ak@akshay.com"`
+2. ✅ **Build Script**: Removed `--turbopack` flag from production build (kept for dev)
+3. ✅ **Next.js 15 Compatibility**: Updated protocols page to use `async/await` for params
+4. ✅ **Next.js Config**: Added `outputFileTracingRoot: process.cwd()` to resolve lockfile warnings
+5. ✅ **Commit History**: Amended commits with proper author information
+
+**Technical Details**:
+- **Before**: `export default function ProtocolPage({ params }: { params: { slug: string } })`
+- **After**: `export default async function ProtocolPage({ params }: { params: Promise<{ slug: string }> })`
+- **Build Script**: Changed from `"build": "next build --turbopack"` to `"build": "next build"`
+- **Config**: Added `outputFileTracingRoot: process.cwd()` to resolve workspace root detection
+
+**Current Status**: 
+- ✅ **Build passes** - All TypeScript errors resolved
+- ✅ **Vercel compatible** - No turbopack, proper author info
+- ✅ **Next.js 15 ready** - All async params handled correctly
+- ✅ **Clean builds** - No warnings or lockfile issues
+- 🚀 **Ready for deployment** - Should deploy successfully on Vercel
+
+**How to Roll Back**:
+1. **Git rollback**: `git reset --hard HEAD~1` to undo the deployment fixes
+2. **Manual revert**: Restore turbopack flag and remove outputFileTracingRoot config
+
+**Next Steps**: 
+- Try Vercel deployment again - should now work without author or compatibility errors
+- Monitor deployment logs for any remaining issues
+- Consider re-enabling turbopack once Vercel adds support
+
 ## Lessons
 
 - **Code Analysis**: Found significant duplication opportunities (400-500 LOC reduction potential)
