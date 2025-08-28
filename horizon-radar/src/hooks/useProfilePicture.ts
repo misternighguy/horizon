@@ -26,8 +26,8 @@ export function useProfilePicture({ onUploadSuccess, onUploadError }: UseProfile
       
       // Show success message
       setTimeout(() => {
-        if (typeof window !== 'undefined' && (window as any).showToast) {
-          (window as any).showToast('Profile picture updated successfully!', 'success', 3000);
+        if (typeof window !== 'undefined' && window.showToast) {
+          window.showToast('Profile picture updated successfully!', 'success', 3000);
         }
       }, 100);
       
@@ -35,8 +35,8 @@ export function useProfilePicture({ onUploadSuccess, onUploadError }: UseProfile
       console.error('Error uploading profile picture:', error);
       const errorMessage = 'Error uploading image. Please try again.';
       onUploadError?.(errorMessage);
-      if (typeof window !== 'undefined' && (window as any).showToast) {
-        (window as any).showToast(errorMessage, 'error', 4000);
+      if (typeof window !== 'undefined' && window.showToast) {
+        window.showToast(errorMessage, 'error', 4000);
       }
     } finally {
       setIsUploading(false);

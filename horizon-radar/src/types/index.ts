@@ -221,6 +221,7 @@ export interface DatabaseSchema {
   comments: Comment[];
   protocols: Record<string, Protocol>;
   researchCards: ResearchCard[];
+  researchRequests: ResearchRequest[];
   newsletterSubscriptions: NewsletterSubscription[];
   system: {
     lastBackup: Date;
@@ -230,6 +231,7 @@ export interface DatabaseSchema {
       totalUsers: number;
       totalComments: number;
       totalProtocols: number;
+      totalResearchRequests: number;
       totalNewsletterSubscriptions: number;
     };
   };
@@ -246,6 +248,50 @@ export interface NewsletterSubscription {
   status: 'subscribed' | 'unsubscribed';
 }
 
+// Research Request Types
+export interface InformalRequest {
+  projectName: string;
+  website?: string;
+  twitter?: string;
+  docsLink?: string;
+  helpfulLink1?: string;
+  helpfulLink2?: string;
+  notes?: string;
+}
+
+export interface FormalRequest {
+  projectName: string;
+  website: string;
+  twitter?: string;
+  contractAddress?: string;
+  chain?: string;
+  category?: string;
+  problemStatement?: string;
+  keyRisks?: string;
+  docsLinks?: string;
+}
+
+export interface ResearchRequest {
+  id: string;
+  type: 'informal' | 'formal';
+  projectName: string;
+  website?: string;
+  twitter?: string;
+  docsLink?: string;
+  helpfulLink1?: string;
+  helpfulLink2?: string;
+  notes?: string;
+  contractAddress?: string;
+  chain?: string;
+  category?: string;
+  problemStatement?: string;
+  keyRisks?: string;
+  docsLinks?: string;
+  submittedAt: Date;
+  submittedBy: string | null;
+  status: 'new' | 'worth_considering' | 'unworthy' | 'completed';
+}
+
 // Local Storage Keys
 export const STORAGE_KEYS = {
   ARTICLES: 'horizon_radar_articles',
@@ -253,6 +299,7 @@ export const STORAGE_KEYS = {
   COMMENTS: 'horizon_radar_comments',
   PROTOCOLS: 'horizon_radar_protocols',
   RESEARCH_CARDS: 'horizon_radar_research_cards',
+  RESEARCH_REQUESTS: 'horizon_radar_research_requests',
   NEWSLETTER_SUBSCRIPTIONS: 'horizon_radar_newsletter_subscriptions',
   SYSTEM: 'horizon_radar_system',
   SESSIONS: 'horizon_radar_sessions',
@@ -261,11 +308,23 @@ export const STORAGE_KEYS = {
 export interface LocalStorageDB {
   getArticleBySlug: (slug: string) => Article | null;
   getCommentsByArticle: (slug: string) => Comment[];
-  createComment: (commentData: Omit<Comment, 'id' | 'timestamp'>) => Comment;
+  createComment: (commentData: Omit<Comment, 'id' | 'timestamp' | 'likeCount'>) => Comment;
+  getUserByUsername: (username: string) => User | null;
+  updateUser: (id: string, updates: Partial<User>) => User | null;
+  updateUserProfile: (id: string, profileUpdates: Partial<User['profile']>) => User | null;
+  getUsers: () => User[];
+  getArticles: () => Article[];
+  updateArticle: (id: string, updates: Partial<Article>) => Article | null;
+  createArticle: (articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>) => Article;
+  getResearchRequests: () => ResearchRequest[];
+  createResearchRequest: (requestData: Omit<ResearchRequest, 'id' | 'submittedAt'>) => ResearchRequest;
+  updateResearchRequest: (id: string, updates: Partial<ResearchRequest>) => ResearchRequest | null;
+  deleteResearchRequest: (id: string) => boolean;
 }
 
 declare global {
   interface Window {
     localStorageDB?: LocalStorageDB;
+    showToast?: (message: string, type?: 'success' | 'error' | 'info', duration?: number) => void;
   }
 } 

@@ -29,8 +29,8 @@ export default function ProfileUploadModal({
     // Validate file
     const validation = validateImageFile(file);
     if (!validation.isValid) {
-      if (typeof window !== 'undefined' && (window as any).showToast) {
-        (window as any).showToast(validation.error, 'error', 4000);
+      if (typeof window !== 'undefined' && window.showToast) {
+        window.showToast(validation.error, 'error', 4000);
       }
       return;
     }
@@ -48,8 +48,8 @@ export default function ProfileUploadModal({
       onUpload(compressedImage);
     } catch (error) {
       console.error('Error processing image:', error);
-      if (typeof window !== 'undefined' && (window as any).showToast) {
-        (window as any).showToast('Error processing image. Please try again.', 'error', 4000);
+      if (typeof window !== 'undefined' && window.showToast) {
+        window.showToast('Error processing image. Please try again.', 'error', 4000);
       }
     }
   };
@@ -60,8 +60,8 @@ export default function ProfileUploadModal({
       onUpload(imageDataUrl);
     } catch (error) {
       console.error('Error loading preset image:', error);
-      if (typeof window !== 'undefined' && (window as any).showToast) {
-        (window as any).showToast('Error loading preset image. Please try again.', 'error', 4000);
+      if (typeof window !== 'undefined' && window.showToast) {
+        window.showToast('Error loading preset image. Please try again.', 'error', 4000);
       }
     }
   };

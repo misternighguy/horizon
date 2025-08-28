@@ -98,6 +98,40 @@
   3. Replace `as HTMLElement` with proper type guards
   4. Remove unnecessary type assertions where TypeScript can infer types
   5. Add null checks for DOM element access
+- **Status**: ✅ COMPLETED
+  - Enhanced Window and LocalStorageDB interfaces in types/index.ts
+  - Replaced (window as any).showToast with window.showToast in ProfileUploadModal.tsx and useProfilePicture.ts
+  - Replaced document.activeElement as HTMLElement with type guard in page.tsx
+  - Replaced (window as any).localStorageDB with window.localStorageDB in profile/page.tsx
+  - Note: One persistent type error in profile/page.tsx related to User.preferences type compatibility
+
+### Phase 6: Database Schema Audit & Validation (Data Integrity)
+**Plan**: Ensure all UI elements have corresponding database fields and fix any mismatches
+- **Target**: Profile page, article pages, admin panel, login system, watchlist system, research requests
+- **Approach**:
+  1. **Profile Page**: Check user form fields map to User type in localStorageDB
+  2. **Article Pages**: Verify article fields, reading levels, watchlist in Article type
+  3. **Admin Panel**: Check CRUD operations use proper database methods
+  4. **Login System**: Verify user authentication uses localStorageDB
+  5. **Watchlist System**: Ensure watchlist array in User type
+  6. **Research Requests**: Check request form fields in localStorageDB
+  7. **Fix any mismatches**: Add missing fields or remove orphaned data
+- **Success Criteria**: Every UI element has proper database backing, no orphaned data
+- **Status**: ✅ COMPLETED
+  - ✅ Added ResearchRequest, InformalRequest, FormalRequest interfaces to types/index.ts
+  - ✅ Updated DatabaseSchema to include researchRequests array
+  - ✅ Enhanced LocalStorageDB interface with research request methods
+  - ✅ Added readingLevel to profile page formData and UI
+  - ✅ Fixed User interface to include readingLevel in preferences
+  - ✅ Migrated research requests from localStorage to localStorageDB
+  - ✅ Updated request/page.tsx to use localStorageDB.createResearchRequest
+  - ✅ Updated admin/page.tsx to use localStorageDB methods for CRUD operations
+  - ✅ Added RESEARCH_REQUESTS to STORAGE_KEYS
+  - ✅ Implemented research request methods in localStorageDB class
+  - ✅ Added "Preferred Reading Level" selector to profile preferences with membership restrictions
+  - ✅ Updated LevelContext to auto-load user's preferred reading level from database
+  - ✅ Integrated reading level changes to sync with user preferences
+  - ✅ Fixed useArticle hook to use LevelContext for proper reading level synchronization
 - **Success Criteria**: No unsafe type assertions, proper TypeScript types
 - **Files**: All TypeScript files, focus on components with DOM manipulation
 

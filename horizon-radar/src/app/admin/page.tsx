@@ -73,13 +73,13 @@ export default function AdminPage() {
       const dbUsers = localStorageDB.getUsers()
       const dbArticles = localStorageDB.getArticles()
       
-      // Load research requests from localStorage
-      const storedRequests = JSON.parse(localStorage.getItem('research_requests') || '[]')
+      // Load research requests from localStorageDB
+      const dbResearchRequests = localStorageDB.getResearchRequests()
       
       setComments(dbComments)
       setUsers(dbUsers)
       setArticles(dbArticles)
-      setResearchRequests(storedRequests)
+      setResearchRequests(dbResearchRequests)
       
       // Load activities
       loadActivities()
@@ -227,11 +227,12 @@ export default function AdminPage() {
   }
 
   const handleUpdateResearchRequestStatus = (requestId: string, newStatus: string) => {
-    const updatedRequests = researchRequests.map(request => 
-      request.id === requestId ? { ...request, status: newStatus } : request
-    )
-    setResearchRequests(updatedRequests)
-    localStorage.setItem('research_requests', JSON.stringify(updatedRequests))
+    const updatedRequest = localStorageDB.updateResearchRequest(requestId, { status: newStatus as any })
+    if (updatedRequest) {
+      setResearchRequests(prev => prev.map(request => 
+        request.id === requestId ? updatedRequest : request
+      ))
+    }
   }
 
   // Function to add research request activity when one is submitted
@@ -245,9 +246,10 @@ export default function AdminPage() {
 
   const handleDeleteResearchRequest = (requestId: string) => {
     if (confirm('Are you sure you want to delete this research request? This action cannot be undone.')) {
-      const updatedRequests = researchRequests.filter(request => request.id !== requestId)
-      setResearchRequests(updatedRequests)
-      localStorage.setItem('research_requests', JSON.stringify(updatedRequests))
+      const success = localStorageDB.deleteResearchRequest(requestId)
+      if (success) {
+        setResearchRequests(prev => prev.filter(request => request.id !== requestId))
+      }
     }
   }
 
@@ -310,7 +312,7 @@ export default function AdminPage() {
     const newActivities: any[] = []
     
     // Generate activities from existing research requests
-    const existingRequests = JSON.parse(localStorage.getItem('research_requests') || '[]')
+    const existingRequests = localStorageDB.getResearchRequests()
     existingRequests.forEach((request: any) => {
       newActivities.push({
         id: `req_${request.id}`,

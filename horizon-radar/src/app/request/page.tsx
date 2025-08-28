@@ -127,10 +127,11 @@ export default function RequestResearch() {
         status: 'new' as const
       };
 
-      // For now, just store in localStorage - in real app this would be a proper database
-      const existing = JSON.parse(localStorage.getItem('research_requests') || '[]');
-      existing.push(request);
-      localStorage.setItem('research_requests', JSON.stringify(existing));
+      // Store in localStorageDB
+      const localStorageDB = window.localStorageDB;
+      if (localStorageDB) {
+        localStorageDB.createResearchRequest(request);
+      }
 
       // Add activity log entry
       const adminActivities = JSON.parse(localStorage.getItem('admin_activities') || '[]');
@@ -182,9 +183,11 @@ export default function RequestResearch() {
         status: 'new' as const
       };
 
-      const existing = JSON.parse(localStorage.getItem('research_requests') || '[]');
-      existing.push(request);
-      localStorage.setItem('research_requests', JSON.stringify(existing));
+      // Store in localStorageDB
+      const localStorageDB = window.localStorageDB;
+      if (localStorageDB) {
+        localStorageDB.createResearchRequest(request);
+      }
 
       // Add activity log entry
       const adminActivities = JSON.parse(localStorage.getItem('admin_activities') || '[]');

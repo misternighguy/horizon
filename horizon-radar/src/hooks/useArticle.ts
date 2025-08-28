@@ -1,17 +1,20 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Article, ReadingLevel, LocalStorageDB } from '@/types';
+import { Article, LocalStorageDB } from '@/types';
+import { useLevel } from '@/contexts/LevelContext';
 
 export function useArticle(slug: string) {
   const [article, setArticle] = useState<Article | null>(null);
-  const [readingStyle, setReadingStyle] = useState<ReadingLevel>('novice');
   const [activeSection, setActiveSection] = useState<string>('');
   const [readingProgress, setReadingProgress] = useState(0);
   const [parallaxOffset, setParallaxOffset] = useState(0);
   
   const articleRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
+  
+  // Use LevelContext to get and set reading style
+  const { level: readingStyle, setLevel: setReadingStyle } = useLevel();
 
   // Load article data
   useEffect(() => {

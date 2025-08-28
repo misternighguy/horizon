@@ -26,6 +26,7 @@ interface User {
     linkedin?: string;
   };
   preferences?: {
+    readingLevel?: 'novice' | 'technical' | 'analyst';
     notifications: boolean;
     newsletter: boolean;
   };
@@ -43,7 +44,8 @@ export default function ProfilePage() {
     twitter: '',
     linkedin: '',
     notifications: true,
-    newsletter: true
+    newsletter: true,
+    readingLevel: 'novice' as 'novice' | 'technical' | 'analyst'
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -68,9 +70,9 @@ export default function ProfilePage() {
       };
       
       // Save to localStorage
-      const localStorageDB = (window as any).localStorageDB;
+      const localStorageDB = window.localStorageDB;
       if (localStorageDB) {
-        localStorageDB.updateUser(user.id, updatedUser);
+        localStorageDB.updateUser(user.id, { profile: updatedUser.profile });
         setUser(updatedUser);
       }
     }
@@ -79,7 +81,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const loadUserData = () => {
       try {
-        const localStorageDB = (window as any).localStorageDB;
+        const localStorageDB = window.localStorageDB;
         const username = localStorage.getItem('userSession') || localStorage.getItem('adminSession');
         
         if (localStorageDB && username) {
@@ -93,7 +95,8 @@ export default function ProfilePage() {
               twitter: userData.profile?.twitter || '',
               linkedin: userData.profile?.linkedin || '',
               notifications: userData.preferences?.notifications ?? true,
-              newsletter: userData.preferences?.newsletter ?? true
+              newsletter: userData.preferences?.newsletter ?? true,
+              readingLevel: userData.preferences?.readingLevel || 'novice'
             });
           } else {
             // User session exists but user not found in database
@@ -149,7 +152,7 @@ export default function ProfilePage() {
 
   const handleSave = () => {
     try {
-      const localStorageDB = (window as any).localStorageDB;
+      const localStorageDB = window.localStorageDB;
       if (localStorageDB && user) {
         const updatedUser = {
           ...user,
@@ -162,12 +165,28 @@ export default function ProfilePage() {
             linkedin: formData.linkedin
           },
           preferences: {
+            ...user.preferences,
+            readingLevel: user.preferences?.readingLevel || 'novice',
             notifications: formData.notifications,
             newsletter: formData.newsletter
           }
         };
         
-        localStorageDB.updateUser(user.id, updatedUser);
+        localStorageDB.updateUser(user.id, {
+          username: formData.username,
+          email: formData.email,
+          profile: {
+            ...user.profile,
+            bio: formData.bio,
+            twitter: formData.twitter,
+            linkedin: formData.linkedin
+          },
+          preferences: {
+            readingLevel: formData.readingLevel,
+            notifications: formData.notifications,
+            newsletter: formData.newsletter
+          }
+        });
         setUser(updatedUser);
         setIsEditing(false);
       }
@@ -433,7 +452,20 @@ export default function ProfilePage() {
 
             {/* Compact Preferences Card */}
             <div className="lg:col-span-3 bg-gray-800/25 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-lg font-medium text-white mb-4">Preferences</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-white">Preferences</h3>
+                <button
+                  onClick={() => {
+                    handleSave();
+                    if (window.showToast) {
+                      window.showToast('Preferences saved.', 'success');
+                    }
+                  }}
+                  className="px-4 py-2 bg-white/5 backdrop-blur-md border border-white/30 text-white font-medium rounded-2xl hover:bg-white/15 hover:border-white/40 transition-all duration-300 text-sm shadow-lg"
+                >
+                  Save
+                </button>
+              </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -471,12 +503,35 @@ export default function ProfilePage() {
                     }`} />
                   </button>
                 </div>
-                <button
-                  onClick={handleSave}
-                  className="w-full px-4 py-2 bg-[rgb(var(--color-horizon-green))] text-black font-medium rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors text-sm"
-                >
-                  Save
-                </button>
+                <div className="space-y-2">
+                  <span className="text-white font-medium text-sm">Preferred Reading Level</span>
+                  <div className="flex justify-center gap-1">
+                    {(['novice', 'technical', 'analyst'] as const).map((level) => {
+                      // Determine if this level should be available based on user membership
+                      const isAvailable = 
+                        user.memberStyle === 'admin' || 
+                        (user.memberStyle === 'premium' && level !== 'analyst') ||
+                        (user.memberStyle === 'free' && ['novice', 'technical'].includes(level));
+                      
+                      return (
+                        <button
+                          key={level}
+                          onClick={() => isAvailable && setFormData({...formData, readingLevel: level})}
+                          disabled={!isAvailable}
+                          className={`px-3 py-1 text-xs rounded transition-colors ${
+                            formData.readingLevel === level
+                              ? 'bg-white text-black'
+                              : isAvailable
+                                ? 'bg-white/10 text-white/60 hover:bg-white/20'
+                                : 'bg-white/5 text-white/30 cursor-not-allowed'
+                          }`}
+                        >
+                          {level.charAt(0).toUpperCase() + level.slice(1)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -491,7 +546,7 @@ export default function ProfilePage() {
                   <h3 className="text-2xl font-medium text-white">Profile Information</h3>
                   <button
                     onClick={() => setIsEditing(!isEditing)}
-                    className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--color-horizon-green))] text-black font-medium rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-white/90 transition-colors"
                   >
                     <Icons.Edit className="w-4 h-4" />
                     {isEditing ? 'Cancel' : 'Edit'}
@@ -650,23 +705,23 @@ export default function ProfilePage() {
                   <h3 className="text-xl font-medium text-white mb-4">Premium Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Icons.Star className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Star className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Unlock "Analyst" Writing Style</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Search className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Search className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Request Research</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Eye className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Eye className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Access to Videos</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Star className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Star className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Create Watchlist</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Support className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Support className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Premium Support</span>
                     </div>
                   </div>
@@ -679,19 +734,23 @@ export default function ProfilePage() {
                   <h3 className="text-xl font-medium text-white mb-4">Free Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Icons.Search className="w-5 h-5 text-[rgb(var(--color-horizon-green))]" />
+                      <Icons.Search className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Research Scope</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Info />
+                      <div className="w-5 h-5 text-black">
+                        <Icons.Info />
+                      </div>
                       <span className="text-white text-sm">Weekly Newsletter</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Users />
+                      <Icons.Users className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Comment & Interact with Experts</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Grid />
+                      <div className="w-5 h-5 text-black">
+                        <Icons.Grid />
+                      </div>
                       <span className="text-white text-sm">Novice & Technical Writing Styles</span>
                     </div>
                   </div>
@@ -704,15 +763,15 @@ export default function ProfilePage() {
                   <h3 className="text-xl font-medium text-white mb-4">Admin Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Icons.Admin className="w-5 h-5 text-purple-400" />
+                      <Icons.Admin className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">Content Management</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Users className="w-5 h-5 text-purple-400" />
+                      <Icons.Users className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">User Management</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Icons.Shield className="w-5 h-5 text-purple-400" />
+                      <Icons.Shield className="w-5 h-5 text-black" />
                       <span className="text-white text-sm">System Access</span>
                     </div>
                   </div>

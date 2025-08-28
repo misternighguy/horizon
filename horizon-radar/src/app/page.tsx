@@ -56,8 +56,8 @@ export default function Page() {
       setLastKeyPress(now);
     } else if (e.key === 'Escape') {
       // Reset focus states when Escape is pressed
-      const activeElement = document.activeElement as HTMLElement;
-      if (activeElement && activeElement.blur) {
+      const activeElement = document.activeElement;
+      if (activeElement && activeElement instanceof HTMLElement) {
         activeElement.blur();
       }
     }

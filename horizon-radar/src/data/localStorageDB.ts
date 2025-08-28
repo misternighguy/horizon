@@ -6,6 +6,7 @@ import {
   Protocol, 
   ProtocolSummary,
   ResearchCard,
+  ResearchRequest,
   NewsletterSubscription,
   STORAGE_KEYS
 } from '@/types';
@@ -990,6 +991,7 @@ class LocalStorageDB {
         totalUsers: users.length,
         totalComments: comments.length,
         totalProtocols: Object.keys(protocols).length,
+        totalResearchRequests: 0,
         totalNewsletterSubscriptions: newsletterSubscriptions.length
       }
     };
@@ -1006,11 +1008,12 @@ class LocalStorageDB {
       comments: this.getComments(),
       protocols: this.getFromStorage<Record<string, Protocol>>(STORAGE_KEYS.PROTOCOLS) || {},
       researchCards: this.getResearchCards(),
+      researchRequests: this.getResearchRequests(),
       newsletterSubscriptions: this.getNewsletterSubscriptions(),
       system: systemStats || {
         lastBackup: new Date(),
         version: '1.0.0',
-        stats: { totalArticles: 0, totalUsers: 0, totalComments: 0, totalProtocols: 0, totalNewsletterSubscriptions: 0 }
+        stats: { totalArticles: 0, totalUsers: 0, totalComments: 0, totalProtocols: 0, totalResearchRequests: 0, totalNewsletterSubscriptions: 0 }
       }
     };
   }
@@ -1065,6 +1068,45 @@ class LocalStorageDB {
       console.error('Failed to restore database:', error);
       return false;
     }
+  }
+
+  // Research Request Methods
+  public getResearchRequests(): ResearchRequest[] {
+    return this.getFromStorage<ResearchRequest[]>(STORAGE_KEYS.RESEARCH_REQUESTS) || [];
+  }
+
+  public createResearchRequest(requestData: Omit<ResearchRequest, 'id' | 'submittedAt'>): ResearchRequest {
+    const requests = this.getResearchRequests();
+    const newRequest: ResearchRequest = {
+      ...requestData,
+      id: Date.now().toString(),
+      submittedAt: new Date()
+    };
+    
+    requests.push(newRequest);
+    this.saveToStorage(STORAGE_KEYS.RESEARCH_REQUESTS, requests);
+    return newRequest;
+  }
+
+  public updateResearchRequest(id: string, updates: Partial<ResearchRequest>): ResearchRequest | null {
+    const requests = this.getResearchRequests();
+    const index = requests.findIndex(req => req.id === id);
+    
+    if (index === -1) return null;
+    
+    requests[index] = { ...requests[index], ...updates };
+    this.saveToStorage(STORAGE_KEYS.RESEARCH_REQUESTS, requests);
+    return requests[index];
+  }
+
+  public deleteResearchRequest(id: string): boolean {
+    const requests = this.getResearchRequests();
+    const filteredRequests = requests.filter(req => req.id !== id);
+    
+    if (filteredRequests.length === requests.length) return false;
+    
+    this.saveToStorage(STORAGE_KEYS.RESEARCH_REQUESTS, filteredRequests);
+    return true;
   }
 
   // Convert Articles to ProtocolSummaries for landing page
