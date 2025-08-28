@@ -624,19 +624,19 @@ export default function ProfilePage() {
 
               {/* Premium Upgrade CTA - Only for free users - Horizontal card below Profile Information */}
               {user.memberStyle === 'free' && (
-                <div className="bg-gradient-to-br from-gray-900 to-black backdrop-blur-sm border border-gray-700 rounded-2xl p-6">
+                <div className="bg-gradient-to-br from-gray-900 to-black backdrop-blur-sm border border-gray-700 rounded-2xl p-4">
                   <div className="flex items-center justify-between gap-6">
                     <div className="flex-1">
-                      <h3 className="text-xl font-medium text-white mb-1">Upgrade to Premium</h3>
-                      <p className="text-white/80 text-sm">
+                      <h3 className="text-lg font-medium text-white mb-0.5">Upgrade to Premium</h3>
+                      <p className="text-white/80 text-xs">
                         Unlock exclusive research, advanced analytics, and priority support.
                       </p>
                     </div>
                     <Link
                       href="/premium"
-                      className="inline-flex items-center gap-2 px-8 py-3 bg-[rgb(var(--color-horizon-green))] text-black font-medium rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors whitespace-nowrap flex-shrink-0"
+                      className="inline-flex items-center gap-2 px-6 py-2 bg-[rgb(var(--color-horizon-green))] text-black font-medium rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/90 transition-colors whitespace-nowrap flex-shrink-0"
                     >
-                      <Icons.ArrowRight className="w-4 h-4" />
+                      <Icons.ArrowRight className="w-3 h-3" />
                       Learn More
                     </Link>
                   </div>
