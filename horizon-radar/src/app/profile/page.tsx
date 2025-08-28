@@ -626,16 +626,11 @@ export default function ProfilePage() {
               {user.memberStyle === 'free' && (
                 <div className="bg-gradient-to-br from-[rgb(var(--color-horizon-green))]/20 to-[rgb(var(--color-brand-400))]/30 backdrop-blur-sm border border-[rgb(var(--color-horizon-green))]/30 rounded-2xl p-6">
                   <div className="flex items-center justify-between gap-6">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="text-2xl text-[rgb(var(--color-horizon-green))]">
-                        <Icons.Crown />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-medium text-white mb-1">Upgrade to Premium</h3>
-                        <p className="text-white/80 text-sm">
-                          Unlock exclusive research, advanced analytics, and priority support.
-                        </p>
-                      </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-medium text-white mb-1">Upgrade to Premium</h3>
+                      <p className="text-white/80 text-sm">
+                        Unlock exclusive research, advanced analytics, and priority support.
+                      </p>
                     </div>
                     <Link
                       href="/premium"
