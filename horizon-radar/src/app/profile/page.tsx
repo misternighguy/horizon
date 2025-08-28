@@ -70,7 +70,7 @@ export default function ProfilePage() {
       // Save to localStorage
       const localStorageDB = (window as any).localStorageDB;
       if (localStorageDB) {
-        localStorageDB.updateUser(updatedUser);
+        localStorageDB.updateUser(user.id, updatedUser);
         setUser(updatedUser);
       }
     }

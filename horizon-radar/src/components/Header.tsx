@@ -36,8 +36,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    // Check for existing login sessions
+  // Function to load user data
+  const loadUserData = () => {
     const adminSession = localStorage.getItem('adminSession')
     const userSession = localStorage.getItem('userSession')
     
@@ -62,6 +62,22 @@ export default function Header() {
         console.error('Error checking admin status:', error);
       }
     }
+  };
+
+  useEffect(() => {
+    // Initial load
+    loadUserData();
+    
+    // Listen for profile picture updates
+    const handleProfileUpdate = () => {
+      loadUserData();
+    };
+    
+    window.addEventListener('profilePictureUpdated', handleProfileUpdate);
+    
+    return () => {
+      window.removeEventListener('profilePictureUpdated', handleProfileUpdate);
+    };
   }, []);
 
   useEffect(() => {

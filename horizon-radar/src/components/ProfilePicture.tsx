@@ -62,8 +62,8 @@ export default function ProfilePicture({
       {/* Clickable Profile Picture */}
       <button
         onClick={onClick}
-        className={`w-full h-full rounded-lg overflow-hidden transition-all duration-200 relative border-2 ${
-          onClick ? 'cursor-pointer hover:opacity-80 border-blue-400 hover:border-blue-500' : 'cursor-default border-transparent'
+        className={`w-full h-full rounded-lg overflow-hidden transition-all duration-200 relative border ${
+          onClick ? 'cursor-pointer hover:opacity-80 border-white/60 hover:border-white/80' : 'cursor-default border-transparent'
         }`}
         disabled={!onClick}
       >

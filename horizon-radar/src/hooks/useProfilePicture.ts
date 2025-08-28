@@ -19,6 +19,11 @@ export function useProfilePicture({ onUploadSuccess, onUploadError }: UseProfile
       // Close modal
       setShowUploadModal(false);
       
+      // Trigger profile picture update event for header refresh
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('profilePictureUpdated'));
+      }
+      
       // Show success message
       setTimeout(() => {
         if (typeof window !== 'undefined' && (window as any).showToast) {
