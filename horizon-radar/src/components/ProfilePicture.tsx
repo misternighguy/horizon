@@ -63,7 +63,13 @@ export default function ProfilePicture({
       <button
         onClick={() => {
           console.log('ProfilePicture button clicked!', { onClick: !!onClick });
-          onClick?.();
+          if (onClick) {
+            console.log('Calling onClick function...');
+            onClick();
+            console.log('onClick function called successfully');
+          } else {
+            console.log('No onClick function provided');
+          }
         }}
         className={`w-full h-full p-0 border-0 bg-transparent cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 ${
           onClick ? 'cursor-pointer' : 'cursor-default'

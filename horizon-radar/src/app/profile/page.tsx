@@ -334,7 +334,9 @@ export default function ProfilePage() {
                       size="md"
                       onClick={() => {
                         console.log('Profile picture clicked in profile page!');
+                        console.log('About to call openUploadModal...');
                         openUploadModal();
+                        console.log('openUploadModal called from profile page');
                       }}
                       showUploadOverlay={true}
                       showVerification={false}
