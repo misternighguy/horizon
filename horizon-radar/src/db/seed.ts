@@ -105,13 +105,13 @@ function classifyLink(platform: string, type: string): { group: string; kind: st
 }
 
 // Helper function to get nested section content
-function getNestedSection(sections: any, path: string): any {
+function getNestedSection(sections: Record<string, unknown>, path: string): unknown {
   const keys = path.split('.');
-  let current = sections;
+  let current: unknown = sections;
   
   for (const key of keys) {
     if (current && typeof current === 'object' && key in current) {
-      current = current[key];
+      current = (current as Record<string, unknown>)[key];
     } else {
       return null;
     }
@@ -401,7 +401,7 @@ async function seed() {
             articleId: articleId,
             eventName: event.event,
             eventDate: event.date || '',
-            type: type as any,
+            type: type as 'testnet' | 'mainnet' | 'raise' | 'product_launch' | 'chain_launch' | 'audit' | 'other',
             title: title,
             dateText: event.date || '',
             orderIndex: i + 1,
@@ -424,7 +424,7 @@ async function seed() {
               linkType: link.platform,
               platform: link.platform,
               url: link.url,
-              group: group as any,
+              group: group as 'social' | 'technical',
               kind: kind,
               orderIndex: orderIndex++,
               createdAtUtc: new Date()
@@ -442,7 +442,7 @@ async function seed() {
               linkType: link.type,
               platform: link.type,
               url: link.url,
-              group: group as any,
+              group: group as 'social' | 'technical',
               kind: kind,
               orderIndex: orderIndex++,
               createdAtUtc: new Date()
