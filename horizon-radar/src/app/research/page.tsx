@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -8,52 +5,61 @@ import Footer from '@/components/Footer';
 import { localStorageDB } from '@/data/localStorageDB';
 import { ResearchCard } from '@/types';
 
-export default function ResearchPage() {
-  const [recentlyPublished, setRecentlyPublished] = useState<ResearchCard[]>([]);
-  const [mostRead, setMostRead] = useState<ResearchCard[]>([]);
-  const [trending, setTrending] = useState<ResearchCard[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && localStorageDB) {
-      setRecentlyPublished(localStorageDB.getResearchCardsByCategory('recently-published') || []);
-      setMostRead(localStorageDB.getResearchCardsByCategory('most-read') || []);
-      setTrending(localStorageDB.getResearchCardsByCategory('trending') || []);
+// Helper function to get research data from API or fallback to mock
+async function getResearchData() {
+  try {
+    // Check if database is configured
+    if (process.env.DATABASE_URL) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/research/cards`, {
+        next: { revalidate: 3600 } // Revalidate every hour
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          recentlyPublished: data.recentlyPublished || [],
+          mostRead: data.mostRead || [],
+          trending: data.trending || []
+        };
+      }
     }
-    setIsLoading(false);
-  }, []);
-
-  // Filter functions for each section
-  const filterCards = (cards: ResearchCard[], query: string) => {
-    console.log('Filtering cards:', { cards: cards?.length, query });
-    if (!query.trim()) return cards || [];
-    
-    const filtered = cards?.filter(card => 
-      card.title.toLowerCase().includes(query.toLowerCase()) ||
-      card.description.toLowerCase().includes(query.toLowerCase())
-    ) || [];
-    
-    console.log('Filtered results:', filtered.length);
-    return filtered;
-  };
-
-  if (isLoading) {
-    return (
-      <div className="relative min-h-screen w-full">
-        <div className="fixed inset-0 z-0 bg-[url('/LandingBackground.png')] bg-cover bg-center bg-no-repeat bg-fixed" />
-        <div className="fixed inset-0 z-0 bg-black/20" />
-        <div className="relative z-20">
-          <Header />
-        </div>
-        <div className="relative z-10 w-full py-10 flex flex-col min-h-screen">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--color-horizon-green))]"></div>
-          </div>
-        </div>
-      </div>
-    );
+  } catch (error) {
+    console.warn('Failed to fetch from API, falling back to mock data:', error);
   }
+  
+  // Fallback to mock data
+  if (localStorageDB) {
+    return {
+      recentlyPublished: localStorageDB.getResearchCardsByCategory('recently-published') || [],
+      mostRead: localStorageDB.getResearchCardsByCategory('most-read') || [],
+      trending: localStorageDB.getResearchCardsByCategory('trending') || []
+    };
+  }
+  
+  return {
+    recentlyPublished: [],
+    mostRead: [],
+    trending: []
+  };
+}
+
+// Filter function for search
+function filterCards(cards: ResearchCard[], query: string) {
+  if (!query.trim()) return cards || [];
+  
+  return cards?.filter(card => 
+    card.title.toLowerCase().includes(query.toLowerCase()) ||
+    (card.description && card.description.toLowerCase().includes(query.toLowerCase()))
+  ) || [];
+}
+
+export default async function ResearchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { recentlyPublished, mostRead, trending } = await getResearchData();
+  const { q: searchQuery = '' } = await searchParams;
 
   return (
     <div className="relative min-h-screen w-full">
@@ -73,15 +79,21 @@ export default function ResearchPage() {
           </h1>
           
           <div className="max-w-4xl mx-auto px-4">
-            <div className="flex items-center gap-4 mb-4">
+            <form className="flex items-center gap-4 mb-4">
               <input
                 type="text"
+                name="q"
                 placeholder="Search all research..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                defaultValue={searchQuery}
                 className="flex-1 px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-horizon-green))]"
               />
-            </div>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-[rgb(var(--color-horizon-green))] text-white rounded-lg hover:bg-[rgb(var(--color-horizon-green))]/80 transition-colors"
+              >
+                Search
+              </button>
+            </form>
           </div>
         </section>
 
@@ -124,7 +136,9 @@ export default function ResearchPage() {
                     </div>
                   </Link>
                 ))
-              ) : null}
+              ) : (
+                <p className="text-white/50 text-sm text-center py-8">No research cards found</p>
+              )}
             </div>
           </div>
 
@@ -165,7 +179,9 @@ export default function ResearchPage() {
                     </div>
                   </Link>
                 ))
-              ) : null}
+              ) : (
+                <p className="text-white/50 text-sm text-center py-8">No research cards found</p>
+              )}
             </div>
           </div>
 
@@ -206,7 +222,9 @@ export default function ResearchPage() {
                     </div>
                   </Link>
                 ))
-              ) : null}
+              ) : (
+                <p className="text-white/50 text-sm text-center py-8">No research cards found</p>
+              )}
             </div>
           </div>
         </div>

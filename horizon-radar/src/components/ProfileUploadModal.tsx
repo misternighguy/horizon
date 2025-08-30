@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { validateImageFile, compressImage, loadPresetProfilePicture } from '@/utils/imageProcessing';
 
@@ -18,9 +18,37 @@ export default function ProfileUploadModal({
   isUploading = false
 }: ProfileUploadModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadProgress, setUploadProgress] = useState<string>('');
 
   const handleFileSelect = () => {
     fileInputRef.current?.click();
+  };
+
+  const uploadImageToServer = async (file: File): Promise<string> => {
+    try {
+      setUploadProgress('Uploading image...');
+      
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Upload failed');
+      }
+
+      const result = await response.json();
+      setUploadProgress('Image uploaded successfully!');
+      
+      return result.imageUrl;
+    } catch (error) {
+      console.error('Upload error:', error);
+      throw new Error(error instanceof Error ? error.message : 'Upload failed');
+    }
   };
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +65,9 @@ export default function ProfileUploadModal({
     }
 
     try {
-      // Compress image
+      setUploadProgress('Processing image...');
+      
+      // Compress image first
       const compressedImage = await compressImage(file, {
         maxWidth: 256,
         maxHeight: 256,
@@ -45,22 +75,45 @@ export default function ProfileUploadModal({
         format: 'jpeg'
       });
 
-      // Call upload handler
-      onUpload(compressedImage);
+      // Convert compressed data URL back to file for upload
+      const response = await fetch(compressedImage);
+      const blob = await response.blob();
+      const compressedFile = new File([blob], file.name, { type: 'image/jpeg' });
+
+      // Upload to server
+      const imageUrl = await uploadImageToServer(compressedFile);
+
+      // Call upload handler with the server URL
+      onUpload(imageUrl);
+      
+      // Reset progress
+      setUploadProgress('');
+      
     } catch (error) {
-      console.error('Error processing image:', error);
+      console.error('Error processing/uploading image:', error);
+      setUploadProgress('');
       if (typeof window !== 'undefined' && window.showToast) {
-        window.showToast('Error processing image. Please try again.', 'error', 4000);
+        window.showToast(
+          error instanceof Error ? error.message : 'Error processing image. Please try again.', 
+          'error', 
+          4000
+        );
       }
     }
   };
 
   const handlePresetSelect = async (preset: 'male' | 'female') => {
     try {
+      setUploadProgress('Loading preset image...');
       const imageDataUrl = await loadPresetProfilePicture(preset);
+      
+      // For preset images, we'll use the data URL directly since they're already optimized
       onUpload(imageDataUrl);
+      setUploadProgress('');
+      
     } catch (error) {
       console.error('Error loading preset image:', error);
+      setUploadProgress('');
       if (typeof window !== 'undefined' && window.showToast) {
         window.showToast('Error loading preset image. Please try again.', 'error', 4000);
       }
@@ -127,7 +180,7 @@ export default function ProfileUploadModal({
               <button
                 onClick={handleFileSelect}
                 disabled={isUploading}
-                className="w-full flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="w-10 h-10 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,11 +194,11 @@ export default function ProfileUploadModal({
               </button>
             </div>
 
-            {/* Loading State */}
-            {isUploading && (
+            {/* Progress State */}
+            {(isUploading || uploadProgress) && (
               <div className="mb-4 flex items-center justify-center gap-3 text-white/70">
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                <span>Processing image...</span>
+                <span>{uploadProgress || 'Processing image...'}</span>
               </div>
             )}
 

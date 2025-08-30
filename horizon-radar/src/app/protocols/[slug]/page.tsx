@@ -3,6 +3,28 @@ import { mockProtocols } from '@/data/mock'
 import LevelToggle from '@/components/LevelToggle'
 import CopyByLevel from '@/components/CopyByLevel'
 
+// Helper function to get protocol data from API or fallback to mock
+async function getProtocolData(slug: string) {
+  try {
+    // Check if database is configured
+    if (process.env.DATABASE_URL) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/protocols/${slug}`, {
+        next: { revalidate: 3600 } // Revalidate every hour
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to fetch from API, falling back to mock data:', error);
+  }
+  
+  // Fallback to mock data
+  return mockProtocols[slug] || null;
+}
+
 function Section({
   title,
   copy,
@@ -22,7 +44,8 @@ function Section({
 
 export default async function ProtocolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const p = mockProtocols[slug]
+  const p = await getProtocolData(slug)
+  
   if (!p) return notFound()
   
   return (
@@ -34,7 +57,7 @@ export default async function ProtocolPage({ params }: { params: Promise<{ slug:
             {p.ticker ? ` (${p.ticker})` : ''}
           </div>
           <div className="text-sm text-gray-500">
-            {p.category.join(' · ')} · {(Array.isArray(p.chains) ? p.chains.join(', ') : p.chains) || 'Web App'}
+            {p.category?.join(' · ') || p.category} · {(Array.isArray(p.chains) ? p.chains.join(', ') : p.chains) || 'Web App'}
           </div>
         </div>
         <LevelToggle />
