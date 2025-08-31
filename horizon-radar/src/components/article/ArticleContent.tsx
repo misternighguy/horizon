@@ -14,7 +14,7 @@ export default function ArticleContent({ article, readingStyle }: ArticleContent
   // If dynamic content exists for this reading level, render it
   if (currentContent.length > 0) {
     return (
-      <div className="lg:col-span-3 space-y-16">
+      <div className="lg:col-span-3 space-y-4 sm:space-y-8 md:space-y-12 lg:space-y-16">
         {currentContent
           .sort((a, b) => a.order - b.order)
           .map((section, index) => (
@@ -34,7 +34,7 @@ export default function ArticleContent({ article, readingStyle }: ArticleContent
   
   // Fall back to static content if no dynamic content exists
   return (
-    <div className="lg:col-span-3 space-y-8 sm:space-y-12 lg:space-y-16">
+    <div className="lg:col-span-3 space-y-4 sm:space-y-8 md:space-y-12 lg:space-y-16">
       {/* Abstract */}
       <section id="abstract">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-4 sm:mb-6">Abstract</h2>
