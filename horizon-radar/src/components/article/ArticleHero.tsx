@@ -55,11 +55,11 @@ export default function ArticleHero({
       <div className="max-w-7xl mx-auto">
         {/* Title and Subtitle */}
         <div className="mb-6">
-          <h1 className="text-6xl font-light mb-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-light mb-4">
             <span className="bg-gradient-to-r from-[#E4E4E4] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent">
               {article.title}
             </span>
-            <span className="text-white font-medium ml-4">({article.ticker})</span>
+            <span className="text-white font-medium ml-2 sm:ml-4 text-3xl sm:text-4xl md:text-6xl">({article.ticker})</span>
           </h1>
           <p className="text-white/80 text-lg max-w-4xl leading-relaxed mb-4">
             {article.subtitle}
@@ -73,7 +73,9 @@ export default function ArticleHero({
         </div>
 
         {/* Reading Style and Video Buttons - Below classification/location */}
-        <div className="flex items-center space-x-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-8">
+          {/* First Row - Reading Style and Watch Video buttons */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             {/* Reading Style Pills */}
             <div 
               className="relative"
@@ -152,12 +154,15 @@ export default function ArticleHero({
                 </button>
               </div>
             </div>
+          </div>
 
-            {/* Watchlist Button */}
+          {/* Second Row - Watchlist Button positioned to the right */}
+          <div className="flex justify-end w-full sm:w-auto">
             <div className="h-10">
               <WatchlistButton articleId={article.id} />
             </div>
           </div>
+        </div>
 
         {/* Hero Image */}
         <div 
