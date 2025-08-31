@@ -154,10 +154,8 @@ export default function ArticleHero({
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Second Row - Watchlist Button positioned to the right */}
-          <div className="flex justify-end w-full sm:w-auto">
+            {/* Watchlist Button - Same row as Watch Video button */}
             <div className="h-10">
               <WatchlistButton articleId={article.id} />
             </div>
