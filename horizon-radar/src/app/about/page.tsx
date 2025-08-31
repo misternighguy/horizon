@@ -410,25 +410,25 @@ export default function AboutPage() {
         >
           <div className="max-w-6xl px-8 text-center">
             <div className="animate-fade-in-up">
-              <h2 className="text-6xl mb-8 font-inter">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 md:mb-8 font-inter">
                 <span className="text-white font-light">Crypto Research is </span>
                 <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient font-medium">
                   fractionalized
                 </span>
               </h2>
               
-              <p className="text-2xl text-black mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
+              <p className="text-lg sm:text-xl md:text-2xl text-black mb-8 sm:mb-12 md:mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
                 The issue with Web3 Research: the whole story is never in one place.
               </p>
               
               {/* Full Story Graphic */}
-              <div className="flex justify-center mb-12">
+              <div className="flex justify-center mb-8 sm:mb-10 md:mb-12">
                 <Image 
                   src="/images/FullStoryGraphic.png" 
                   alt="Full Story Graphic - Web3 Research Fragmentation" 
-                  width={800}
-                  height={600}
-                  className="max-w-full h-auto rounded-lg shadow-lg"
+                  width={480}
+                  height={360}
+                  className="max-w-full h-auto rounded-lg shadow-lg w-[480px] sm:w-[640px] md:w-[800px]"
                 />
               </div>
               
@@ -440,11 +440,11 @@ export default function AboutPage() {
                     setIsScrolling(true);
                     setTimeout(() => setIsScrolling(false), 800);
                   }}
-                  className="group inline-flex items-center gap-4 px-8 py-4 text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
+                  className="group inline-flex items-center gap-2 sm:gap-3 md:gap-4 px-5 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
                 >
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                   <span>OUR SOLUTION</span>
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
@@ -458,25 +458,25 @@ export default function AboutPage() {
         >
           <div className="max-w-6xl px-8 text-center">
             <div className="animate-fade-in-up">
-              <h2 className="text-6xl mb-8 font-inter">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 md:mb-8 font-inter">
                 <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient font-medium">
                   Stitching
                 </span>
-                <span className="text-white font-light ml-4">the story together</span>
+                <span className="text-white font-light ml-2 sm:ml-3 md:ml-4">the story together</span>
               </h2>
               
-              <p className="text-2xl text-black mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
+              <p className="text-lg sm:text-xl md:text-2xl text-black mb-8 sm:mb-12 md:mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
                 while amplifying its depth and eliminating its bias with AI agents.
               </p>
               
               {/* Stiching Story Graphic */}
-              <div className="flex justify-center mb-16">
+              <div className="flex justify-center mb-8 sm:mb-12 md:mb-16">
                 <Image 
                   src="/images/StichingStory.png" 
                   alt="Stiching Story - AI Agents Amplifying Research Depth" 
-                  width={800}
-                  height={600}
-                  className="max-w-full h-auto rounded-lg"
+                  width={480}
+                  height={360}
+                  className="max-w-full h-auto rounded-lg w-[480px] sm:w-[640px] md:w-[800px]"
                 />
               </div>
               
@@ -488,11 +488,11 @@ export default function AboutPage() {
                     setIsScrolling(true);
                     setTimeout(() => setIsScrolling(false), 800);
                   }}
-                  className="group inline-flex items-center gap-4 px-8 py-4 text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
+                  className="group inline-flex items-center gap-2 sm:gap-3 md:gap-4 px-5 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
                 >
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                   <span>HOW IT WORKS</span>
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
@@ -506,25 +506,25 @@ export default function AboutPage() {
         >
           <div className="max-w-6xl px-8">
             <div className="text-center mb-16 animate-fade-in-up">
-              <h2 className="text-6xl mb-8 font-inter">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 md:mb-8 font-inter">
                 <span className="text-white font-light">The </span>
                 <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient font-medium">
                   perfect
                 </span>
-                <span className="text-white font-light ml-4">reading experience</span>
+                <span className="text-white font-light ml-2 sm:ml-3 md:ml-4">reading experience</span>
               </h2>
-              <p className="text-xl text-black mb-8 max-w-3xl mx-auto leading-relaxed font-inter">
+              <p className="text-base sm:text-lg md:text-xl text-black mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed font-inter">
                 Made for the curious, the informed and the savy (all in one place).
               </p>
               
               {/* How It Works Graphic */}
-              <div className="flex justify-center mb-16">
+              <div className="flex justify-center mb-8 sm:mb-12 md:mb-16">
                 <Image 
                   src="/images/HowItWorks.png" 
                   alt="How It Works - Perfect Reading Experience" 
-                  width={800}
-                  height={600}
-                  className="max-w-full h-auto rounded-lg"
+                  width={480}
+                  height={360}
+                  className="max-w-full h-auto rounded-lg w-[480px] sm:w-[640px] md:w-[800px]"
                 />
               </div>
               
@@ -536,11 +536,11 @@ export default function AboutPage() {
                     setIsScrolling(true);
                     setTimeout(() => setIsScrolling(false), 800);
                   }}
-                  className="group inline-flex items-center gap-4 px-8 py-4 text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
+                  className="group inline-flex items-center gap-2 sm:gap-3 md:gap-4 px-5 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
                 >
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                   <span>I&apos;M READY</span>
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
@@ -558,39 +558,39 @@ export default function AboutPage() {
         >
           <div className="text-center max-w-6xl px-8 relative z-10">
             <div className="animate-fade-in-up">
-              <h2 className="text-6xl mb-8 font-inter">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 md:mb-8 font-inter">
                 <span className="text-white font-light">Are you </span>
                 <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient font-medium">
                   Ready
                 </span>
                 <span className="text-white font-light">?</span>
               </h2>
-              <p className="text-2xl text-black mb-12 max-w-4xl mx-auto leading-relaxed font-inter">
+              <p className="text-lg sm:text-xl md:text-2xl text-black mb-6 sm:mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-inter">
                 Level up your research game, for $0.
               </p>
               
-              <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
+              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16">
                 <Link 
                   href="/login" 
-                  className="px-10 py-4 bg-white/20 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/30 transition-all duration-300 transform hover:scale-105 font-inter"
+                  className="px-6 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 bg-white/20 border border-white/30 text-white rounded-full font-medium text-sm sm:text-base md:text-lg hover:bg-white/30 transition-all duration-300 transform hover:scale-105 font-inter"
                 >
                   Create Account
                 </Link>
                 <Link 
                   href="/research" 
-                  className="px-10 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300 transform hover:scale-105 font-inter"
+                  className="px-6 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 border border-white/30 text-white rounded-full font-medium text-sm sm:text-base md:text-lg hover:bg-white/10 transition-all duration-300 transform hover:scale-105 font-inter"
                 >
                   Browse Research
                 </Link>
                 <button 
                   onClick={() => window.showSubscribePopout && window.showSubscribePopout()}
-                  className="px-10 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300 transform hover:scale-105 font-inter"
+                  className="px-6 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 border border-white/30 text-white rounded-full font-medium text-sm sm:text-base md:text-lg hover:bg-white/10 transition-all duration-300 transform hover:scale-105 font-inter"
                 >
                   Subscribe to Newsletter
                 </button>
               </div>
               
-              <div className="text-white/60 text-lg font-inter">
+              <div className="text-white/60 text-sm sm:text-base md:text-lg font-inter">
                 <p>No commitment • Cancel anytime • Start protecting your capital today</p>
               </div>
             </div>
@@ -605,9 +605,9 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer - Hidden on mobile for about page */}
       <div 
-        className="relative z-20 transition-opacity duration-500"
+        className="relative z-20 transition-opacity duration-500 hidden sm:block"
         style={{ opacity: footerOpacity }}
       >
         <Footer />
