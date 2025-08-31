@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getResearchColumns, searchResearchCards } from '../../../../db/repo/research';
+import { getResearchColumns, searchResearchCards } from '@/db/repo/research';
 
 // GET /api/research/cards - Get research columns or search
 export async function GET(request: NextRequest) {

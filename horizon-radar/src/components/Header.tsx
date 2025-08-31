@@ -165,7 +165,7 @@ export default function Header() {
                  onMouseLeave={handleDropdownLeave}
                >
                  <button 
-                   className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-[rgb(var(--color-horizon-green))] bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))] transition-colors cursor-pointer"
+                   className="inline-flex items-center gap-3 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full text-sm md:text-base font-medium text-[rgb(var(--color-horizon-green))] bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown-dark))] transition-colors cursor-pointer"
                    aria-label="User menu"
                    onClick={() => setShowDropdown(!showDropdown)}
                  >
@@ -223,7 +223,7 @@ export default function Header() {
              ) : (
                <Link 
                  href="/login" 
-                 className="inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown))] transition-colors"
+                 className="inline-flex items-center gap-3 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full text-sm md:text-base font-medium text-white bg-[rgb(var(--color-horizon-brown))] hover:bg-[rgb(var(--color-horizon-brown))] transition-colors"
                  aria-label="Login to your account"
                >
                  <Icons.Profile />
@@ -565,7 +565,7 @@ function MobileMenu() {
   return (
     <>
                              <button
-           className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
+           className="md:hidden inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
            aria-label="Open menu"
            onClick={() => setOpen(true)}
          >
@@ -663,7 +663,7 @@ function MobileSearchButton() {
   
   return (
     <button
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
+      className="inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
       aria-label="Open search"
       onClick={() => {
         // On mobile, redirect to search page instead of showing dropdown

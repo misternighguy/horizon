@@ -12,7 +12,7 @@ import { Icons } from '@/components/ui/Icons';
 export default function ActionButtons() {
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 md:flex-row md:justify-center w-full">
+      <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 md:flex-row md:justify-center w-full">
         <FancyLink
           href="/about"
           ariaLabel="What is Horizon?"
@@ -45,9 +45,9 @@ function FancyLink({
     <Link
       href={href}
       aria-label={ariaLabel}
-      className="group fancy-btn inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full px-4 py-3 sm:px-6 md:px-10 sm:py-3 md:py-4 text-base sm:text-lg md:text-[20px] font-light tracking-[-0.01em] bg-white/71 border border-white font-inter whitespace-nowrap w-full max-w-xs sm:w-auto min-h-[44px] sm:min-h-[48px] md:min-h-[56px] transition-all duration-300 hover:bg-white/80 focus:bg-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+      className="group fancy-btn inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full px-3 py-2 sm:px-4 md:px-6 lg:px-10 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg lg:text-[20px] font-light tracking-[-0.01em] bg-white/71 border border-white font-inter whitespace-nowrap w-full max-w-xs sm:w-auto min-h-[36px] sm:min-h-[44px] md:min-h-[48px] lg:min-h-[56px] transition-all duration-300 hover:bg-white/80 focus:bg-white/80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
     >
-      <span className="text-white group-hover:text-black transition-colors duration-300 text-lg sm:text-xl md:text-2xl">{icon}</span>
+              <span className="text-white group-hover:text-black transition-colors duration-300 text-base sm:text-lg md:text-xl lg:text-2xl">{icon}</span>
       <span className="text-white group-hover:text-[#3c3c3c] transition-colors duration-300">{label}</span>
       <span aria-hidden className="shine" />
     </Link>

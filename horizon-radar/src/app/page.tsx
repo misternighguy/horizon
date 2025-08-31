@@ -93,23 +93,23 @@ export default function Page() {
       </div>
       
              {/* Content with overlay - Centered on screen */}
-       <div className="relative z-10 w-full py-6 sm:py-8 md:py-10 space-y-6 sm:space-y-8 sm:mt-[7.5vh]">
+       <div className="relative z-10 w-full py-3 sm:py-6 md:py-8 lg:py-10 space-y-4 sm:space-y-6 md:space-y-8 sm:mt-[7.5vh]">
                  {/* Hero Section - Mobile responsive typography */}
-         <section className="space-y-4 text-center px-4 sm:px-6 md:px-8">
-           <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-medium drop-shadow-lg leading-tight">
+         <section className="space-y-3 sm:space-y-4 text-center px-4 sm:px-6 md:px-8">
+           <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-medium drop-shadow-lg leading-tight">
              <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient">
                Clarity
              </span>
              <span className="text-white font-light ml-2 sm:ml-3 md:ml-4">for Crypto Research</span>
            </h1>
-           <p className="text-base sm:text-lg max-w-3xl mx-auto text-white/90 drop-shadow-md px-4 sm:px-0">
+           <p className="text-sm sm:text-base md:text-lg max-w-3xl mx-auto text-white/90 drop-shadow-md px-4 sm:px-0">
              Leveraging AI insights and research to drive quality education investment decisions.
            </p>
          </section>
 
         {/* Product Cards Carousel Section */}
         {protocolSummaries.length > 0 && (
-        <section className="space-y-3 w-full px-4 sm:px-6 md:px-8">
+        <section className="space-y-2 sm:space-y-3 w-full px-4 sm:px-6 md:px-8">
           {/* Mobile: Single Card with Simple Navigation */}
           <div className="block md:hidden">
             <div className="w-full flex justify-center px-4">
@@ -257,7 +257,7 @@ export default function Page() {
         )}
 
                  {/* Interactive glass buttons beneath the product cards - Mobile responsive spacing */}
-         <section className="mt-8 sm:mt-12 md:mt-16 px-4 sm:px-6 md:px-8">
+         <section className="mt-4 sm:mt-8 md:mt-12 lg:mt-16 px-4 sm:px-6 md:px-8">
            <ActionButtons />
          </section>
       </div>
