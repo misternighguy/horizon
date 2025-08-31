@@ -358,18 +358,18 @@ export default function AboutPage() {
           <div className="text-center max-w-6xl px-8 relative z-10">
             <div className="animate-fade-in-up">
               {/* Horizon Logo */}
-              <div className="mb-8">
-                <Image src="/logo.png" alt="Horizon Radar" width={360} height={120} className="mx-auto" />
+              <div className="mb-4 sm:mb-6 md:mb-8">
+                <Image src="/logo.png" alt="Horizon Radar" width={240} height={80} className="mx-auto w-[240px] sm:w-[300px] md:w-[360px]" />
               </div>
               
-              <h1 className="text-6xl mb-8 font-inter">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 md:mb-8 font-inter">
                 <span className="bg-gradient-to-r from-white via-[#E4E4E4] via-[rgb(var(--color-brand-400))] to-[rgb(var(--color-horizon-green))] bg-clip-text text-transparent animate-gradient font-medium">
                   Clarity
                 </span>
-                <span className="text-white font-light ml-4">for Crypto Research</span>
+                <span className="text-white font-light ml-2 sm:ml-3 md:ml-4">for Crypto Research</span>
               </h1>
               
-              <p className="text-2xl text-black mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
+              <p className="text-lg sm:text-xl md:text-2xl text-black mb-8 sm:mb-12 md:mb-16 max-w-4xl mx-auto leading-relaxed font-inter">
                 Scouting the horizon of formidable blockchain technology for Web3 savants.
               </p>
               
@@ -381,11 +381,11 @@ export default function AboutPage() {
                     setIsScrolling(true);
                     setTimeout(() => setIsScrolling(false), 800);
                   }}
-                  className="group inline-flex items-center gap-4 px-8 py-4 text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
+                  className="group inline-flex items-center gap-2 sm:gap-3 md:gap-4 px-5 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white font-inter hover:bg-white/30 hover:scale-105 transition-all duration-300 rounded-full"
                 >
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                   <span>LEARN MORE</span>
-                  <Icons.ArrowDown className="w-5 h-5" />
+                  <Icons.ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </div>
