@@ -562,98 +562,138 @@ function MobileMenu() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  // Dispatch custom event when mobile menu state changes
+  useEffect(() => {
+    const event = new CustomEvent('mobileMenuStateChange', { 
+      detail: { isOpen: open } 
+    });
+    window.dispatchEvent(event);
+  }, [open]);
+
+  // Create portal container for mobile menu
+  useEffect(() => {
+    if (open) {
+      const portalContainer = document.createElement('div');
+      portalContainer.id = 'mobile-menu-portal';
+      portalContainer.style.position = 'fixed';
+      portalContainer.style.top = '0';
+      portalContainer.style.left = '0';
+      portalContainer.style.right = '0';
+      portalContainer.style.bottom = '0';
+      portalContainer.style.zIndex = '99999';
+      portalContainer.style.pointerEvents = 'auto';
+      document.body.appendChild(portalContainer);
+
+      return () => {
+        const existingPortal = document.getElementById('mobile-menu-portal');
+        if (existingPortal) {
+          existingPortal.remove();
+        }
+      };
+    }
+  }, [open]);
+
   return (
     <>
-                             <button
-           className="md:hidden inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
-           aria-label="Open menu"
-           onClick={() => setOpen(true)}
-         >
-           <Icons.Menu />
-         </button>
+      <button
+        className="md:hidden inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/20 bg-white/10 hover:bg-white/20 transition-colors"
+        aria-label="Open menu"
+        onClick={() => setOpen(true)}
+      >
+        <Icons.Menu />
+      </button>
 
-       {open && (
-         <div
-           role="dialog"
-           aria-modal="true"
-           className="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm"
-           onClick={() => setOpen(false)}
-         >
-           <div
-             className="absolute left-0 top-0 h-full w-80 bg-[#3c352b] shadow-xl border-r border-[#263036]"
-             onClick={(e) => e.stopPropagation()}
-           >
-             <div className="flex items-center justify-between p-4 border-b border-[#263036]">
-               <span className="font-medium text-white text-lg">Menu</span>
-               <button 
-                 aria-label="Close menu" 
-                 onClick={() => setOpen(false)} 
-                 className="p-2 rounded-md hover:bg-[#4a4238] transition-colors"
-               >
-                 <span className="text-white">
-                   <Icons.Close />
-                 </span>
-               </button>
-             </div>
+      {open && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[99999] bg-black/40 backdrop-blur-sm"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 99999,
+            pointerEvents: 'auto'
+          }}
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="absolute left-0 top-0 h-full w-80 bg-[#3c352b] shadow-xl border-r border-[#263036]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-[#263036]">
+              <span className="font-medium text-white text-lg">Menu</span>
+              <button 
+                aria-label="Close menu" 
+                onClick={() => setOpen(false)} 
+                className="p-2 rounded-md hover:bg-[#4a4238] transition-colors"
+              >
+                <span className="text-white">
+                  <Icons.Close />
+                </span>
+              </button>
+            </div>
 
-             <nav className="p-4 space-y-3">
-               {/* Home link - First option */}
-               <Link
-                 href="/"
-                 onClick={() => setOpen(false)}
-                 className={[
-                   'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
-                   pathname === '/' ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
-                 ].join(' ')}
-               >
-                 <Icons.Home />
-                 Home
-               </Link>
-               
-               {NAV.map((n) => {
-                 const active = pathname === n.href;
-                 return (
-                   <Link
-                     key={n.href}
-                     href={n.href}
-                     onClick={() => setOpen(false)}
-                     className={[
-                       'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
-                       active ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
-                     ].join(' ')}
-                   >
-                     {n.href === '/about' && <Icons.Info />}
-                     {n.href === '/premium' && <Icons.Shield />}
-                     {n.href === '/research' && <Icons.Grid />}
-                     {n.href === '/request' && <Icons.Users />}
-                     {n.href === '/watchlist' && <Icons.Eye />}
-                     {n.label}
-                   </Link>
-                 );
-               })}
-               
-               {/* Search link for mobile */}
-               <Link
-                 href="/search"
-                 onClick={() => setOpen(false)}
-                 className="flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
-               >
-                 <Icons.Search />
-                 Search
-               </Link>
-               
-               <Link
-                 href="/login"
-                 onClick={() => setOpen(false)}
-                 className="mt-4 flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
-               >
-                 <Icons.Profile />
-                 Login
-               </Link>
-             </nav>
-           </div>
-         </div>
-       )}
+            <nav className="p-4 space-y-3">
+              {/* Home link - First option */}
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                className={[
+                  'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
+                  pathname === '/' ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
+                ].join(' ')}
+              >
+                <Icons.Home />
+                Home
+              </Link>
+              
+              {NAV.map((n) => {
+                const active = pathname === n.href;
+                return (
+                  <Link
+                    key={n.href}
+                    href={n.href}
+                    onClick={() => setOpen(false)}
+                    className={[
+                      'flex items-center gap-3 rounded-md px-4 py-3 text-base transition-colors',
+                      active ? 'bg-[#4a4238] font-medium text-white' : 'text-white/80 hover:bg-[#4a4238] hover:text-white'
+                    ].join(' ')}
+                  >
+                    {n.href === '/about' && <Icons.Info />}
+                    {n.href === '/premium' && <Icons.Shield />}
+                    {n.href === '/research' && <Icons.Grid />}
+                    {n.href === '/request' && <Icons.Users />}
+                    {n.href === '/watchlist' && <Icons.Eye />}
+                    {n.label}
+                  </Link>
+                );
+              })}
+              
+              {/* Search link for mobile */}
+              <Link
+                href="/search"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
+              >
+                <Icons.Search />
+                Search
+              </Link>
+              
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="mt-4 flex items-center gap-3 rounded-md px-4 py-3 text-base text-white/80 hover:bg-[#4a4238] hover:text-white transition-colors"
+              >
+                <Icons.Profile />
+                Login
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
     </>
   );
 }

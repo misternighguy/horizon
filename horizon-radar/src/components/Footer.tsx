@@ -6,6 +6,7 @@ import { Icons } from '@/components/ui/Icons';
 
 export default function Footer() {
   const pathname = usePathname();
+  
   if (pathname?.startsWith('/about')) return null; // no footer on About per spec
 
   // Research page gets special styling
