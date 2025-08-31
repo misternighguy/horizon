@@ -184,7 +184,7 @@ export default function Page() {
                 disabled={isTransitioning}
                 aria-label="View previous protocol"
               >
-                <Image src="/LeftArrowLanding.png" alt="Previous" width={48} height={48} />
+                <img src="/LeftArrowLanding.png" alt="Previous" className="w-12 h-12" />
               </button>
 
               {/* Right Arrow */}
@@ -195,7 +195,7 @@ export default function Page() {
                 disabled={isTransitioning}
                 aria-label="View next protocol"
               >
-                <Image src="/RightArrowLanding.png" alt="Next" width={48} height={48} />
+                <img src="/RightArrowLanding.png" alt="Next" className="w-12 h-12" />
               </button>
 
               {/* Carousel Cards Container - Extended padding to accommodate glow */}
