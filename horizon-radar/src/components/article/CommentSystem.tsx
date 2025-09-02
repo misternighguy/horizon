@@ -15,9 +15,17 @@ export default function CommentSystem({ articleSlug, articleId, articleTitle }: 
   const [replyForms, setReplyForms] = useState<Record<string, string>>({});
   const [dailyCommentCount, setDailyCommentCount] = useState(0);
   const [dailyReplyCount, setDailyReplyCount] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side before accessing localStorageDB
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Load comments for this article
   useEffect(() => {
+    if (!isClient) return;
+    
     try {
       const localStorageDB: LocalStorageDB | undefined = window.localStorageDB;
       if (localStorageDB) {
@@ -27,7 +35,7 @@ export default function CommentSystem({ articleSlug, articleId, articleTitle }: 
     } catch (error) {
       console.error('Failed to load comments:', error);
     }
-  }, [articleSlug]);
+  }, [articleSlug, isClient]);
 
   // Check daily limits
   useEffect(() => {
@@ -126,6 +134,20 @@ export default function CommentSystem({ articleSlug, articleId, articleTitle }: 
       console.error('Failed to post reply:', error);
     }
   };
+
+  // Don't render anything until we're on the client side
+  if (!isClient) {
+    return (
+      <section id="comments" className="mt-16 pb-20 px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">Loading comments...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="comments" className="mt-16 pb-20 px-8">

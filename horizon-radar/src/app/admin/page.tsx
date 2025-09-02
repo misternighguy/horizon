@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { localStorageDB } from '@/data/localStorageDB'
 import { User, Comment, UserFormData, Article, ResearchRequest } from '@/types'
 
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic'
+
 interface AdminUser {
   username: string
   role: string

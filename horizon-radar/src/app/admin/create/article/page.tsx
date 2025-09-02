@@ -9,6 +9,9 @@ import { localStorageDB } from '@/data/localStorageDB';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic'
+
 type ReadingLevel = 'novice' | 'technical' | 'analyst';
 
 interface DraftArticle {
@@ -934,6 +937,18 @@ function CreateArticlePageContent() {
       alert('Error publishing article. Please try again.');
     }
   };
+
+  // Don't render anything until we're on the client side
+  if (typeof window === 'undefined') {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Loading article editor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">

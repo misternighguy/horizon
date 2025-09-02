@@ -2,10 +2,23 @@ import { defineConfig } from 'drizzle-kit';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// Use absolute path to ensure .env.local is found
-const envPath = path.resolve(__dirname, '.env.local');
-console.log('Loading environment from:', envPath);
-dotenv.config({ path: envPath });
+// Load environment variables from multiple possible locations
+const envPaths = [
+  path.resolve(__dirname, '.env.local'),
+  path.resolve(__dirname, 'env.production'),
+  path.resolve(__dirname, '.env')
+];
+
+// Try to load from each location
+for (const envPath of envPaths) {
+  try {
+    dotenv.config({ path: envPath });
+    console.log('Loaded environment from:', envPath);
+    break;
+  } catch (error) {
+    console.log('Could not load from:', envPath);
+  }
+}
 
 // Debug: log the DATABASE_URL
 console.log('DATABASE_URL:', process.env.DATABASE_URL);

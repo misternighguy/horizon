@@ -31,7 +31,8 @@ export default function ProfileUploadModal({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/upload/image', {
+      // Use the new image upload API that stores files in Ocean droplet
+      const response = await fetch('/api/upload-image', {
         method: 'POST',
         body: formData,
       });
@@ -44,6 +45,7 @@ export default function ProfileUploadModal({
       const result = await response.json();
       setUploadProgress('Image uploaded successfully!');
       
+      // Return the public URL for the uploaded image
       return result.imageUrl;
     } catch (error) {
       console.error('Upload error:', error);
@@ -80,10 +82,10 @@ export default function ProfileUploadModal({
       const blob = await response.blob();
       const compressedFile = new File([blob], file.name, { type: 'image/jpeg' });
 
-      // Upload to server
+      // Upload to server using new API
       const imageUrl = await uploadImageToServer(compressedFile);
 
-      // Call upload handler with the server URL
+      // Call upload handler with the server URL (not base64)
       onUpload(imageUrl);
       
       // Reset progress
@@ -161,7 +163,7 @@ export default function ProfileUploadModal({
                   disabled={isUploading}
                   className="flex flex-col items-center gap-3 p-4 bg-pink-500/20 border border-pink-400/30 rounded-xl hover:bg-pink-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-pink-400/50">
+                  <div className="w-40 h-40 rounded-lg overflow-hidden border-2 border-blue-400/50">
                     <img
                       src="/images/FemalePFP.jpeg"
                       alt="Female Avatar"
@@ -180,7 +182,7 @@ export default function ProfileUploadModal({
               >
                 <div className="w-10 h-10 bg-[rgb(var(--color-horizon-green))] rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </div>
                 <div className="text-left">

@@ -1,9 +1,15 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { localStorageDB } from '@/data/localStorageDB';
 import { ResearchCard } from '@/types';
+
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic'
 
 // Helper function to get research data from API or fallback to mock
 async function getResearchData() {
@@ -53,13 +59,75 @@ function filterCards(cards: ResearchCard[], query: string) {
   ) || [];
 }
 
-export default async function ResearchPage({
+export default function ResearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: { q?: string };
 }) {
-  const { recentlyPublished, mostRead, trending } = await getResearchData();
-  const { q: searchQuery = '' } = await searchParams;
+  const [recentlyPublished, setRecentlyPublished] = useState<ResearchCard[]>([]);
+  const [mostRead, setMostRead] = useState<ResearchCard[]>([]);
+  const [trending, setTrending] = useState<ResearchCard[]>([]);
+  const [isClient, setIsClient] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(searchParams.q || '');
+
+  // Ensure we're on the client side before accessing localStorageDB
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Load research data when component mounts
+  useEffect(() => {
+    if (!isClient) return;
+
+    const loadResearchData = async () => {
+      try {
+        // Check if database is configured
+        if (process.env.NEXT_PUBLIC_DATABASE_URL) {
+          const response = await fetch('/api/research/cards', {
+            next: { revalidate: 3600 } // Revalidate every hour
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setRecentlyPublished(data.recentlyPublished || []);
+            setMostRead(data.mostRead || []);
+            setTrending(data.trending || []);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to fetch from API, falling back to mock data:', error);
+      }
+      
+      // Fallback to mock data
+      if (localStorageDB) {
+        setRecentlyPublished(localStorageDB.getResearchCardsByCategory('recently-published') || []);
+        setMostRead(localStorageDB.getResearchCardsByCategory('most-read') || []);
+        setTrending(localStorageDB.getResearchCardsByCategory('trending') || []);
+      }
+    };
+
+    loadResearchData();
+  }, [isClient]);
+
+  // Don't render anything until we're on the client side
+  if (!isClient) {
+    return (
+      <div className="relative min-h-screen w-full">
+        <div className="fixed inset-0 z-0 bg-[url('/LandingBackground.png')] bg-cover bg-center bg-no-repeat bg-fixed" />
+        <div className="fixed inset-0 z-0 bg-black/20" />
+        <div className="relative z-20">
+          <Header />
+        </div>
+        <div className="relative z-10 w-full py-10 flex flex-col min-h-screen">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">Loading research page...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen w-full">
