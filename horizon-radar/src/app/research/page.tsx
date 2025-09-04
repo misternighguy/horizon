@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { localStorageDB } from '@/data/localStorageDB';
@@ -59,16 +60,13 @@ function filterCards(cards: ResearchCard[], query: string) {
   ) || [];
 }
 
-export default function ResearchPage({
-  searchParams,
-}: {
-  searchParams: { q?: string };
-}) {
+function ResearchPageContent() {
   const [recentlyPublished, setRecentlyPublished] = useState<ResearchCard[]>([]);
   const [mostRead, setMostRead] = useState<ResearchCard[]>([]);
   const [trending, setTrending] = useState<ResearchCard[]>([]);
   const [isClient, setIsClient] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(searchParams.q || '');
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
 
   // Ensure we're on the client side before accessing localStorageDB
   useEffect(() => {
@@ -303,5 +301,27 @@ export default function ResearchPage({
         <Footer />
       </div>
     </div>
+  );
+}
+
+export default function ResearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="relative min-h-screen w-full">
+        <div className="fixed inset-0 z-0 bg-[url('/LandingBackground.png')] bg-cover bg-center bg-no-repeat bg-fixed" />
+        <div className="fixed inset-0 z-0 bg-black/20" />
+        <div className="relative z-20">
+          <Header />
+        </div>
+        <div className="relative z-10 w-full py-10 flex flex-col min-h-screen">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">Loading research page...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <ResearchPageContent />
+    </Suspense>
   );
 } 
