@@ -289,118 +289,106 @@ export default function ProfilePage() {
         <div className="max-w-[calc(80rem-150px)] mx-auto px-4 sm:px-6 md:px-8 space-y-8">
           {/* Top Row - Combined Profile and Stats Card */}
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-            {/* Gold Credit Card */}
-            <div className="lg:col-span-4 relative overflow-hidden rounded-2xl group transition-all duration-300 preserve-3d" id="goldCard">
-              {/* 3D Background - Gold for premium/admin, Silver for free */}
-              <div className={`absolute inset-0 rounded-2xl shadow-2xl ${
-                user.memberStyle === 'free' 
-                  ? 'bg-gradient-radial from-gray-300 via-gray-400 to-gray-600' 
-                  : 'bg-gradient-radial from-yellow-400 via-amber-600 to-gray-900'
-              }`} />
+            {/* Minimalist Profile Card */}
+            <div className="lg:col-span-4 relative overflow-hidden rounded-2xl group transition-all duration-300 preserve-3d h-full min-h-[320px]" id="goldCard">
+              {/* Moving Glow Effect on Hover */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 animate-shimmer-slow pointer-events-none" />
               
-              {/* 3D Depth Layer */}
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/40 rounded-2xl" />
+              {/* Main Card Background */}
+              <div className="absolute inset-0 bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden">
+                {/* Subtle Geometric Background */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+                
+                {/* Geometric Accents */}
+                <svg className="absolute top-6 right-6 w-24 h-24 text-white/10" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                  <path d="M10 10 L90 10 L90 90" strokeWidth="1" />
+                  <circle cx="90" cy="10" r="3" fill="currentColor" />
+                </svg>
+                
+                <svg className="absolute bottom-6 left-6 w-16 h-16 text-white/5" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                  <path d="M0 100 L30 70 L100 70" strokeWidth="1" />
+                </svg>
+              </div>
               
-              {/* Metallic Texture Pattern */}
-              <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'var(--metallic-texture)' }} />
-              
-              {/* Metallic Shimmer Lines */}
-              <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'var(--metallic-shimmer)' }} />
-              
-              {/* Sci-fi glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-              
-              {/* Main Card Content */}
-              <div className={`relative backdrop-blur-sm rounded-2xl p-6 h-full shadow-xl ${
-                user.memberStyle === 'free'
-                  ? 'bg-gradient-to-br from-gray-300/90 via-gray-400/90 to-gray-500/90 border border-gray-300/50'
-                  : 'bg-gradient-to-br from-yellow-400/90 via-yellow-500/90 to-amber-600/90 border border-yellow-300/50'
-              }`}>
-                {/* Card Header */}
-                <div className="flex items-start justify-between mb-6">
-                  {/* Logo/Brand */}
+              {/* Card Content */}
+              <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-8">
                   <div className="flex items-center gap-3">
-                    <Image src="/logo.png" alt="Horizon Radar Logo" width={48} height={48} className="object-contain" />
+                    <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                      <Image src="/logo.png" alt="Horizon Radar" width={24} height={24} className="opacity-80" />
+                    </div>
                     <div>
-                      <h3 className="text-black/80 text-sm font-medium tracking-wider uppercase">HORIZON RADAR</h3>
+                      <h3 className="text-white font-medium text-sm tracking-widest uppercase">HORIZON</h3>
                     </div>
                   </div>
                   
-                  {/* Member Status Badge */}
-                  <div className={`px-4 py-2 rounded-full text-sm font-bold tracking-wider uppercase ${
+                  <div className={`px-3 py-1 rounded text-xs font-medium tracking-widest uppercase border ${
                     user.memberStyle === 'premium' 
-                      ? 'bg-black/20 text-black border border-black/30 shadow-lg' 
+                      ? 'bg-white/10 text-white border-white/20' 
                       : user.memberStyle === 'admin'
-                      ? 'bg-purple-600/80 text-white shadow-lg'
-                      : 'bg-black/20 text-black border border-black/30'
+                      ? 'bg-white/10 text-white border-white/20'
+                      : 'bg-white/5 text-white/60 border-white/10'
                   }`}>
                     {getMemberStyleDisplay(user.memberStyle)}
                   </div>
                 </div>
 
-                {/* Member Info Section */}
-                <div className="mb-6">
-                  {/* Avatar and Name Row */}
-                  <div className="flex items-center gap-4 mb-3">
-                    <ProfilePicture
-                      src={user.profile?.avatar}
-                      alt={`${user.username}'s profile picture`}
-                      username={user.username}
-                      size="md"
-                      onClick={openUploadModal}
-                      showUploadOverlay={true}
-                      showVerification={false}
-                    />
+                {/* User Info */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-5">
+                    <div className="relative">
+                      <ProfilePicture
+                        src={user.profile?.avatar}
+                        alt={`${user.username}'s profile picture`}
+                        username={user.username}
+                        size="md"
+                        onClick={openUploadModal}
+                        showUploadOverlay={true}
+                        showVerification={false}
+                        className="ring-2 ring-white/10 ring-offset-4 ring-offset-[#0A0A0A]"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[rgb(var(--color-horizon-green))] rounded-full border-2 border-[#0A0A0A]" />
+                    </div>
+                    
                     <div>
-                      <h2 className="text-xl font-bold text-black tracking-tight">{user.username}</h2>
+                      <h2 className="text-2xl font-light text-white tracking-tight mb-1">{user.username}</h2>
+                      {user.profile?.bio && (
+                        <p className="text-white/50 text-sm max-w-[200px] line-clamp-2 leading-relaxed">
+                          {user.profile.bio}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  
-                  {/* Bio if available */}
-                  {user.profile?.bio && (
-                    <p className="text-black/80 text-sm italic border-l-2 border-black/30 pl-4">
-                      &quot;{user.profile.bio}&quot;
-                    </p>
-                  )}
-                </div>
 
-                                {/* Stats Grid */}
-                <div className="flex gap-6 mb-4">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2"/>
-                      <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2"/>
-                      <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2"/>
-                      <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2"/>
-                    </svg>
+                  {/* Stats Row */}
+                  <div className="grid grid-cols-2 gap-8 py-6 border-t border-white/10 border-b border-white/10">
                     <div>
-                      <span className="text-black/60 text-xs uppercase tracking-wider block">Issued</span>
-                      <p className="text-black font-semibold text-sm">{new Date(user.createdAt).toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' })}</p>
+                      <span className="text-white/40 text-[10px] uppercase tracking-wider block mb-1">Issued</span>
+                      <p className="text-white font-mono text-sm">
+                        {new Date(user.createdAt).toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' })}
+                      </p>
                     </div>
-                  </div>
-                  
-                  {user.memberStyle !== 'admin' && (
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10" strokeWidth="2"/>
-                        <polyline points="12,6 12,12 16,14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    {user.memberStyle !== 'admin' && (
                       <div>
-                        <span className="text-black/60 text-xs uppercase tracking-wider block">Expires</span>
-                        <p className="text-black font-semibold text-sm">{new Date(user.expiresAt).toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' })}</p>
+                        <span className="text-white/40 text-[10px] uppercase tracking-wider block mb-1">Expires</span>
+                        <p className="text-white font-mono text-sm">
+                          {new Date(user.expiresAt).toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' })}
+                        </p>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
 
-                {/* Card Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-black/20">
-                  <div className="flex items-center gap-2">
-                    <Icons.Shield className="w-4 h-4 text-black" />
-                    <span className="text-black/60 text-sm">Verified Member</span>
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-2">
+                  <div className="flex items-center gap-2 text-white/40">
+                    <Icons.Shield className="w-3 h-3" />
+                    <span className="text-xs uppercase tracking-wider">Verified</span>
                   </div>
-                  <div className="text-black/40 text-sm">
-                    ID: {user.id.slice(0, 8).toUpperCase()}
+                  <div className="font-mono text-xs text-white/30">
+                    ID: <span className="text-white/50">{user.id.slice(0, 8).toUpperCase()}</span>
                   </div>
                 </div>
               </div>
